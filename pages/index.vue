@@ -22,7 +22,7 @@
         </div>
       </div>
       <Button @click="showMore" :hidden="this.currentIndexItem + this.itemsPerPage === 60" type="icon">
-        <div v-if="dynamicTitle">See also</div>
+        <div v-if="dynamicTitle">See more</div>
         <div v-else>Xem thêm</div>
       </Button>
       <div class="home-footer">

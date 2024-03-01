@@ -7,7 +7,6 @@ import CostumeInfomation from '@/components/CostumeInfomation.vue'
 import khomu1 from '@/assets/img/khomu1.png'
 import khomu2 from '@/assets/img/khomu2.png'
 export default {
-    name: "Khơ Mú",
 
     data() {
         return {

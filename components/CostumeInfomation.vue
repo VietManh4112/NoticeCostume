@@ -6,22 +6,22 @@
             </div>
             <div class="content">
                 <div class="content-text">
-                    <p><b>Tên tự gọi:</b> Tày</p>
-                    <p><b>Tên khác:</b> Thổ</p>
-                    <p><b>Nhóm địa phương:</b> Thổ, Ngạn, Phén, Thu Lao và Pa Dí</p>
+                    <p><b>{{ dynamicTexts.text1 }}</b> Tày</p>
+                    <p><b>{{ dynamicTexts.text2 }}</b> Thổ</p>
+                    <p><b>{{ dynamicTexts.text3 }}</b> Thổ, Ngạn, Phén, Thu Lao và Pa Dí</p>
                     <hr>
-                    <p><b>Vùng cư trú:</b> Đông Bắc Bộ</p>
-                    <p><b>Khu vực cư trú:</b> Vùng thung lũng các tỉnh Đông Bắc, từ Quảng Ninh, Bắc Giang đến Cao Bằng, Bắc Kạn, Lào Cai, Yên Bái</p>
+                    <p><b>{{ dynamicTexts.text4 }}</b> Đông Bắc Bộ</p>
+                    <p><b>{{ dynamicTexts.text5 }}</b> Vùng thung lũng các tỉnh Đông Bắc, từ Quảng Ninh, Bắc Giang đến Cao Bằng, Bắc Kạn, Lào Cai, Yên Bái</p>
                     <hr>
                     <div>
-                        <p><b>Dân số (2019):</b> 2729</p>
-                        <p><b>Dân số:</b> 0.003%</p>
+                        <p><b>{{ dynamicTexts.text6 }}</b> 2729</p>
+                        <p><b>{{ dynamicTexts.text7 }}</b> 0.003%</p>
                     </div>
                     <hr>
-                    <p><b>Nhóm ngôn ngữ:</b> Tạng - Miến</p>
-                    <p><b>Ngữ hệ:</b> Hán - Tạng</p>
+                    <p><b>{{ dynamicTexts.text8 }}</b> Tạng - Miến</p>
+                    <p><b>{{ dynamicTexts.text9 }}</b> Hán - Tạng</p>
                     <hr>
-                    <p><b>Trang phục truyền thống:</b></p>
+                    <p><b>{{ dynamicTexts.text10 }}</b></p>
                     <p>Trang phục của phụ nữ Cống khá đơn giản gồm: áo, váy, dây thắt lưng, yếm, khăn đội đầu và một số đồ trang sức. Áo ngắn may bằng vải trắng hoặc màu chàm, tay áo được nối dài, mở ngực, cổ áo liền với nẹp ngực, áo không xẻ tà. Cổ áo là một dải vải đen kéo dài từ vạt áo bên phải chạy vòng qua cổ sang hết vạt áo bên trái. Dọc theo chiều dài của nẹp áo có đính đôi dây bằng sợi bông se lại hình vặn thừng để làm dây buộc.</p>
                     <p>Trang phục nam giới người Cống gồm có khăn, áo, quần may bằng vải, nhuộm chàm không trang trí.</p>
                 </div>
@@ -33,7 +33,7 @@
                         <img src="@/assets/img/logo.png" class="img-logo">
                     </div>
                     <div class="content-logo__btn">
-                        <Button @click="gotoNextPage" :disabled="index === 54" type="nav">Next</Button>
+                        <Button @click="gotoNextPage" :disabled="index === 53" type="nav">Next</Button>
                     </div>
                 </div>
             </div>
@@ -45,6 +45,8 @@
 </template>
 
 <script>
+import { eventBus } from '@/helper/index.js'
+import Resource from '@/helper/resource.js'
 import Button from '@/components/Button.vue'
     export default {
         name: "CostumeInfomation",
@@ -61,6 +63,11 @@ import Button from '@/components/Button.vue'
 
         mounted() {
             window.addEventListener('keydown', this.handleKeyDown);
+
+            eventBus.$on('data-sent', (isEnglish) => {
+                this.dynamicTitle = isEnglish;
+                console.log(this.dynamicTitle);
+            });
         },
 
         methods: {
@@ -93,15 +100,33 @@ import Button from '@/components/Button.vue'
             handleKeyDown() {
                 if (event.key === 'ArrowLeft' && this.index > 0) {
                     this.gotoPreviousPage();
-                } else if (event.key === 'ArrowRight' && this.index < 54) {
+                } else if (event.key === 'ArrowRight' && this.index < 53) {
                     this.gotoNextPage();
+                }
+            }
+        },
+
+        computed: {
+            dynamicTexts() {
+                return {
+                    text1: this.dynamicTitle ? Resource.text1.en : Resource.text1.vi,
+                    text2: this.dynamicTitle ? Resource.text2.en : Resource.text2.vi,
+                    text3: this.dynamicTitle ? Resource.text3.en : Resource.text3.vi,
+                    text4: this.dynamicTitle ? Resource.text4.en : Resource.text4.vi,
+                    text5: this.dynamicTitle ? Resource.text5.en : Resource.text5.vi,
+                    text6: this.dynamicTitle ? Resource.text6.en : Resource.text6.vi,
+                    text7: this.dynamicTitle ? Resource.text7.en : Resource.text7.vi,
+                    text8: this.dynamicTitle ? Resource.text8.en : Resource.text8.vi,
+                    text9: this.dynamicTitle ? Resource.text9.en : Resource.text9.vi,
+                    text10: this.dynamicTitle ? Resource.text10.en : Resource.text10.vi,
                 }
             }
         },
 
         data() {
             return {
-                items: ['Cống','Hà Nhì','Kháng','Khơ Mú'],
+                items: ['Cống','Hà Nhì','Kháng','Khơ Mú','La Ha','La Hủ','Lào','Lự','Mảng','Si La','Xinh-mun','Bố Y','Dao','Giáy','Mông','Phù Lá','Thái','Cờ Lao','La Chí','Lô Lô','Ngái','Nùng','Pà Thẻn','Pu Péo','Sán Chay','Sán Dìu','Tày','Mường','Việt','Bru- Vân Kiều','Chứt','Cơ-tu','Ơ-đu','Tà-ôi','Thổ','Co','Ra Glai','Brâu','Chu-ru','Cơ-ho','Ê-đê','Gia-rai','Mạ','Mnông','Rơ-măm','Xơ-đăng','Ba-na','Giẻ-triêng','Hrê','Chơ-ro','X`Tiêng','Khmer','Hoa','Chăm'],
+                dynamicTitle: '',
             }
         }
     }

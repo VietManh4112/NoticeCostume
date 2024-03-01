@@ -61,11 +61,18 @@ export default {
       isEnglish: false,
     }
   },
+
+  updated() {
+    this.sendData();
+  },
+
   methods: {
     sendData() {
       eventBus.$emit('data-sent', this.isEnglish);
     }
   },
+
+  
 }
 </script>
 

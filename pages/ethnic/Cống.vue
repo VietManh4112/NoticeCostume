@@ -7,7 +7,6 @@ import CostumeInfomation from '@/components/CostumeInfomation.vue'
 import cong1 from '@/assets/img/cong1.png'
 import cong2 from '@/assets/img/cong2.png'
 export default {
-    name: "Hà Nhì",
 
     data() {
         return {

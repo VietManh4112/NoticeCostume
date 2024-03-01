@@ -7,7 +7,6 @@ import CostumeInfomation from '@/components/CostumeInfomation.vue'
 import tay1 from '@/assets/img/tay1.png'
 import tay2 from '@/assets/img/tay2.png'
 export default {
-    name: "Kháng",
 
     data() {
         return {
