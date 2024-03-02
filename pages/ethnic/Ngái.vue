@@ -11,7 +11,7 @@ export default {
     data() {
         return {
             items: {left: ngai1,right: ngai2},
-            index: 20,
+            index: 12,
         }
     },
 

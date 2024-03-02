@@ -41,11 +41,13 @@
                 <img :src="imgright" class="img-costume img-right">
             </div>
         </div>
+        <div class="comment">
+
+        </div>
     </div>
 </template>
 
 <script>
-import { eventBus } from '@/helper/index.js'
 import Resource from '@/helper/resource.js'
 import Button from '@/components/Button.vue'
     export default {
@@ -63,11 +65,6 @@ import Button from '@/components/Button.vue'
 
         mounted() {
             window.addEventListener('keydown', this.handleKeyDown);
-
-            eventBus.$on('data-sent', (isEnglish) => {
-                this.dynamicTitle = isEnglish;
-                console.log(this.dynamicTitle);
-            });
         },
 
         methods: {
@@ -107,26 +104,29 @@ import Button from '@/components/Button.vue'
         },
 
         computed: {
+            isEnglish() {
+                return this.$store.state.isEnglish;
+            },
+
             dynamicTexts() {
                 return {
-                    text1: this.dynamicTitle ? Resource.text1.en : Resource.text1.vi,
-                    text2: this.dynamicTitle ? Resource.text2.en : Resource.text2.vi,
-                    text3: this.dynamicTitle ? Resource.text3.en : Resource.text3.vi,
-                    text4: this.dynamicTitle ? Resource.text4.en : Resource.text4.vi,
-                    text5: this.dynamicTitle ? Resource.text5.en : Resource.text5.vi,
-                    text6: this.dynamicTitle ? Resource.text6.en : Resource.text6.vi,
-                    text7: this.dynamicTitle ? Resource.text7.en : Resource.text7.vi,
-                    text8: this.dynamicTitle ? Resource.text8.en : Resource.text8.vi,
-                    text9: this.dynamicTitle ? Resource.text9.en : Resource.text9.vi,
-                    text10: this.dynamicTitle ? Resource.text10.en : Resource.text10.vi,
+                    text1: this.isEnglish ? Resource.text1.en : Resource.text1.vi,
+                    text2: this.isEnglish ? Resource.text2.en : Resource.text2.vi,
+                    text3: this.isEnglish ? Resource.text3.en : Resource.text3.vi,
+                    text4: this.isEnglish ? Resource.text4.en : Resource.text4.vi,
+                    text5: this.isEnglish ? Resource.text5.en : Resource.text5.vi,
+                    text6: this.isEnglish ? Resource.text6.en : Resource.text6.vi,
+                    text7: this.isEnglish ? Resource.text7.en : Resource.text7.vi,
+                    text8: this.isEnglish ? Resource.text8.en : Resource.text8.vi,
+                    text9: this.isEnglish ? Resource.text9.en : Resource.text9.vi,
+                    text10: this.isEnglish ? Resource.text10.en : Resource.text10.vi,
                 }
             }
         },
 
         data() {
             return {
-                items: ['Cống','Hà Nhì','Kháng','Khơ Mú','La Ha','La Hủ','Lào','Lự','Mảng','Si La','Xinh-mun','Bố Y','Dao','Giáy','Mông','Phù Lá','Thái','Cờ Lao','La Chí','Lô Lô','Ngái','Nùng','Pà Thẻn','Pu Péo','Sán Chay','Sán Dìu','Tày','Mường','Việt','Bru- Vân Kiều','Chứt','Cơ-tu','Ơ-đu','Tà-ôi','Thổ','Co','Ra Glai','Brâu','Chu-ru','Cơ-ho','Ê-đê','Gia-rai','Mạ','Mnông','Rơ-măm','Xơ-đăng','Ba-na','Giẻ-triêng','Hrê','Chơ-ro','X`Tiêng','Khmer','Hoa','Chăm'],
-                dynamicTitle: '',
+                items: ['Cống','Hà Nhì','Lô Lô','Khơ Mú','Việt','Tày','Thổ','Lự','Mảng','Hoa','Pà Thẻn','Bố Y','Ngái','Khmer','Mông','Mường','Thái','Cờ Lao','Gia-rai','Cơ-ho','Dao','Nùng','Xinh-mun','Pu Péo','Sán Chay','Sán Dìu','La Hủ','Phù Lá','La Ha','Bru- Vân Kiều','Chứt','Cơ-tu','Ơ-đu','Tà-ôi','Lào','Co','Ra Glai','Brâu','Chu-ru','Kháng','Ê-đê','La Chí','Mạ','Mnông','Rơ-măm','Xơ-đăng','Ba-na','Giẻ-triêng','Hrê','Chơ-ro','X`Tiêng','Giáy','Si La','Chăm'],
             }
         }
     }
@@ -151,6 +151,10 @@ import Button from '@/components/Button.vue'
                     radial-gradient(circle at 48.9014% 49.5215%, #FFF 0%, rgba(255,255,255,0%) 100%);
     width: 100vw;
     height: 91vh;
+}
+
+.comment {
+    height: 10vh;
 }
 
 /**
@@ -181,6 +185,7 @@ import Button from '@/components/Button.vue'
 */
 .content {
     width: 40vw;
+    position: relative;
 }
 
 .img-costume {

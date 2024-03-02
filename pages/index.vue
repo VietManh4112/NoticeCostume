@@ -12,8 +12,8 @@
         <p>{{ maintext }}</p>
       </div>
 
-      <div style="margin-bottom: 10vh;">
-        <input type="text" placeholder="Tìm kiếm">
+      <div class="main-search">
+        <TextField></TextField>
       </div>
 
       <div class="avatar-container">
@@ -22,7 +22,7 @@
         </div>
       </div>
       <Button @click="showMore" :hidden="this.currentIndexItem + this.itemsPerPage === 60" type="icon">
-        <div v-if="dynamicTitle">See more</div>
+        <div v-if="isEnglish">See more</div>
         <div v-else>Xem thêm</div>
       </Button>
       <div class="home-footer">
@@ -34,10 +34,10 @@
   </div>
 </template>
 <script>
-import { eventBus } from '@/helper/index.js'
 import Resource from '@/helper/resource.js'
 import Avatar from '@/components/Avatar.vue';
 import Button from '@/components/Button.vue';
+import TextField from '@/components/TextField.vue';
 import bg1 from '@/assets/img/bgcostume1.png';
 import bg2 from '@/assets/img/bgcostume2.png';
 import bg3 from '@/assets/img/bgcostume3.png';
@@ -100,6 +100,7 @@ import image54 from '@/assets/img/avatar54.png';
     components: {
       Avatar,
       Button,
+      TextField,
     },
 
     data() {
@@ -111,46 +112,46 @@ import image54 from '@/assets/img/avatar54.png';
         items: [
           { imageUrl: image1, role: 'Cống' },
           { imageUrl: image2, role: 'Hà Nhì' },
-          { imageUrl: image3, role: 'Kháng' },
+          { imageUrl: image3, role: 'Lô Lô' },
           { imageUrl: image4, role: 'Khơ Mú' },
-          { imageUrl: image5, role: 'La Ha' },
-          { imageUrl: image6, role: 'La Hủ' },
-          { imageUrl: image7, role: 'Lào' },
+          { imageUrl: image5, role: 'Việt' },
+          { imageUrl: image6, role: 'Tày' },
+          { imageUrl: image7, role: 'Thổ' },
           { imageUrl: image8, role: 'Lự' },
           { imageUrl: image9, role: 'Mảng' },
-          { imageUrl: image10, role: 'Si La' },
-          { imageUrl: image11, role: 'Xinh-mun' },
+          { imageUrl: image10, role: 'Hoa' },
+          { imageUrl: image11, role: 'Pà Thẻn' },
           { imageUrl: image12, role: 'Bố Y' },
-          { imageUrl: image13, role: 'Dao' },
-          { imageUrl: image14, role: 'Giáy' },
+          { imageUrl: image13, role: 'Ngái' },
+          { imageUrl: image14, role: 'Khmer' },
           { imageUrl: image15, role: 'Mông' },
-          { imageUrl: image16, role: 'Phù Lá' },
+          { imageUrl: image16, role: 'Mường' },
           { imageUrl: image17, role: 'Thái' },
           { imageUrl: image18, role: 'Cờ Lao' },
-          { imageUrl: image19, role: 'La Chí' },
-          { imageUrl: image20, role: 'Lô Lô' },
-          { imageUrl: image21, role: 'Ngái' },
+          { imageUrl: image19, role: 'Gia-rai' },
+          { imageUrl: image20, role: 'Cơ-ho' },
+          { imageUrl: image21, role: 'Dao' },
           { imageUrl: image22, role: 'Nùng' },
-          { imageUrl: image23, role: 'Tà Thẻn' },
+          { imageUrl: image23, role: 'Xinh-mun' },
           { imageUrl: image24, role: 'Pu Péo' },
           { imageUrl: image25, role: 'Sán Chay' },
           { imageUrl: image26, role: 'Sán Dìu' },
-          { imageUrl: image27, role: 'Tày' },
-          { imageUrl: image28, role: 'Mường' },
-          { imageUrl: image29, role: 'Việt' },
+          { imageUrl: image27, role: 'La Hủ' },
+          { imageUrl: image28, role: 'Phù Lá' },
+          { imageUrl: image29, role: 'La Ha' },
           { imageUrl: image30, role: 'Bru- Vân Kiều' },
           { imageUrl: image31, role: 'Chứt' },
           { imageUrl: image32, role: 'Cơ-tu' },
           { imageUrl: image33, role: 'Ơ-đu' },
           { imageUrl: image34, role: 'Tà-ôi' },
-          { imageUrl: image35, role: 'Thổ' },
+          { imageUrl: image35, role: 'Lào' },
           { imageUrl: image36, role: 'Co' },
           { imageUrl: image37, role: 'Ra Glai' },
           { imageUrl: image38, role: 'Brâu' },
           { imageUrl: image39, role: 'Chu-ru' },
-          { imageUrl: image40, role: 'Cơ-ho' },
+          { imageUrl: image40, role: 'Kháng' },
           { imageUrl: image41, role: 'Ê-đê' },
-          { imageUrl: image42, role: 'Gia-rai' },
+          { imageUrl: image42, role: 'La Chí' },
           { imageUrl: image43, role: 'Mạ' },
           { imageUrl: image44, role: 'Mnông' },
           { imageUrl: image45, role: 'Rơ-măm' },
@@ -160,13 +161,12 @@ import image54 from '@/assets/img/avatar54.png';
           { imageUrl: image49, role: 'Hrê' },
           { imageUrl: image50, role: 'Chơ-ro' },
           { imageUrl: image51, role: 'X`Tiêng' },
-          { imageUrl: image52, role: 'Khmer' },
-          { imageUrl: image53, role: 'Hoa' },
+          { imageUrl: image52, role: 'Giáy' },
+          { imageUrl: image53, role: 'Si La' },
           { imageUrl: image54, role: 'Chăm' }
         ],
         itemsPerPage: 10,
         currentIndexItem: 0,
-        dynamicTitle: '',
       }
     },
 
@@ -182,7 +182,7 @@ import image54 from '@/assets/img/avatar54.png';
       },
       
       maintitle() {
-        if (this.dynamicTitle) {
+        if (this.isEnglish) {
           return Resource.mainTitle.en; 
         } else {
           return Resource.mainTitle.vi;
@@ -190,11 +190,15 @@ import image54 from '@/assets/img/avatar54.png';
       },  
 
       maintext() {
-        if (this.dynamicTitle) {
+        if (this.isEnglish) {
           return Resource.mainText.en; 
         } else {
           return Resource.mainText.vi;
         }
+      },
+
+      isEnglish() {
+        return this.$store.state.isEnglish;
       }
     },
 
@@ -202,9 +206,6 @@ import image54 from '@/assets/img/avatar54.png';
       // Bắt đầu tự động lướt qua sau mỗi 5 giây
       this.intervalId = setInterval(this.nextImage, 5000);
       
-      eventBus.$on('data-sent', (isEnglish) => {
-        this.dynamicTitle = isEnglish;
-      });
     },
 
     beforeDestroy() {
@@ -285,11 +286,15 @@ h2 {
 .main-text p {
   text-align: center;
   line-height: 1.5em;
-  font-family: maitree, serif;
   font-size: 15px;
   font-weight: normal;
   font-style: normal;
   color: #636363;
+}
+
+.main-search {
+  display: flex;
+  justify-content: center;
 }
 
 svg {

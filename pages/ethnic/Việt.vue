@@ -11,7 +11,7 @@ export default {
     data() {
         return {
             items: {left: viet1,right: viet2},
-            index: 28,
+            index: 4,
         }
     },
 

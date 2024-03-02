@@ -24,7 +24,7 @@
 
 <script>
 import Resource from '@/helper/resource.js'
-import { eventBus } from '@/helper/index.js'
+import { mapState, mapMutations } from 'vuex';
 export default {
   name: 'DefaultLayout',
 
@@ -34,6 +34,17 @@ export default {
         return Resource.Title.en; 
       } else {
         return Resource.Title.vi;
+      }
+    },
+
+    ...mapState(['isEnglish']),
+
+    isEnglish: {
+      get() {
+        return this.$store.state.isEnglish;
+      },
+      set(value) {
+        this.$store.commit('setIsEnglish', value);
       }
     },
   },
@@ -58,21 +69,21 @@ export default {
       miniVariant: false,
       right: true,
       rightDrawer: false,
-      isEnglish: false,
+
     }
   },
 
-  updated() {
+  beforeUpdate() {
     this.sendData();
   },
 
   methods: {
+    ...mapMutations(['setIsEnglish']),
     sendData() {
-      eventBus.$emit('data-sent', this.isEnglish);
+      this.setIsEnglish(!this.isEnglish);
     }
   },
 
-  
 }
 </script>
 

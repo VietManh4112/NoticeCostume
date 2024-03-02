@@ -11,7 +11,7 @@ export default {
     data() {
         return {
             items: {left: lolo1,right: lolo2},
-            index: 19,
+            index: 2,
         }
     },
 

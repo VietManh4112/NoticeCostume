@@ -11,7 +11,8 @@ export default {
     data() {
         return {
             items: {left: cong1,right: cong2},
-            index: 5,
+            index: 26,
+            
         }
     },
 

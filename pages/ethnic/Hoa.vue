@@ -11,7 +11,7 @@ export default {
     data() {
         return {
             items: {left: hoa1,right: hoa2},
-            index: 52,
+            index: 9,
         }
     },
 
