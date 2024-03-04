@@ -42,7 +42,15 @@
             </div>
         </div>
         <div class="comment">
-
+            <h2>Bình luận</h2>
+            <div class="comment-textarea">
+                <textarea placeholder="Để lại bình luận của bạn tại đây." class="comment__text"></textarea>
+                <Button type="nav">Gửi</Button>
+            </div>
+            <hr style="border: none; height: 2px; background-color: #f5f5f5;">
+            <div class="comment-list">
+                <span>a</span>
+            </div>
         </div>
     </div>
 </template>
@@ -154,7 +162,35 @@ import Button from '@/components/Button.vue'
 }
 
 .comment {
-    height: 10vh;
+    width: 70vw;
+    margin: 0px 0px 14px calc((100% - 750px) * 0.5);
+    padding: 10px;
+    background-color: #f9fafb;
+    box-shadow: 0 1px 2px 0 rgba(60,64,67,10%),0 2px 6px 2px rgba(60,64,67,15%);
+    border-radius: 10px;
+}
+
+.comment-textarea {
+    display: flex;
+    height: auto;
+    margin-bottom: 20px;
+}
+
+.comment__text {
+    width: 60vw;
+    height: 15vh;
+    padding: 4px;
+    background-color: #fff;
+    border-radius: 10px;
+    box-shadow: 0 1px 2px 0 rgba(60,64,67,10%),0 2px 6px 2px rgba(60,64,67,15%);
+}
+
+.comment__text:focus {
+    outline: none;
+}
+
+.comment-list {
+    height: 15vh;
 }
 
 /**

@@ -13,7 +13,7 @@
       </div>
 
       <div class="main-search">
-        <TextField></TextField>
+        <TextField type="textfield"></TextField>
       </div>
 
       <div class="avatar-container">

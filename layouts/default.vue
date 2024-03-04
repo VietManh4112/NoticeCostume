@@ -16,6 +16,8 @@
           <div v-if="isEnglish"><img src="https://assets.snapedit.app/images/flags/en.svg" class="toolbar__flag">English</div>
           <div v-else><img src="https://assets.snapedit.app/images/flags/vn.svg" class="toolbar__flag">Vietnamese</div>
         </div>
+        <Button type="login" @click="login">Đăng nhập</Button>
+        <Button type="register" @click="register">Đăng ký</Button>
       </v-app-bar>
       <Nuxt/>
     </v-container>
@@ -24,9 +26,15 @@
 
 <script>
 import Resource from '@/helper/resource.js'
+import Button from '@/components/Button.vue'
 import { mapState, mapMutations } from 'vuex';
+import register from '~/pages/register.vue';
 export default {
   name: 'DefaultLayout',
+
+  components: {
+    Button,
+  },
 
   computed: {
     title() {
@@ -81,6 +89,14 @@ export default {
     ...mapMutations(['setIsEnglish']),
     sendData() {
       this.setIsEnglish(!this.isEnglish);
+    },
+
+    login() {
+      this.$router.push(`/login`);
+    },
+
+    register() {
+      this.$router.push(`/register`);
     }
   },
 
@@ -102,7 +118,7 @@ export default {
 }
 
 .toolbar__languages {
-  width: 20vw;
+  width: 15vw;
   display: flex;
   align-items: center;
 }

@@ -66,4 +66,32 @@ export default {
     cursor: not-allowed;
 }
 
+.btn-login {
+    border: none;
+    font-weight: 500;
+    width: 100px;
+}
+
+.btn-register {
+    width: 100px;
+    height: 36px;
+    font-weight: 500;
+    color: #fff;
+    border-radius: 16px;
+    background-color: #EEB188;
+}
+
+.btn-register:hover {
+    animation: buttonUp 0.2s ease-in-out forwards;
+}
+
+@keyframes buttonUp {
+    0% {
+    transform: translateY(0);
+  }
+  100% {
+    transform: translateY(-10%);
+  }
+}
+
 </style>
