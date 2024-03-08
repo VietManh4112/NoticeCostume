@@ -11,7 +11,7 @@ export default {
     data() {
         return {
             items: {left: khmer1,right: khmer2},
-            index: 13,
+            index: 51,
         }
     },
 

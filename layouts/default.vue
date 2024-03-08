@@ -104,6 +104,15 @@ export default {
 </script>
 
 <style>
+@import url('https://fonts.googleapis.com/css2?family=Maitree:wght@200;300;400;500;600;700&display=swap');
+
+.container {
+  margin: 0;
+  padding: 0;
+  font-family: 'Maitree', sans-serif;
+}
+
+
 .toolbar__title {
   width: 20vw;
   display: flex;

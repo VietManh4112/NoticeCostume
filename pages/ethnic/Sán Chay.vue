@@ -4,13 +4,13 @@
 
 <script>
 import CostumeInfomation from '@/components/CostumeInfomation.vue'
-import cong1 from '@/assets/img/cong1.png'
-import cong2 from '@/assets/img/cong2.png'
+import sanchay1 from '@/assets/img/sanchay1.png'
+import sanchay2 from '@/assets/img/sanchay2.png'
 export default {
 
     data() {
         return {
-            items: {left: cong1,right: cong2},
+            items: {left: sanchay1,right: sanchay2},
             index: 24,
         }
     },

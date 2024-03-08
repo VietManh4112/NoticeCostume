@@ -11,7 +11,7 @@ export default {
     data() {
         return {
             items: {left: tay1,right: tay2},
-            index: 5,
+            index: 26,
         }
     },
 

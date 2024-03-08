@@ -11,8 +11,7 @@ export default {
     data() {
         return {
             items: {left: lao1,right: lao2},
-            index: 34,
-            
+            index: 6,
         }
     },
 

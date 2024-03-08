@@ -4,13 +4,13 @@
 
 <script>
 import CostumeInfomation from '@/components/CostumeInfomation.vue'
-import tay1 from '@/assets/img/tay1.png'
-import tay2 from '@/assets/img/tay2.png'
+import romam1 from '@/assets/img/romam1.png'
+import romam2 from '@/assets/img/romam2.png'
 export default {
 
     data() {
         return {
-            items: {left: tay1,right: tay2},
+            items: {left: romam1,right: romam2},
             index: 44,
         }
     },

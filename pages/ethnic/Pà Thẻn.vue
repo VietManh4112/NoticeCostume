@@ -11,7 +11,7 @@ export default {
     data() {
         return {
             items: {left: pathen1,right: pathen2},
-            index: 10,
+            index: 22,
         }
     },
 

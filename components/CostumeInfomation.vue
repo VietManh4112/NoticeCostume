@@ -134,7 +134,7 @@ import Button from '@/components/Button.vue'
 
         data() {
             return {
-                items: ['Cống','Hà Nhì','Lô Lô','Khơ Mú','Việt','Tày','Thổ','Lự','Mảng','Hoa','Pà Thẻn','Bố Y','Ngái','Khmer','Mông','Mường','Thái','Cờ Lao','Gia-rai','Cơ-ho','Dao','Nùng','Xinh-mun','Pu Péo','Sán Chay','Sán Dìu','La Hủ','Phù Lá','La Ha','Bru- Vân Kiều','Chứt','Cơ-tu','Ơ-đu','Tà-ôi','Lào','Co','Ra Glai','Brâu','Chu-ru','Kháng','Ê-đê','La Chí','Mạ','Mnông','Rơ-măm','Xơ-đăng','Ba-na','Giẻ-triêng','Hrê','Chơ-ro','X`Tiêng','Giáy','Si La','Chăm'],
+                items: ['Cống','Hà Nhì','Kháng','Khơ Mú','La Ha','La Hủ','Lào','Lự','Mảng','Si La','Xinh-mun','Bố Y','Dao','Giáy','Mông','Phù Lá','Thái','Cờ Lao','La Chí','Lô Lô','Ngái','Nùng','Pà Thẻn','Pu Péo','Sán Chay','Sán Dìu','Tày','Mường','Việt','Bru- Vân Kiều','Chứt','Cơ-tu','Ơ-đu','Tà-ôi','Thổ','Co','Ra Glai','Brâu','Chu-ru','Cơ-ho','Ê-đê','Gia-rai','Mạ','Mnông','Rơ-măm','Xơ-đăng','Ba-na','Giẻ-triêng','Hrê','Chơ-ro','X`Tiêng','Khmer','Hoa','Chăm'],
             }
         }
     }

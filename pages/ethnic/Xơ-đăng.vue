@@ -4,13 +4,13 @@
 
 <script>
 import CostumeInfomation from '@/components/CostumeInfomation.vue'
-import tay1 from '@/assets/img/tay1.png'
-import tay2 from '@/assets/img/tay2.png'
+import xodang1 from '@/assets/img/xodang1.png'
+import xodang2 from '@/assets/img/xodang2.png'
 export default {
 
     data() {
         return {
-            items: {left: tay1,right: tay2},
+            items: {left: xodang1,right: xodang2},
             index: 45,
         }
     },

@@ -11,7 +11,7 @@ export default {
     data() {
         return {
             items: {left: giarai1,right: giarai2},
-            index: 18,
+            index: 41,
         }
     },
 

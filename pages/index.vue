@@ -231,14 +231,6 @@ import image54 from '@/assets/img/avatar54.png';
   }
 </script>
 <style>
-@import url('https://fonts.googleapis.com/css2?family=Maitree:wght@200;300;400;500;600;700&display=swap');
-
-.container {
-  margin: 0;
-  padding: 0;
-  font-family: 'Maitree', sans-serif;
-}
-
 .img-bg {
   width: 100vw;
   height: 100vh;

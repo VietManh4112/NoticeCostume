@@ -11,7 +11,7 @@ export default {
     data() {
         return {
             items: {left: muong1,right: muong2},
-            index: 15,
+            index: 27,
         }
     },
 
