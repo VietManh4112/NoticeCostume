@@ -3,6 +3,22 @@ const Resource = {
         vi: 'Trang Phục 54 Dân Tộc',
         en: 'Costumes Of 54 Ethnic Groups'
     },
+    loginBtn: {
+        vi: 'Đăng nhập',
+        en: 'Login'
+    },
+    registerBtn: {
+        vi: 'Đăng ký',
+        en: 'Register'
+    },
+    google: {
+        vi: 'Tiếp tục với Google',
+        en: 'Continue with Google'
+    },
+    fogotpass: {
+        vi: 'Quên mật khẩu?',
+        en: 'Forgot password?'
+    },
     mainTitle: {
         vi: '54 Dân tộc anh em',
         en: '54 Brotherly Ethnic Groups'

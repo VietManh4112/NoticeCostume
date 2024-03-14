@@ -1,11 +1,15 @@
 <template>
-    <div v-if="type === 'textfield'" class="textfield">
+    <div v-if="type === 'textfield'" class="textfield" :style="{'border-radius': value.length > 0 ? '30px 30px 0px 0px' : ''}">
         <img src="@/assets/img/search.png" width="15" height="15" class="textfield__img">
-        <input type="text" placeholder="Tìm kiếm" class="textfield__search">
+        <input type="text" :value="value" @input="$emit('input', $event.target.value)"  placeholder="Tìm kiếm" class="textfield__search">
     </div>
 
-    <div v-else-if="type === 'form-tk'">
+    <div v-else-if="type === 'form-text'">
         <input type="text" :placeholder="placeholder" class="textfield__form">
+    </div>
+
+    <div v-else-if="type === 'form-number'">
+        <input type="number" :placeholder="placeholder" class="textfield__form">
     </div>
 
     <div v-else-if="type === 'form-pass'">
@@ -20,7 +24,8 @@ export default {
     props: {
         type: String,
         placeholder: String,
-    }
+        value: String,
+    },
 }
 </script>
 
@@ -28,14 +33,13 @@ export default {
 .textfield {
     display: flex;
     align-items: center;
-    width: 25vw;
-    height: 7vh;
+    width: 400px;
+    height: 50px;
     border-radius: 30px;
-    margin-bottom: 8vh;
     background-color: white;
 }
 
-.textfield:hover,.textfield:focus-within {
+.textfield:hover, .textfield:focus-within {
     background-color: rgb(255, 228, 236);
 }
 

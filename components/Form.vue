@@ -4,14 +4,14 @@
             <img src="@/assets/img/img.png" width="540" height="540">
         </div>
         <div class="form-form" >
-            <h1 v-show="type === 'login'">Đăng nhập</h1>
-            <h1 v-show="type === 'register'">Tạo tài khoản mới</h1>
+            <h1 v-show="type === 'login'">{{ loginBtn }}</h1>
+            <h1 v-show="type === 'register'">{{ registerBtn }}</h1>
             <form>
                 <div>
                     <ul>
                         <li class="google">
                             <img src="https://cfcdn.apowersoft.info/astro/picwish/_astro/google.61020c54.svg" width="20" height="20" style="margin-right: 5px;">
-                            Tiếp tục với Google
+                            {{ google }}
                         </li>
                         <li class="facebook">
                             <img src="https://cfcdn.apowersoft.info/astro/picwish/_astro/facebook.d531e827.svg">
@@ -25,13 +25,13 @@
                 <div class="border-line"></div>
                     <span class="text-line">Hoặc</span>
                 </div>
-                <TextField type="form-tk" :placeholder="Email"></TextField>
+                <TextField type="form-text" :placeholder="Email"></TextField>
                 <TextField type="form-pass" :placeholder="Pass"></TextField>
                 <TextField v-show="type === 'register'" type="form-pass" :placeholder="ConfirmPass"></TextField>
-                <div v-show="type === 'login'" style="display: flex;justify-content: flex-end;margin-bottom: 10px;">Quên mật khẩu?</div>
+                <div v-if="type === 'login'" style="display: flex;justify-content: flex-end;margin-bottom: 10px;">{{ fogotpass }}</div>
                 <Button type="icon">
-                    <p v-show="type === 'login'">Đăng nhập</p>
-                    <p v-show="type === 'register'">Đăng ký</p>
+                    <p v-show="type === 'login'">{{ loginBtn }}</p>
+                    <p v-show="type === 'register'">{{ registerBtn }}</p>
                 </Button>
                 
             </form>
@@ -39,6 +39,7 @@
     </div>
 </template>
 <script>
+import Resource from '@/helper/resource.js'
 import TextField from '@/components/TextField.vue';
 import Button from '@/components/Button.vue'
     export default {
@@ -53,13 +54,51 @@ import Button from '@/components/Button.vue'
             type: String,
         },
 
+        computed: {
+            loginBtn() {
+                if (this.isEnglish) {
+                    return Resource.loginBtn.en; 
+                } else {
+                    return Resource.loginBtn.vi;
+                }
+            },
+
+            registerBtn() {
+                if (this.isEnglish) {
+                    return Resource.registerBtn.en; 
+                } else {
+                    return Resource.registerBtn.vi;
+                }
+            },
+
+            google() {
+                if (this.isEnglish) {
+                    return Resource.google.en; 
+                } else {
+                    return Resource.google.vi;
+                } 
+            },
+
+            fogotpass() {
+                if (this.isEnglish) {
+                    return Resource.fogotpass.en; 
+                } else {
+                    return Resource.fogotpass.vi;
+                } 
+            },
+
+            isEnglish() {
+                return this.$store.state.isEnglish;
+            }
+        },
+
         data() {
             return {
                 Email: 'Email',
                 Pass: 'Mật Khẩu',
                 ConfirmPass: 'Xác nhận mật khẩu',
             };
-        }
+        },
     }
 </script>
 
@@ -102,6 +141,10 @@ ul {
 
 li {
     margin-right: 10px;
+}
+
+li:hover {
+    cursor: pointer;
 }
 
 .google {

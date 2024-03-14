@@ -16,8 +16,8 @@
           <div v-if="isEnglish"><img src="https://assets.snapedit.app/images/flags/en.svg" class="toolbar__flag">English</div>
           <div v-else><img src="https://assets.snapedit.app/images/flags/vn.svg" class="toolbar__flag">Vietnamese</div>
         </div>
-        <Button type="login" @click="login">Đăng nhập</Button>
-        <Button type="register" @click="register">Đăng ký</Button>
+        <Button type="login" @click="login">{{ loginBtn }}</Button>
+        <Button type="register" @click="register">{{ registerBtn }}</Button>
       </v-app-bar>
       <Nuxt/>
     </v-container>
@@ -42,6 +42,22 @@ export default {
         return Resource.Title.en; 
       } else {
         return Resource.Title.vi;
+      }
+    },
+
+    loginBtn() {
+      if (this.isEnglish) {
+        return Resource.loginBtn.en; 
+      } else {
+        return Resource.loginBtn.vi;
+      }
+    },
+
+    registerBtn() {
+      if (this.isEnglish) {
+        return Resource.registerBtn.en; 
+      } else {
+        return Resource.registerBtn.vi;
       }
     },
 

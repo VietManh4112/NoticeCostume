@@ -3,7 +3,8 @@ const Enum = {
         icon: 'btn-icon',
         nav: 'btn-nav',
         login: 'btn-login',
-        register: 'btn-register'
+        register: 'btn-register',
+        normal: 'btn-normal',
     }
 }
 

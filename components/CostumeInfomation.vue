@@ -5,6 +5,10 @@
                 <img :src="imgleft" class="img-costume img-left">
             </div>
             <div class="content">
+                <div class="button__buy">
+                    <button  @click="buyCostume">Mua</button>
+                </div>
+                <Modal v-if="hideModal" @hide-modal="handleHideModal"></Modal>
                 <div class="content-text">
                     <p><b>{{ dynamicTexts.text1 }}</b> Tày</p>
                     <p><b>{{ dynamicTexts.text2 }}</b> Thổ</p>
@@ -58,11 +62,13 @@
 <script>
 import Resource from '@/helper/resource.js'
 import Button from '@/components/Button.vue'
+import Modal from '@/components/Modal.vue'
     export default {
         name: "CostumeInfomation",
 
         components: {
             Button,
+            Modal,
         },
 
         props: {
@@ -108,6 +114,14 @@ import Button from '@/components/Button.vue'
                 } else if (event.key === 'ArrowRight' && this.index < 53) {
                     this.gotoNextPage();
                 }
+            },
+
+            buyCostume() {
+                this.hideModal = true;
+            },
+
+            handleHideModal(value) {
+                this.hideModal = value;
             }
         },
 
@@ -135,6 +149,7 @@ import Button from '@/components/Button.vue'
         data() {
             return {
                 items: ['Cống','Hà Nhì','Kháng','Khơ Mú','La Ha','La Hủ','Lào','Lự','Mảng','Si La','Xinh-mun','Bố Y','Dao','Giáy','Mông','Phù Lá','Thái','Cờ Lao','La Chí','Lô Lô','Ngái','Nùng','Pà Thẻn','Pu Péo','Sán Chay','Sán Dìu','Tày','Mường','Việt','Bru- Vân Kiều','Chứt','Cơ-tu','Ơ-đu','Tà-ôi','Thổ','Co','Ra Glai','Brâu','Chu-ru','Cơ-ho','Ê-đê','Gia-rai','Mạ','Mnông','Rơ-măm','Xơ-đăng','Ba-na','Giẻ-triêng','Hrê','Chơ-ro','X`Tiêng','Khmer','Hoa','Chăm'],
+                hideModal: false,
             }
         }
     }
@@ -191,6 +206,17 @@ import Button from '@/components/Button.vue'
 
 .comment-list {
     height: 15vh;
+}
+
+.button__buy {
+    position: absolute;
+    right: 0;
+    top: 16px;
+    visibility: hidden;
+}
+
+.content:hover .button__buy {
+    visibility: visible;
 }
 
 /**

@@ -12,8 +12,20 @@
         <p>{{ maintext }}</p>
       </div>
 
-      <div class="main-search">
-        <TextField type="textfield"></TextField>
+      <div style="position: relative;">
+        <div class="main-search">
+          <TextField type="textfield" :value="searchKeyword" @input="searchKeyword = $event"></TextField>
+        </div>
+        <div class="search-items">
+          <div v-for="(item, index) in filteredItems" :key="index" :style="{ top: (50 + index * 70) + 'px' }">
+            <nuxt-link :to="'/ethnic/' + item.role" class="item__roles">
+              <div style="width: 120px;">
+                <img :src="item.imageUrl" style="width: 60px;height: 55px;">
+              </div>
+              <p>{{ item.role }}</p>
+            </nuxt-link>
+          </div>
+        </div>
       </div>
 
       <div class="avatar-container">
@@ -112,46 +124,46 @@ import image54 from '@/assets/img/avatar54.png';
         items: [
           { imageUrl: image1, role: 'Cống' },
           { imageUrl: image2, role: 'Hà Nhì' },
-          { imageUrl: image3, role: 'Lô Lô' },
+          { imageUrl: image3, role: 'Kháng' },
           { imageUrl: image4, role: 'Khơ Mú' },
-          { imageUrl: image5, role: 'Việt' },
-          { imageUrl: image6, role: 'Tày' },
-          { imageUrl: image7, role: 'Thổ' },
+          { imageUrl: image5, role: 'La Ha' },
+          { imageUrl: image6, role: 'La Hủ' },
+          { imageUrl: image7, role: 'Lào' },
           { imageUrl: image8, role: 'Lự' },
           { imageUrl: image9, role: 'Mảng' },
-          { imageUrl: image10, role: 'Hoa' },
-          { imageUrl: image11, role: 'Pà Thẻn' },
+          { imageUrl: image10, role: 'Si La' },
+          { imageUrl: image11, role: 'Xinh-mun' },
           { imageUrl: image12, role: 'Bố Y' },
-          { imageUrl: image13, role: 'Ngái' },
-          { imageUrl: image14, role: 'Khmer' },
+          { imageUrl: image13, role: 'Dao' },
+          { imageUrl: image14, role: 'Giáy' },
           { imageUrl: image15, role: 'Mông' },
-          { imageUrl: image16, role: 'Mường' },
+          { imageUrl: image16, role: 'Phù Lá' },
           { imageUrl: image17, role: 'Thái' },
           { imageUrl: image18, role: 'Cờ Lao' },
-          { imageUrl: image19, role: 'Gia-rai' },
-          { imageUrl: image20, role: 'Cơ-ho' },
-          { imageUrl: image21, role: 'Dao' },
+          { imageUrl: image19, role: 'La Chí' },
+          { imageUrl: image20, role: 'Lô Lô' },
+          { imageUrl: image21, role: 'Ngái' },
           { imageUrl: image22, role: 'Nùng' },
-          { imageUrl: image23, role: 'Xinh-mun' },
+          { imageUrl: image23, role: 'Pà Thẻn' },
           { imageUrl: image24, role: 'Pu Péo' },
           { imageUrl: image25, role: 'Sán Chay' },
           { imageUrl: image26, role: 'Sán Dìu' },
-          { imageUrl: image27, role: 'La Hủ' },
-          { imageUrl: image28, role: 'Phù Lá' },
-          { imageUrl: image29, role: 'La Ha' },
+          { imageUrl: image27, role: 'Tày' },
+          { imageUrl: image28, role: 'Mường' },
+          { imageUrl: image29, role: 'Việt' },
           { imageUrl: image30, role: 'Bru- Vân Kiều' },
           { imageUrl: image31, role: 'Chứt' },
           { imageUrl: image32, role: 'Cơ-tu' },
           { imageUrl: image33, role: 'Ơ-đu' },
           { imageUrl: image34, role: 'Tà-ôi' },
-          { imageUrl: image35, role: 'Lào' },
+          { imageUrl: image35, role: 'Thổ' },
           { imageUrl: image36, role: 'Co' },
           { imageUrl: image37, role: 'Ra Glai' },
           { imageUrl: image38, role: 'Brâu' },
           { imageUrl: image39, role: 'Chu-ru' },
-          { imageUrl: image40, role: 'Kháng' },
+          { imageUrl: image40, role: 'Cơ-ho' },
           { imageUrl: image41, role: 'Ê-đê' },
-          { imageUrl: image42, role: 'La Chí' },
+          { imageUrl: image42, role: 'Gia-rai' },
           { imageUrl: image43, role: 'Mạ' },
           { imageUrl: image44, role: 'Mnông' },
           { imageUrl: image45, role: 'Rơ-măm' },
@@ -161,12 +173,13 @@ import image54 from '@/assets/img/avatar54.png';
           { imageUrl: image49, role: 'Hrê' },
           { imageUrl: image50, role: 'Chơ-ro' },
           { imageUrl: image51, role: 'X`Tiêng' },
-          { imageUrl: image52, role: 'Giáy' },
-          { imageUrl: image53, role: 'Si La' },
+          { imageUrl: image52, role: 'Khmer' },
+          { imageUrl: image53, role: 'Hoa' },
           { imageUrl: image54, role: 'Chăm' }
         ],
         itemsPerPage: 10,
         currentIndexItem: 0,
+        searchKeyword: '',
       }
     },
 
@@ -199,6 +212,17 @@ import image54 from '@/assets/img/avatar54.png';
 
       isEnglish() {
         return this.$store.state.isEnglish;
+      },
+
+      filteredItems() {
+        const keyword = this.searchKeyword.toLowerCase().trim();
+        if (!keyword) return [];
+
+        const filteredAndReversed = this.items.filter(item => {
+          return item.role.toLowerCase().includes(keyword.toLowerCase());
+        }).reverse();
+
+        return filteredAndReversed.slice(0, 6);
       }
     },
 
@@ -227,6 +251,11 @@ import image54 from '@/assets/img/avatar54.png';
       showMore() {
         this.currentIndexItem += this.itemsPerPage;
       },
+
+      moreEthnic() {
+        this.index += this.numberEthnic;
+      }
+
     }
   }
 </script>
@@ -289,6 +318,34 @@ h2 {
   justify-content: center;
 }
 
+.search-items {
+  position: absolute;
+  margin: 0px 0px 0px calc((100% - 400px) * 0.5);
+  background-color: rgb(255, 228, 236);
+  border-radius: 0px 0px 30px 30px;
+  z-index: 9;
+}
+
+.item__roles {
+  display: flex;
+  align-items: center;
+  width: 400px;
+  height: 70px;
+}
+
+.item__roles:hover {
+  cursor: pointer;
+  background-color: rgba(128, 127, 127,10%);
+}
+
+a {
+  text-decoration: none;
+}
+
+.item__roles p {
+  color: rgba(99,99,99,100%);
+}
+
 svg {
   border: 1px solid white;
   border-radius: 50%;
@@ -333,6 +390,7 @@ svg:hover .image-caption {
   justify-content: flex-start;
   width: 62vw;
   margin: auto;
+  margin-top: 50px;
 }
 
 .avatar-wrapper {

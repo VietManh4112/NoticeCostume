@@ -27,6 +27,10 @@ export default {
 </script>
 
 <style>
+.btn {
+    border-radius: 16px;
+}
+
 .btn-icon {
     width: 145px;
     height: 45px;
@@ -34,7 +38,7 @@ export default {
     font-style: normal;
     font-weight: 400;
     background-color: #EEB188;
-    border-radius: 16px;
+
 }
 
 .btn-icon:hover {
@@ -45,7 +49,6 @@ export default {
 .btn-nav {
     width: 150px;
     height: 40px;
-    border-radius: 16px;
     color: #8f880b;
     background-color: #fdddc9;
     border: 1px solid white;
@@ -92,6 +95,12 @@ export default {
   100% {
     transform: translateY(-10%);
   }
+}
+
+.btn-normal {
+    padding: 6px 16px;
+    border: 1px solid rgba(0,0,0,9%);
+    border-radius: 0px;
 }
 
 </style>
