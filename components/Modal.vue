@@ -1,7 +1,7 @@
 <template>
     <div>
         <div class="modal">
-            <div class="modal-content">
+            <div v-if="type === 'modal-buy'" class="modal-content__buy">
                 <div class="flex">
                     <p>Tên người nhận:</p>
                     <TextField type="form-text" :placeholder="name"></TextField>
@@ -30,6 +30,10 @@
                 </div>
                 <Button type="nav" @click="buyCostume">Đặt mua</Button>
             </div>
+
+            <div v-if="type === 'modal-edit'">
+                
+            </div>
         </div>
     </div>
 </template>
@@ -43,6 +47,10 @@ import Button from '@/components/Button.vue'
         components: {
             TextField ,
             Button,
+        },
+
+        props: {
+            type: String,
         },
 
         data() {
@@ -90,7 +98,7 @@ import Button from '@/components/Button.vue'
     background-color: rgba(0, 0, 0, 50%);
 }
 
-.modal-content {
+.modal-content__buy {
     margin: 8% auto;
     padding: 20px;
     width: 50%;

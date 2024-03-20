@@ -46,6 +46,7 @@
   </div>
 </template>
 <script>
+import axiosInstance from '@/helper/api.js'
 import Resource from '@/helper/resource.js'
 import Avatar from '@/components/Avatar.vue';
 import Button from '@/components/Button.vue';
@@ -223,7 +224,7 @@ import image54 from '@/assets/img/avatar54.png';
         }).reverse();
 
         return filteredAndReversed.slice(0, 6);
-      }
+      },
     },
 
     mounted() {
@@ -254,8 +255,27 @@ import image54 from '@/assets/img/avatar54.png';
 
       moreEthnic() {
         this.index += this.numberEthnic;
-      }
+      },
 
+      async update() {
+        const postData = {
+          username: 'admin',
+          password: '123',
+        };
+        axiosInstance.post('/api/auth/sign-in', postData)
+        .then(response => {
+          localStorage.setItem('token', response.data);
+          const tokenlocal = localStorage.getItem('token');
+          console.log(tokenlocal);
+        })
+        .catch(error => {
+          console.error('Error:', error);
+        });
+      }
+    },
+
+    created() {
+      this.update();
     }
   }
 </script>

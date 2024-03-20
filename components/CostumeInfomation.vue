@@ -6,28 +6,43 @@
             </div>
             <div class="content">
                 <div class="button__buy">
-                    <button  @click="buyCostume">Mua</button>
+                    <button  @click="buyCostume" title="Đặt hàng">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-shopping-cart" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                            <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+                            <circle cx="6" cy="19" r="2" />
+                            <circle cx="17" cy="19" r="2" />
+                            <path d="M17 17h-11v-14h-2" />
+                            <path d="M6 5l14 1l-1.5 7h-11.5" />
+                        </svg>
+                    </button>
                 </div>
-                <Modal v-if="hideModal" @hide-modal="handleHideModal"></Modal>
+                <div class="button__edit">
+                    <button title="Chỉnh sửa">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" aria-hidden="true" fill="none">
+                            <path fill="currentColor" d="m13.96 5.46 4.58 4.58a1 1 0 0 0 1.42 0l1.38-1.38a2 2 0 0 0 0-2.82l-3.18-3.18a2 2 0 0 0-2.82 0l-1.38 1.38a1 1 0 0 0 0 1.42ZM2.11 20.16l.73-4.22a3 3 0 0 1 .83-1.61l7.87-7.87a1 1 0 0 1 1.42 0l4.58 4.58a1 1 0 0 1 0 1.42l-7.87 7.87a3 3 0 0 1-1.6.83l-4.23.73a1.5 1.5 0 0 1-1.73-1.73Z" class></path>
+                        </svg>
+                    </button>
+                </div>
+                <Modal v-if="hideModalBuy" type="modal-buy" @hide-modal="handleHideModal"></Modal>
                 <div class="content-text">
-                    <p><b>{{ dynamicTexts.text1 }}</b> Tày</p>
-                    <p><b>{{ dynamicTexts.text2 }}</b> Thổ</p>
-                    <p><b>{{ dynamicTexts.text3 }}</b> Thổ, Ngạn, Phén, Thu Lao và Pa Dí</p>
-                    <hr>
-                    <p><b>{{ dynamicTexts.text4 }}</b> Đông Bắc Bộ</p>
-                    <p><b>{{ dynamicTexts.text5 }}</b> Vùng thung lũng các tỉnh Đông Bắc, từ Quảng Ninh, Bắc Giang đến Cao Bằng, Bắc Kạn, Lào Cai, Yên Bái</p>
-                    <hr>
-                    <div>
-                        <p><b>{{ dynamicTexts.text6 }}</b> 2729</p>
-                        <p><b>{{ dynamicTexts.text7 }}</b> 0.003%</p>
-                    </div>
-                    <hr>
-                    <p><b>{{ dynamicTexts.text8 }}</b> Tạng - Miến</p>
-                    <p><b>{{ dynamicTexts.text9 }}</b> Hán - Tạng</p>
-                    <hr>
-                    <p><b>{{ dynamicTexts.text10 }}</b></p>
-                    <p>Trang phục của phụ nữ Cống khá đơn giản gồm: áo, váy, dây thắt lưng, yếm, khăn đội đầu và một số đồ trang sức. Áo ngắn may bằng vải trắng hoặc màu chàm, tay áo được nối dài, mở ngực, cổ áo liền với nẹp ngực, áo không xẻ tà. Cổ áo là một dải vải đen kéo dài từ vạt áo bên phải chạy vòng qua cổ sang hết vạt áo bên trái. Dọc theo chiều dài của nẹp áo có đính đôi dây bằng sợi bông se lại hình vặn thừng để làm dây buộc.</p>
-                    <p>Trang phục nam giới người Cống gồm có khăn, áo, quần may bằng vải, nhuộm chàm không trang trí.</p>
+                    <p><b>{{ dynamicTexts.text1 }}</b> <span>Tày</span></p>
+                        <p><b>{{ dynamicTexts.text2 }}</b> <span>Thổ</span></p>
+                        <p><b>{{ dynamicTexts.text3 }}</b> <span>Thổ, Ngạn, Phén, Thu Lao và Pa Dí</span></p>
+                        <hr>
+                        <p><b>{{ dynamicTexts.text4 }}</b> <span>Đông Bắc Bộ</span></p>
+                        <p><b>{{ dynamicTexts.text5 }}</b> <span>Vùng thung lũng các tỉnh Đông Bắc, từ Quảng Ninh, Bắc Giang đến Cao Bằng, Bắc Kạn, Lào Cai, Yên Bái</span></p>
+                        <hr>
+                        <div>
+                            <p><b>{{ dynamicTexts.text6 }}</b> <span>2729</span></p>
+                            <p><b>{{ dynamicTexts.text7 }}</b> <span>0.003%</span></p>
+                        </div>
+                        <hr>
+                        <p><b>{{ dynamicTexts.text8 }}</b> <span>Tạng - Miến</span></p>
+                        <p><b>{{ dynamicTexts.text9 }}</b> <span>Hán - Tạng</span></p>
+                        <hr>
+                        <p><b>{{ dynamicTexts.text10 }}</b></p>
+                        <p><span>Trang phục của phụ nữ Cống khá đơn giản gồm: áo, váy, dây thắt lưng, yếm, khăn đội đầu và một số đồ trang sức. Áo ngắn may bằng vải trắng hoặc màu chàm, tay áo được nối dài, mở ngực, cổ áo liền với nẹp ngực, áo không xẻ tà. Cổ áo là một dải vải đen kéo dài từ vạt áo bên phải chạy vòng qua cổ sang hết vạt áo bên trái. Dọc theo chiều dài của nẹp áo có đính đôi dây bằng sợi bông se lại hình vặn thừng để làm dây buộc.</span></p>
+                        <p><span>Trang phục nam giới người Cống gồm có khăn, áo, quần may bằng vải, nhuộm chàm không trang trí.</span></p>
                 </div>
                 <div class="content-logo">
                     <div class="content-logo__btn">
@@ -53,7 +68,17 @@
             </div>
             <hr style="border: none; height: 2px; background-color: #f5f5f5;">
             <div class="comment-list">
-                <span>a</span>
+                <div class="box-infor">
+                    <div class="box-infor__avatar">
+                        <span>M</span>
+                    </div>
+                    <p class="box-infor__name">Mạnh</p>
+                </div>
+                <div class="box-comment">
+                    <div class="box-comment__question">
+                        <p>Trang phục rất đẹp.</p>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
@@ -117,12 +142,12 @@ import Modal from '@/components/Modal.vue'
             },
 
             buyCostume() {
-                this.hideModal = true;
+                this.hideModalBuy = true;
             },
 
             handleHideModal(value) {
-                this.hideModal = value;
-            }
+                this.hideModalBuy = value;
+            },
         },
 
         computed: {
@@ -149,7 +174,7 @@ import Modal from '@/components/Modal.vue'
         data() {
             return {
                 items: ['Cống','Hà Nhì','Kháng','Khơ Mú','La Ha','La Hủ','Lào','Lự','Mảng','Si La','Xinh-mun','Bố Y','Dao','Giáy','Mông','Phù Lá','Thái','Cờ Lao','La Chí','Lô Lô','Ngái','Nùng','Pà Thẻn','Pu Péo','Sán Chay','Sán Dìu','Tày','Mường','Việt','Bru- Vân Kiều','Chứt','Cơ-tu','Ơ-đu','Tà-ôi','Thổ','Co','Ra Glai','Brâu','Chu-ru','Cơ-ho','Ê-đê','Gia-rai','Mạ','Mnông','Rơ-măm','Xơ-đăng','Ba-na','Giẻ-triêng','Hrê','Chơ-ro','X`Tiêng','Khmer','Hoa','Chăm'],
-                hideModal: false,
+                hideModalBuy: false,
             }
         }
     }
@@ -212,11 +237,12 @@ import Modal from '@/components/Modal.vue'
     position: absolute;
     right: 0;
     top: 16px;
-    visibility: hidden;
 }
 
-.content:hover .button__buy {
-    visibility: visible;
+.button__edit {
+    position: absolute;
+    right: 0;
+    top: 50px;
 }
 
 /**
@@ -264,6 +290,20 @@ import Modal from '@/components/Modal.vue'
     margin: 1.2vh;
 }
 
+.content-text span {
+    animation: showText 1s ease-in-out forwards;
+}
+
+@keyframes showText {
+  0% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 1;
+  }
+}
+
+
 .content-logo {
     display: flex;
     width: 40vw;
@@ -309,6 +349,44 @@ hr {
     border: 0;
     height: 1px;
     background-color: black;
+}
+
+.box-infor {
+    display: flex;
+}
+
+.box-infor__avatar {
+    width: 30px;
+    height: 30px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: #FFF;
+    font-weight: 900;
+    background-color: aqua;
+    border-radius: 50%;
+    margin-right: 10px;
+}
+
+.box-infor__name {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-weight: 500;
+}
+
+.box-comment__question {
+    box-shadow: 0 1px 2px 0 rgba(60,64,67,10%),0 2px 6px 2px rgba(60,64,67,15%);
+    width: calc(100% - 25px);
+    margin-left: auto;
+    padding: 10px;
+    border-radius: 13px;
+}
+
+.button-comment__rep {
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
 }
 
 </style>
