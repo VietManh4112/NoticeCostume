@@ -48,19 +48,19 @@ const Resource = {
         en:'Residence area:'
     },
     text6: {
-        vi: 'Dân số (2019):',
+        vi: 'Chất liệu:',
         en:'Population (2019):'
     },
     text7: {
-        vi: 'Dân số:',
+        vi: 'Họa tiết:',
         en:'Population:'
     },
     text8: {
-        vi: 'Nhóm ngôn ngữ:',
+        vi: 'Thông tin thêm:',
         en:'Language group:'
     },
     text9: {
-        vi: 'Ngữ hệ:',
+        vi: 'Đặc điểm:',
         en:'Proto language'
     },
     text10: {

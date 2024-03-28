@@ -17,42 +17,43 @@
                     </button>
                 </div>
                 <div class="button__edit">
-                    <button title="Chỉnh sửa">
+                    <button @click="editInfo" title="Chỉnh sửa">
                         <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" aria-hidden="true" fill="none">
                             <path fill="currentColor" d="m13.96 5.46 4.58 4.58a1 1 0 0 0 1.42 0l1.38-1.38a2 2 0 0 0 0-2.82l-3.18-3.18a2 2 0 0 0-2.82 0l-1.38 1.38a1 1 0 0 0 0 1.42ZM2.11 20.16l.73-4.22a3 3 0 0 1 .83-1.61l7.87-7.87a1 1 0 0 1 1.42 0l4.58 4.58a1 1 0 0 1 0 1.42l-7.87 7.87a3 3 0 0 1-1.6.83l-4.23.73a1.5 1.5 0 0 1-1.73-1.73Z" class></path>
                         </svg>
                     </button>
                 </div>
-                <Modal v-if="hideModalBuy" type="modal-buy" @hide-modal="handleHideModal"></Modal>
-                <div class="content-text">
-                    <p><b>{{ dynamicTexts.text1 }}</b> <span>Tày</span></p>
-                        <p><b>{{ dynamicTexts.text2 }}</b> <span>Thổ</span></p>
-                        <p><b>{{ dynamicTexts.text3 }}</b> <span>Thổ, Ngạn, Phén, Thu Lao và Pa Dí</span></p>
-                        <hr>
-                        <p><b>{{ dynamicTexts.text4 }}</b> <span>Đông Bắc Bộ</span></p>
-                        <p><b>{{ dynamicTexts.text5 }}</b> <span>Vùng thung lũng các tỉnh Đông Bắc, từ Quảng Ninh, Bắc Giang đến Cao Bằng, Bắc Kạn, Lào Cai, Yên Bái</span></p>
+                <Modal v-if="hideModalBuy" type="modal-buy" @hide-modal="handleHideModalBuy"></Modal>
+                <Modal v-if="hideModalEdit" type="modal-edit" @hide-modal="handleHideModalEdit"></Modal>
+                <div v-for="(item, index) in items" :key="index" class="content-text">
+                    <div v-for="(info, indexinfo) in info" :key="indexinfo">
+                        <template v-if="index === count -1">
+                        <p><b>{{ dynamicTexts.text1 }}</b> <span>{{item.role}}</span></p>
+
                         <hr>
                         <div>
-                            <p><b>{{ dynamicTexts.text6 }}</b> <span>2729</span></p>
-                            <p><b>{{ dynamicTexts.text7 }}</b> <span>0.003%</span></p>
+                            <p><b>{{ dynamicTexts.text6 }}</b> <span>{{ info.material }}</span></p>
+                            <p><b>{{ dynamicTexts.text7 }}</b> <span>{{ info.pattern }}</span></p>
                         </div>
                         <hr>
-                        <p><b>{{ dynamicTexts.text8 }}</b> <span>Tạng - Miến</span></p>
-                        <p><b>{{ dynamicTexts.text9 }}</b> <span>Hán - Tạng</span></p>
+                        <p><b>{{ dynamicTexts.text8 }}</b> <span>{{ info.other }}</span></p>
+                        <p><b>{{ dynamicTexts.text9 }}</b> <span>{{ info.characteristic }}</span></p>
                         <hr>
                         <p><b>{{ dynamicTexts.text10 }}</b></p>
-                        <p><span>Trang phục của phụ nữ Cống khá đơn giản gồm: áo, váy, dây thắt lưng, yếm, khăn đội đầu và một số đồ trang sức. Áo ngắn may bằng vải trắng hoặc màu chàm, tay áo được nối dài, mở ngực, cổ áo liền với nẹp ngực, áo không xẻ tà. Cổ áo là một dải vải đen kéo dài từ vạt áo bên phải chạy vòng qua cổ sang hết vạt áo bên trái. Dọc theo chiều dài của nẹp áo có đính đôi dây bằng sợi bông se lại hình vặn thừng để làm dây buộc.</span></p>
-                        <p><span>Trang phục nam giới người Cống gồm có khăn, áo, quần may bằng vải, nhuộm chàm không trang trí.</span></p>
+                        <p><b>Nam : </b><span>{{ info.male }}</span></p>
+                        <p><b>Nữ : </b><span>{{ info.female }}</span></p>
+                    </template>
+                    </div>
                 </div>
                 <div class="content-logo">
                     <div class="content-logo__btn">
-                        <Button @click="gotoPreviousPage" :disabled="index === 0" type="nav">Previous</Button>
+                        <Button @click="gotoPreviousPage" :disabled="count === 1" type="nav">Previous</Button>
                     </div>
                     <div class="content-logo__img">
                         <img src="@/assets/img/logo.png" class="img-logo">
                     </div>
                     <div class="content-logo__btn">
-                        <Button @click="gotoNextPage" :disabled="index === 53" type="nav">Next</Button>
+                        <Button @click="gotoNextPage" :disabled="count === 54" type="nav">Next</Button>
                     </div>
                 </div>
             </div>
@@ -88,6 +89,8 @@
 import Resource from '@/helper/resource.js'
 import Button from '@/components/Button.vue'
 import Modal from '@/components/Modal.vue'
+import EthnicStore from "@/store/ethnic"
+import axiosInstance from '@/helper/api.js'
     export default {
         name: "CostumeInfomation",
 
@@ -99,11 +102,29 @@ import Modal from '@/components/Modal.vue'
         props: {
             imgleft: String,
             imgright:String,
-            index: Number,
+            count: Number,
         },
 
         mounted() {
             window.addEventListener('keydown', this.handleKeyDown);
+
+            EthnicStore.get('/api/get-ethnics')
+            .then(response => {
+                response.data.forEach(item => {
+                    const newItem = {...this.ethnic}
+                    newItem.role = item.name
+                    this.items.push(newItem)
+                })
+            }
+            ).catch(error => {
+                console.error(error);
+            });
+        },
+
+        watch: {
+            count(newValue, oldValue) {
+                this.loadData(newValue);
+            }
         },
 
         methods: {
@@ -112,8 +133,8 @@ import Modal from '@/components/Modal.vue'
              * Chuyển hướng tới trang tiếp theo
              */
             gotoNextPage() {
-                const nextPageIndex = this.index + 1;
-                const nextPage = this.items[nextPageIndex];
+                const nextPageIndex = this.count + 1;
+                const nextPage = this.items[nextPageIndex - 1].role;
                 const nextPageEncoded = encodeURIComponent(nextPage);
                 this.$router.push(`/ethnic/${nextPageEncoded}`);
             },
@@ -123,8 +144,8 @@ import Modal from '@/components/Modal.vue'
              * Chuyển hướng tới trang trước đó
              */
             gotoPreviousPage() {
-                const previousPageIndex = this.index - 1;
-                const previousPage = this.items[previousPageIndex];
+                const previousPageIndex = this.count - 1;
+                const previousPage = this.items[previousPageIndex - 1].role;
                 const previousPageEncoded = encodeURIComponent(previousPage);
                 this.$router.push(`/ethnic/${previousPageEncoded}`);
             },
@@ -134,9 +155,9 @@ import Modal from '@/components/Modal.vue'
              * Điều hướng trang web bằng nút mũi tên
              */
             handleKeyDown() {
-                if (event.key === 'ArrowLeft' && this.index > 0) {
+                if (event.key === 'ArrowLeft' && this.count > 1) {
                     this.gotoPreviousPage();
-                } else if (event.key === 'ArrowRight' && this.index < 53) {
+                } else if (event.key === 'ArrowRight' && this.count < 54) {
                     this.gotoNextPage();
                 }
             },
@@ -145,8 +166,38 @@ import Modal from '@/components/Modal.vue'
                 this.hideModalBuy = true;
             },
 
-            handleHideModal(value) {
+            handleHideModalBuy(value) {
                 this.hideModalBuy = value;
+            },
+
+            editInfo() {
+                this.hideModalEdit = true;
+            },
+
+            handleHideModalEdit() {
+                this.hideModalEdit = value;
+            },
+
+            async loadData(id) {
+                axiosInstance.get('/api/get-costumes/' + id)
+                .then(response => {
+                    const newItem = {...this.ethnic}
+                    newItem.material = response.data.material
+                    newItem.pattern = response.data.pattern
+                    newItem.other = response.data.other
+                    newItem.characteristic = response.data.characteristic
+                    newItem.male = response.data.listCostumesDetail[0].description
+                    newItem.female = response.data.listCostumesDetail[1].description
+                    this.info.push(newItem)
+                    console.log(this.info)
+                })
+                .catch(error => {
+                    throw new Error(error);
+                })
+            },
+
+            itemsToShow() {
+                return this.items;
             },
         },
 
@@ -168,13 +219,26 @@ import Modal from '@/components/Modal.vue'
                     text9: this.isEnglish ? Resource.text9.en : Resource.text9.vi,
                     text10: this.isEnglish ? Resource.text10.en : Resource.text10.vi,
                 }
-            }
+            },
         },
 
         data() {
             return {
-                items: ['Cống','Hà Nhì','Kháng','Khơ Mú','La Ha','La Hủ','Lào','Lự','Mảng','Si La','Xinh-mun','Bố Y','Dao','Giáy','Mông','Phù Lá','Thái','Cờ Lao','La Chí','Lô Lô','Ngái','Nùng','Pà Thẻn','Pu Péo','Sán Chay','Sán Dìu','Tày','Mường','Việt','Bru- Vân Kiều','Chứt','Cơ-tu','Ơ-đu','Tà-ôi','Thổ','Co','Ra Glai','Brâu','Chu-ru','Cơ-ho','Ê-đê','Gia-rai','Mạ','Mnông','Rơ-măm','Xơ-đăng','Ba-na','Giẻ-triêng','Hrê','Chơ-ro','X`Tiêng','Khmer','Hoa','Chăm'],
+                
                 hideModalBuy: false,
+                hideModalEdit: false,
+                ethnics : {
+                    role: '',
+                    material: '',
+                    pattern: '',
+                    other: '',
+                    characteristic: '',
+                    male: '',
+                    female: '',
+                },
+                items : [],
+                info: [],
+                isDataFetched: false
             }
         }
     }

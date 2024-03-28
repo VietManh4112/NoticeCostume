@@ -5,7 +5,7 @@
     </div>
 
     <div v-else-if="type === 'form-text'">
-        <input type="text" :placeholder="placeholder" class="textfield__form">
+        <input type="text" :placeholder="placeholder" @input="$emit('input', $event.target.value)" class="textfield__form">
     </div>
 
     <div v-else-if="type === 'form-number'">
@@ -59,7 +59,7 @@ export default {
 
 .textfield__form {
     width: 380px;
-    height: 50px;
+    height: 45px;
     padding: 5px 15px;
     border: 1px solid rgba(119, 118, 117, 30%);
     border-radius: 4px;

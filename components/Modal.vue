@@ -31,8 +31,40 @@
                 <Button type="nav" @click="buyCostume">Đặt mua</Button>
             </div>
 
-            <div v-if="type === 'modal-edit'">
-                
+            <div v-if="type === 'modal-edit'" class="modal-content__edit">
+                <div class="flex">
+                    <p>Tên tự gọi:</p>
+                    <TextField type="form-text"></TextField>
+                </div>
+                <div class="flex">
+                    <p>Tên khác:</p>
+                    <TextField type="form-text"></TextField>
+                </div>
+                <div class="flex">
+                    <p>Nhóm địa phương:</p>
+                    <TextField type="form-text"></TextField>
+                </div>
+                <div class="flex">
+                    <p>Vùng cư trú:</p>
+                    <TextField type="form-text"></TextField>
+                </div>
+                <div class="flex">
+                    <p>Chất liệu:</p>
+                    <TextField type="form-text"></TextField>
+                </div>
+                <div class="flex">
+                    <p>Họa tiết:</p>
+                    <TextField type="form-text"></TextField>
+                </div>
+                <div class="flex">
+                    <p>Nam phục:</p>
+                    <TextField type="form-text"></TextField>
+                </div>
+                <div class="flex">
+                    <p>Nữ phục:</p>
+                    <TextField type="form-text"></TextField>
+                </div>
+                <Button type="nav">Xác nhận</Button>
             </div>
         </div>
     </div>
@@ -98,7 +130,7 @@ import Button from '@/components/Button.vue'
     background-color: rgba(0, 0, 0, 50%);
 }
 
-.modal-content__buy {
+.modal-content__buy,  .modal-content__edit{
     margin: 8% auto;
     padding: 20px;
     width: 50%;
@@ -111,6 +143,10 @@ import Button from '@/components/Button.vue'
     transform: scale(1);
     transition: transform 1s;
     position: relative;
+}
+
+.modal-content__edit {
+    margin: 4.8% auto;
 }
 
 .modal-input {

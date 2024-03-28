@@ -42,73 +42,20 @@
       </div>
     </div>
 
-    
+
   </div>
 </template>
 <script>
-import axiosInstance from '@/helper/api.js'
+import axiosInstance, { setBearerToken } from '@/helper/api.js'
 import Resource from '@/helper/resource.js'
 import Avatar from '@/components/Avatar.vue';
 import Button from '@/components/Button.vue';
 import TextField from '@/components/TextField.vue';
+import EthnicStore from "@/store/ethnic";
 import bg1 from '@/assets/img/bgcostume1.png';
 import bg2 from '@/assets/img/bgcostume2.png';
 import bg3 from '@/assets/img/bgcostume3.png';
 import bg4 from '@/assets/img/bgcostume4.png';
-import image1 from '@/assets/img/avatar01.png';
-import image2 from '@/assets/img/avatar02.png';
-import image3 from '@/assets/img/avatar03.png';
-import image4 from '@/assets/img/avatar04.png';
-import image5 from '@/assets/img/avatar05.png';
-import image6 from '@/assets/img/avatar06.png';
-import image7 from '@/assets/img/avatar07.png';
-import image8 from '@/assets/img/avatar08.png';
-import image9 from '@/assets/img/avatar09.png';
-import image10 from '@/assets/img/avatar10.png';
-import image11 from '@/assets/img/avatar11.png';
-import image12 from '@/assets/img/avatar12.png';
-import image13 from '@/assets/img/avatar13.png';
-import image14 from '@/assets/img/avatar14.png';
-import image15 from '@/assets/img/avatar15.png';
-import image16 from '@/assets/img/avatar16.png';
-import image17 from '@/assets/img/avatar17.png';
-import image18 from '@/assets/img/avatar18.png';
-import image19 from '@/assets/img/avatar19.png';
-import image20 from '@/assets/img/avatar20.png';
-import image21 from '@/assets/img/avatar21.png';
-import image22 from '@/assets/img/avatar22.png';
-import image23 from '@/assets/img/avatar23.png';
-import image24 from '@/assets/img/avatar24.png';
-import image25 from '@/assets/img/avatar25.png';
-import image26 from '@/assets/img/avatar26.png';
-import image27 from '@/assets/img/avatar27.png';
-import image28 from '@/assets/img/avatar28.png';
-import image29 from '@/assets/img/avatar29.png';
-import image30 from '@/assets/img/avatar30.png';
-import image31 from '@/assets/img/avatar31.png';
-import image32 from '@/assets/img/avatar32.png';
-import image33 from '@/assets/img/avatar33.png';
-import image34 from '@/assets/img/avatar34.png';
-import image35 from '@/assets/img/avatar35.png';
-import image36 from '@/assets/img/avatar36.png';
-import image37 from '@/assets/img/avatar37.png';
-import image38 from '@/assets/img/avatar38.png';
-import image39 from '@/assets/img/avatar39.png';
-import image40 from '@/assets/img/avatar40.png';
-import image41 from '@/assets/img/avatar41.png';
-import image42 from '@/assets/img/avatar42.png';
-import image43 from '@/assets/img/avatar43.png';
-import image44 from '@/assets/img/avatar44.png';
-import image45 from '@/assets/img/avatar45.png';
-import image46 from '@/assets/img/avatar46.png';
-import image47 from '@/assets/img/avatar47.png';
-import image48 from '@/assets/img/avatar48.png';
-import image49 from '@/assets/img/avatar49.png';
-import image50 from '@/assets/img/avatar50.png';
-import image51 from '@/assets/img/avatar51.png';
-import image52 from '@/assets/img/avatar52.png';
-import image53 from '@/assets/img/avatar53.png';
-import image54 from '@/assets/img/avatar54.png';
   export default {
     components: {
       Avatar,
@@ -122,62 +69,13 @@ import image54 from '@/assets/img/avatar54.png';
         currentIndex: 0,
         intervalId: null,
         showAvatar: false,
-        items: [
-          { imageUrl: image1, role: 'Cống' },
-          { imageUrl: image2, role: 'Hà Nhì' },
-          { imageUrl: image3, role: 'Kháng' },
-          { imageUrl: image4, role: 'Khơ Mú' },
-          { imageUrl: image5, role: 'La Ha' },
-          { imageUrl: image6, role: 'La Hủ' },
-          { imageUrl: image7, role: 'Lào' },
-          { imageUrl: image8, role: 'Lự' },
-          { imageUrl: image9, role: 'Mảng' },
-          { imageUrl: image10, role: 'Si La' },
-          { imageUrl: image11, role: 'Xinh-mun' },
-          { imageUrl: image12, role: 'Bố Y' },
-          { imageUrl: image13, role: 'Dao' },
-          { imageUrl: image14, role: 'Giáy' },
-          { imageUrl: image15, role: 'Mông' },
-          { imageUrl: image16, role: 'Phù Lá' },
-          { imageUrl: image17, role: 'Thái' },
-          { imageUrl: image18, role: 'Cờ Lao' },
-          { imageUrl: image19, role: 'La Chí' },
-          { imageUrl: image20, role: 'Lô Lô' },
-          { imageUrl: image21, role: 'Ngái' },
-          { imageUrl: image22, role: 'Nùng' },
-          { imageUrl: image23, role: 'Pà Thẻn' },
-          { imageUrl: image24, role: 'Pu Péo' },
-          { imageUrl: image25, role: 'Sán Chay' },
-          { imageUrl: image26, role: 'Sán Dìu' },
-          { imageUrl: image27, role: 'Tày' },
-          { imageUrl: image28, role: 'Mường' },
-          { imageUrl: image29, role: 'Việt' },
-          { imageUrl: image30, role: 'Bru- Vân Kiều' },
-          { imageUrl: image31, role: 'Chứt' },
-          { imageUrl: image32, role: 'Cơ-tu' },
-          { imageUrl: image33, role: 'Ơ-đu' },
-          { imageUrl: image34, role: 'Tà-ôi' },
-          { imageUrl: image35, role: 'Thổ' },
-          { imageUrl: image36, role: 'Co' },
-          { imageUrl: image37, role: 'Ra Glai' },
-          { imageUrl: image38, role: 'Brâu' },
-          { imageUrl: image39, role: 'Chu-ru' },
-          { imageUrl: image40, role: 'Cơ-ho' },
-          { imageUrl: image41, role: 'Ê-đê' },
-          { imageUrl: image42, role: 'Gia-rai' },
-          { imageUrl: image43, role: 'Mạ' },
-          { imageUrl: image44, role: 'Mnông' },
-          { imageUrl: image45, role: 'Rơ-măm' },
-          { imageUrl: image46, role: 'Xơ-đăng' },
-          { imageUrl: image47, role: 'Ba-na' },
-          { imageUrl: image48, role: 'Giẻ-triêng' },
-          { imageUrl: image49, role: 'Hrê' },
-          { imageUrl: image50, role: 'Chơ-ro' },
-          { imageUrl: image51, role: 'X`Tiêng' },
-          { imageUrl: image52, role: 'Khmer' },
-          { imageUrl: image53, role: 'Hoa' },
-          { imageUrl: image54, role: 'Chăm' }
-        ],
+        // them 
+        ethnic : {
+          imageUrl: '',
+          role: '',
+          index: ''
+        },
+        items : [],
         itemsPerPage: 10,
         currentIndexItem: 0,
         searchKeyword: '',
@@ -194,18 +92,18 @@ import image54 from '@/assets/img/avatar54.png';
       itemsToShow() {
         return this.items.slice(0, this.currentIndexItem + this.itemsPerPage);
       },
-      
+
       maintitle() {
         if (this.isEnglish) {
-          return Resource.mainTitle.en; 
+          return Resource.mainTitle.en;
         } else {
           return Resource.mainTitle.vi;
         }
-      },  
+      },
 
       maintext() {
         if (this.isEnglish) {
-          return Resource.mainText.en; 
+          return Resource.mainText.en;
         } else {
           return Resource.mainText.vi;
         }
@@ -228,9 +126,22 @@ import image54 from '@/assets/img/avatar54.png';
     },
 
     mounted() {
+      EthnicStore.get('/api/get-ethnics')
+      .then(response => {
+          response.data.forEach(item => {
+            const newItem = {...this.ethnic}
+            newItem.index = item.id
+            newItem.imageUrl = item.imageUrl
+            newItem.role = item.name
+            this.items.push(newItem)
+          })
+        }
+      ).catch(error => {
+        console.error(error);
+      });
       // Bắt đầu tự động lướt qua sau mỗi 5 giây
       this.intervalId = setInterval(this.nextImage, 5000);
-      
+
     },
 
     beforeDestroy() {
@@ -256,7 +167,7 @@ import image54 from '@/assets/img/avatar54.png';
       moreEthnic() {
         this.index += this.numberEthnic;
       },
-
+      // them vao user store , co khi nen xu ly o middleware
       async update() {
         const postData = {
           username: 'admin',
@@ -266,6 +177,7 @@ import image54 from '@/assets/img/avatar54.png';
         .then(response => {
           localStorage.setItem('token', response.data);
           const tokenlocal = localStorage.getItem('token');
+          setBearerToken(tokenlocal);
           console.log(tokenlocal);
         })
         .catch(error => {
@@ -392,7 +304,7 @@ g {
   justify-content: center;
   align-items: center;
   border-radius: 8px;
-  opacity: 0; 
+  opacity: 0;
   width: 120px;
   height: 30px;
   transition: opacity 0.3s ease;

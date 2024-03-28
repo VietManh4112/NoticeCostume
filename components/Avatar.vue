@@ -1,6 +1,5 @@
 <template>
-    <div @click="sendId">
-      <nuxt-link :to="'/ethnic/' + role">
+    <nuxt-link :to="'/ethnic/' + role">
         <svg preserveAspectRatio='none' data-bbox='-4 -10 160 160' viewBox='-4 -10 160 160' height='160' width='160'
             xmlns='http://www.w3.org/2000/svg' data-type='shape'>
             <defs>
@@ -19,7 +18,6 @@
             </g>
         </svg>
       </nuxt-link>
-    </div>
 </template>
 
 <script>
@@ -29,12 +27,6 @@
             imageUrl: String,
             role: String,
         },
-
-        methods: {
-          sendId() {
-            console.log(this.role);
-          }
-        }
     }
 </script>
 

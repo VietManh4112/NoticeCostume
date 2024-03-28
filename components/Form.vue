@@ -25,11 +25,20 @@
                 <div class="border-line"></div>
                     <span class="text-line">Hoặc</span>
                 </div>
-                <TextField type="form-text" :placeholder="Email"></TextField>
-                <TextField type="form-pass" :placeholder="Pass"></TextField>
-                <TextField v-show="type === 'register'" type="form-pass" :placeholder="ConfirmPass"></TextField>
+                <div style="position: relative;">
+                    <TextField type="form-text" :placeholder="Name" v-model="name"></TextField>
+                    <p v-if="validateName" class="validateInput">Tên đăng nhập không được bỏ trống!</p>
+                </div>
+                <div style="position: relative;">
+                    <TextField type="form-pass" :placeholder="Pass" v-model="pass"></TextField>
+                    <p  v-if="validatePass" class="validateInput">Mật khẩu không được bỏ trống!</p>
+                </div>
+                <div style="position: relative;">
+                    <TextField v-show="type === 'register'" type="form-pass" :placeholder="ConfirmPass" v-model="confirmpass"></TextField>
+                    <p v-show="type === 'register'" class="validateInput">{{ validationMessage }}</p>
+                </div>
                 <div v-if="type === 'login'" style="display: flex;justify-content: flex-end;margin-bottom: 10px;">{{ fogotpass }}</div>
-                <Button type="icon">
+                <Button type="icon" @click="updateAccount">
                     <p v-show="type === 'login'">{{ loginBtn }}</p>
                     <p v-show="type === 'register'">{{ registerBtn }}</p>
                 </Button>
@@ -94,11 +103,41 @@ import Button from '@/components/Button.vue'
 
         data() {
             return {
-                Email: 'Email',
+                Name: 'Tên đăng nhập',
                 Pass: 'Mật Khẩu',
                 ConfirmPass: 'Xác nhận mật khẩu',
+                name: '',
+                pass: '',
+                confirmpass: '',
+                validateName: false,
+                validatePass: false,
+                validationMessage: '',
             };
         },
+
+        methods: {
+            updateAccount() {
+                if (this.name.trim() === '') {
+                    this.validateName = true;
+                } else {
+                    this.validateName = false;
+                }
+
+                if (this.pass.trim() === '') {
+                    this.validatePass = true;
+                } else {
+                    this.validatePass = false;
+                }
+
+                if (this.confirmpass.trim() === '') {
+                    this.validationMessage = 'Xác nhận mật khẩu không được bỏ trống!';
+                } else if (this.confirmpass !== this.pass) {
+                    this.validationMessage = 'Mật khẩu không giống!';
+                } else {
+                    this.validationMessage = '';
+                }
+            },
+        }
     }
 </script>
 
@@ -179,5 +218,13 @@ li:hover {
     left: 42%;
     color: rgba(153,153,153, 100%);
     background-color: #FFF;
+}
+
+.validateInput {
+    color: red;
+    position: absolute;
+    top: 50px;
+    font-size: 12px;
+    left: 8px;
 }
 </style>
