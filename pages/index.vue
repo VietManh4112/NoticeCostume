@@ -278,7 +278,7 @@ a {
   color: rgba(99,99,99,100%);
 }
 
-svg {
+.avatar-container svg {
   border: 1px solid white;
   border-radius: 50%;
   box-shadow: var(--shd,0 1px 3px rgba(0,0,0,50%));

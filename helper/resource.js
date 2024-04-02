@@ -32,39 +32,31 @@ const Resource = {
         en:'Name:'
     },
     text2: {
-        vi: 'Tên khác:',
-        en:'Another name:'
-    },
-    text3: {
-        vi: 'Nhóm địa phương:',
-        en:'Local group:'
-    },
-    text4: {
-        vi: 'Vùng cư trú:',
-        en:'Residence:'
-    },
-    text5: {
-        vi: 'Khu vực cư trú:',
-        en:'Residence area:'
-    },
-    text6: {
         vi: 'Chất liệu:',
         en:'Population (2019):'
     },
-    text7: {
+    text3: {
         vi: 'Họa tiết:',
         en:'Population:'
     },
-    text8: {
+    text4: {
         vi: 'Thông tin thêm:',
         en:'Language group:'
     },
-    text9: {
+    text5: {
         vi: 'Đặc điểm:',
         en:'Proto language'
     },
-    text10: {
+    text6: {
         vi: 'Trang phục truyền thống:',
+        en:'Traditional costume:'
+    },
+    text7: {
+        vi: 'Nam:',
+        en:'Traditional costume:'
+    },
+    text8: {
+        vi: 'Nữ:',
         en:'Traditional costume:'
     },
 }

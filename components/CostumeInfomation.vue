@@ -16,33 +16,24 @@
                         </svg>
                     </button>
                 </div>
-                <div class="button__edit">
-                    <button @click="editInfo" title="Chỉnh sửa">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" aria-hidden="true" fill="none">
-                            <path fill="currentColor" d="m13.96 5.46 4.58 4.58a1 1 0 0 0 1.42 0l1.38-1.38a2 2 0 0 0 0-2.82l-3.18-3.18a2 2 0 0 0-2.82 0l-1.38 1.38a1 1 0 0 0 0 1.42ZM2.11 20.16l.73-4.22a3 3 0 0 1 .83-1.61l7.87-7.87a1 1 0 0 1 1.42 0l4.58 4.58a1 1 0 0 1 0 1.42l-7.87 7.87a3 3 0 0 1-1.6.83l-4.23.73a1.5 1.5 0 0 1-1.73-1.73Z" class></path>
-                        </svg>
-                    </button>
-                </div>
                 <Modal v-if="hideModalBuy" type="modal-buy" @hide-modal="handleHideModalBuy"></Modal>
-                <Modal v-if="hideModalEdit" type="modal-edit" @hide-modal="handleHideModalEdit"></Modal>
                 <div v-for="(item, index) in items" :key="index" class="content-text">
                     <div v-for="(info, indexinfo) in info" :key="indexinfo">
                         <template v-if="index === count -1">
-                        <p><b>{{ dynamicTexts.text1 }}</b> <span>{{item.role}}</span></p>
-
-                        <hr>
-                        <div>
-                            <p><b>{{ dynamicTexts.text6 }}</b> <span>{{ info.material }}</span></p>
-                            <p><b>{{ dynamicTexts.text7 }}</b> <span>{{ info.pattern }}</span></p>
-                        </div>
-                        <hr>
-                        <p><b>{{ dynamicTexts.text8 }}</b> <span>{{ info.other }}</span></p>
-                        <p><b>{{ dynamicTexts.text9 }}</b> <span>{{ info.characteristic }}</span></p>
-                        <hr>
-                        <p><b>{{ dynamicTexts.text10 }}</b></p>
-                        <p><b>Nam : </b><span>{{ info.male }}</span></p>
-                        <p><b>Nữ : </b><span>{{ info.female }}</span></p>
-                    </template>
+                            <TextEdit :title=" dynamicTexts.text1" :text="item.role" :apiUrl="`/api/get-ethnics/` + count"></TextEdit>
+                            <hr>
+                            <div>
+                                <TextEdit :title=" dynamicTexts.text2" :text="info.material" :apiUrl="`/api/get-costumes/` + count"></TextEdit>
+                                <TextEdit :title=" dynamicTexts.text3" :text="info.pattern"></TextEdit>
+                            </div>
+                            <hr>
+                            <TextEdit :title=" dynamicTexts.text4" :text="info.other"></TextEdit>
+                            <TextEdit :title=" dynamicTexts.text5" :text="info.characteristic"></TextEdit>
+                            <hr>
+                            <p><b>{{ dynamicTexts.text6 }}</b></p>
+                            <TextEdit :title=" dynamicTexts.text7" :text="info.male"></TextEdit>
+                            <TextEdit :title=" dynamicTexts.text8" :text="info.female"></TextEdit>
+                        </template>
                     </div>
                 </div>
                 <div class="content-logo">
@@ -91,12 +82,14 @@ import Button from '@/components/Button.vue'
 import Modal from '@/components/Modal.vue'
 import EthnicStore from "@/store/ethnic"
 import axiosInstance from '@/helper/api.js'
+import TextEdit from '@/components/TextEdit.vue'
     export default {
         name: "CostumeInfomation",
 
         components: {
             Button,
             Modal,
+            TextEdit,
         },
 
         props: {
@@ -170,14 +163,6 @@ import axiosInstance from '@/helper/api.js'
                 this.hideModalBuy = value;
             },
 
-            editInfo() {
-                this.hideModalEdit = true;
-            },
-
-            handleHideModalEdit() {
-                this.hideModalEdit = value;
-            },
-
             async loadData(id) {
                 axiosInstance.get('/api/get-costumes/' + id)
                 .then(response => {
@@ -214,10 +199,8 @@ import axiosInstance from '@/helper/api.js'
                     text4: this.isEnglish ? Resource.text4.en : Resource.text4.vi,
                     text5: this.isEnglish ? Resource.text5.en : Resource.text5.vi,
                     text6: this.isEnglish ? Resource.text6.en : Resource.text6.vi,
-                    text7: this.isEnglish ? Resource.text7.en : Resource.text7.vi,
-                    text8: this.isEnglish ? Resource.text8.en : Resource.text8.vi,
-                    text9: this.isEnglish ? Resource.text9.en : Resource.text9.vi,
-                    text10: this.isEnglish ? Resource.text10.en : Resource.text10.vi,
+                    text7: this.isEnglish ? Resource.text6.en : Resource.text7.vi,
+                    text8: this.isEnglish ? Resource.text6.en : Resource.text8.vi,
                 }
             },
         },
@@ -226,7 +209,6 @@ import axiosInstance from '@/helper/api.js'
             return {
                 
                 hideModalBuy: false,
-                hideModalEdit: false,
                 ethnics : {
                     role: '',
                     material: '',
@@ -238,7 +220,7 @@ import axiosInstance from '@/helper/api.js'
                 },
                 items : [],
                 info: [],
-                isDataFetched: false
+                isDataFetched: false,
             }
         }
     }
@@ -303,12 +285,6 @@ import axiosInstance from '@/helper/api.js'
     top: 16px;
 }
 
-.button__edit {
-    position: absolute;
-    right: 0;
-    top: 50px;
-}
-
 /**
 * css chung cho khung left-bar, right-bar
 */
@@ -347,26 +323,12 @@ import axiosInstance from '@/helper/api.js'
 
 .content-text {
     margin-top: 3vh;
-    font-size: 12px;
+    font-size: 13px;
 }
 
 .content-text p {
     margin: 1.2vh;
 }
-
-.content-text span {
-    animation: showText 1s ease-in-out forwards;
-}
-
-@keyframes showText {
-  0% {
-    opacity: 0;
-  }
-  100% {
-    opacity: 1;
-  }
-}
-
 
 .content-logo {
     display: flex;
