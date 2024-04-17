@@ -19,6 +19,8 @@
         <Button v-if="!isLogin" type="login" @click="login">{{ loginBtn }}</Button>
         <Button v-if="!isLogin" type="register" @click="register">{{ registerBtn }}</Button>
         <img v-if="isLogin" class="user__avatar" src="https://lh3.googleusercontent.com/u/0/drive-viewer/AKGpihbDrspelpWewsXWvkQz_kkbEb2_Atp5O6Hxgijr1wk25-SQa7K54p1pqos5DP5cav6rw1DJWisOp85InFU2oRMFMOCB5O45Yxs=w1910-h885-v0">
+        <div v-if="isLogin" class="user__name">
+        </div>
       </v-app-bar>
       <Nuxt/>
     </v-container>
@@ -98,13 +100,19 @@ export default {
       miniVariant: false,
       right: true,
       rightDrawer: false,
+      sub: '',
+      url: '',
+    }
+  },
 
+  created() {
+    if(this.isEnglish) {
+      this.getData();
     }
   },
 
   beforeUpdate() {
     this.sendData();
-    this.getData();
   },
 
   methods: {
@@ -114,8 +122,16 @@ export default {
     },
 
     getData() {
-      const tokenlocal = localStorage.getItem('token');
-      console.log('default:    ' + tokenlocal);
+      const jwt = require('jsonwebtoken');
+
+      const token = localStorage.getItem('token');
+      const decoded = jwt.decode(token);
+      if (decoded) {
+        this.sub = decoded.sub;
+        this.url = decoded.url;
+        console.log('Subject:', sub);
+        console.log('Url:', url);
+      }
     },
 
     login() {
@@ -175,5 +191,9 @@ export default {
   width: 28px;
   height: 28px;
   border-radius: 50%;
+}
+
+.user__name {
+  margin: 0 10px;
 }
 </style>

@@ -160,6 +160,7 @@ import Button from '@/components/Button.vue'
                     localStorage.setItem('token', response.data);
                     const tokenlocal = localStorage.getItem('token');
                     setBearerToken(tokenlocal);
+                    this.$router.push(`/`);
                 })
                 .catch(error => {
                     console.error('Error:', error);

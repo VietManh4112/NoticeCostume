@@ -117,6 +117,7 @@ import TextEdit from '@/components/TextEdit.vue'
         watch: {
             count(newValue, oldValue) {
                 this.loadData(newValue);
+                this.loadComments(newValue);
             }
         },
 
@@ -174,11 +175,26 @@ import TextEdit from '@/components/TextEdit.vue'
                     newItem.male = response.data.listCostumesDetail[0].description
                     newItem.female = response.data.listCostumesDetail[1].description
                     this.info.push(newItem)
-                    console.log(this.info)
                 })
                 .catch(error => {
                     throw new Error(error);
                 })
+            },
+
+            async loadComments(id) {
+                axiosInstance.post('/api/get-comments', {costumeId: id})
+                .then(response => {
+                    response.data.forEach(item => {
+                        const newItem = {...this.comments}
+                        newItem.content = item.content
+                        this.comment.push(newItem)
+                        console.log(this.comment);
+                    })
+                    
+                }
+                ).catch(error => {
+                    console.error(error);
+                });
             },
 
             itemsToShow() {
@@ -218,6 +234,12 @@ import TextEdit from '@/components/TextEdit.vue'
                     male: '',
                     female: '',
                 },
+                comments : {
+                    avatar: '',
+                    name: '',
+                    content: '',
+                },
+                comment : [],
                 items : [],
                 info: [],
                 isDataFetched: false,
