@@ -16,8 +16,9 @@
           <div v-if="isEnglish"><img src="https://assets.snapedit.app/images/flags/en.svg" class="toolbar__flag">English</div>
           <div v-else><img src="https://assets.snapedit.app/images/flags/vn.svg" class="toolbar__flag">Vietnamese</div>
         </div>
-        <Button type="login" @click="login">{{ loginBtn }}</Button>
-        <Button type="register" @click="register">{{ registerBtn }}</Button>
+        <Button v-if="!isLogin" type="login" @click="login">{{ loginBtn }}</Button>
+        <Button v-if="!isLogin" type="register" @click="register">{{ registerBtn }}</Button>
+        <img v-if="isLogin" class="user__avatar" src="https://lh3.googleusercontent.com/u/0/drive-viewer/AKGpihbDrspelpWewsXWvkQz_kkbEb2_Atp5O6Hxgijr1wk25-SQa7K54p1pqos5DP5cav6rw1DJWisOp85InFU2oRMFMOCB5O45Yxs=w1910-h885-v0">
       </v-app-bar>
       <Nuxt/>
     </v-container>
@@ -35,7 +36,7 @@ export default {
   components: {
     Button,
   },
-
+  
   computed: {
     title() {
       if (this.isEnglish) {
@@ -59,6 +60,10 @@ export default {
       } else {
         return Resource.registerBtn.vi;
       }
+    },
+
+    isLogin() {
+      return this.$store.state.isLogin;
     },
 
     ...mapState(['isEnglish']),
@@ -99,12 +104,18 @@ export default {
 
   beforeUpdate() {
     this.sendData();
+    this.getData();
   },
 
   methods: {
     ...mapMutations(['setIsEnglish']),
     sendData() {
       this.setIsEnglish(!this.isEnglish);
+    },
+
+    getData() {
+      const tokenlocal = localStorage.getItem('token');
+      console.log('default:    ' + tokenlocal);
     },
 
     login() {
@@ -158,5 +169,11 @@ export default {
   padding-top: 0.3vw;
   margin-left: 0.3vw;
   margin-right: 0.3vw;
+}
+
+.user__avatar {
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
 }
 </style>

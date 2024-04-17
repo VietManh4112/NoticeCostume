@@ -38,9 +38,12 @@
                     <p v-show="type === 'register'" class="validateInput">{{ validationMessage }}</p>
                 </div>
                 <div v-if="type === 'login'" style="display: flex;justify-content: flex-end;margin-bottom: 10px;">{{ fogotpass }}</div>
-                <Button type="icon" @click="updateAccount">
-                    <p v-show="type === 'login'">{{ loginBtn }}</p>
-                    <p v-show="type === 'register'">{{ registerBtn }}</p>
+                <Button v-show="type === 'login'" type="icon" @click="updateAccount">
+                    <p >{{ loginBtn }}</p>
+                </Button>
+
+                <Button v-show="type === 'register'" type="icon">
+                    <p>{{ registerBtn }}</p>
                 </Button>
                 
             </form>
@@ -48,6 +51,8 @@
     </div>
 </template>
 <script>
+import axiosInstance, { setBearerToken } from '@/helper/api.js'
+import { mapState, mapMutations } from 'vuex';
 import Resource from '@/helper/resource.js'
 import TextField from '@/components/TextField.vue';
 import Button from '@/components/Button.vue'
@@ -98,7 +103,18 @@ import Button from '@/components/Button.vue'
 
             isEnglish() {
                 return this.$store.state.isEnglish;
-            }
+            },
+
+            ...mapState(['isLogin']),
+
+            isLogin: {
+                get() {
+                    return this.$store.state.isLogin;
+                },
+                set(value) {
+                    this.$store.commit('setIsLogin', value);
+                }
+            },
         },
 
         data() {
@@ -116,6 +132,7 @@ import Button from '@/components/Button.vue'
         },
 
         methods: {
+            ...mapMutations(['setIsLogin']),
             updateAccount() {
                 if (this.name.trim() === '') {
                     this.validateName = true;
@@ -136,6 +153,17 @@ import Button from '@/components/Button.vue'
                 } else {
                     this.validationMessage = '';
                 }
+                const postData = {username: this.name, password: this.pass};
+                axiosInstance.post('/api/auth/sign-in', postData)
+                .then(response => {
+                    this.setIsLogin(true);
+                    localStorage.setItem('token', response.data);
+                    const tokenlocal = localStorage.getItem('token');
+                    setBearerToken(tokenlocal);
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                });
             },
         }
     }

@@ -167,28 +167,7 @@ import bg4 from '@/assets/img/bgcostume4.png';
       moreEthnic() {
         this.index += this.numberEthnic;
       },
-      // them vao user store , co khi nen xu ly o middleware
-      async update() {
-        const postData = {
-          username: 'admin',
-          password: '123',
-        };
-        axiosInstance.post('/api/auth/sign-in', postData)
-        .then(response => {
-          localStorage.setItem('token', response.data);
-          const tokenlocal = localStorage.getItem('token');
-          setBearerToken(tokenlocal);
-          console.log(tokenlocal);
-        })
-        .catch(error => {
-          console.error('Error:', error);
-        });
-      }
     },
-
-    created() {
-      this.update();
-    }
   }
 </script>
 <style>

@@ -13,7 +13,7 @@
     </div>
 
     <div v-else-if="type === 'form-pass'">
-        <input type="password" :placeholder="placeholder" class="textfield__form">
+        <input type="password" :placeholder="placeholder" @input="$emit('input', $event.target.value)" class="textfield__form">
     </div>
 
 </template>

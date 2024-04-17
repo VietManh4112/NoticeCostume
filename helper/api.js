@@ -17,7 +17,6 @@ axiosInstance.interceptors.request.use(
         // Kiểm tra xem bearerToken đã được đặt hay chưa
         if (bearerToken) {
             config.headers['Authorization'] = `Bearer ${bearerToken}`;
-            console.log("headers : " + bearerToken);
         }
         return config;
     },
