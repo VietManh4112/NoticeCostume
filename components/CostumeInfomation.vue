@@ -20,19 +20,19 @@
                 <div v-for="(item, index) in items" :key="index" class="content-text">
                     <div v-for="(info, indexinfo) in info" :key="indexinfo">
                         <template v-if="index === count -1">
-                            <TextEdit :title=" dynamicTexts.text1" :text="item.role" :apiUrl="`/api/get-ethnics/` + count"></TextEdit>
+                            <div class="edit"><b><p style="margin-right: 4px;">{{ dynamicTexts.text1 }}</p></b><p style="margin-left: 0;">{{ item.role }}</p></div>
                             <hr>
                             <div>
-                                <TextEdit :title=" dynamicTexts.text2" :text="info.material" :apiUrl="`/api/get-costumes/` + count"></TextEdit>
-                                <TextEdit :title=" dynamicTexts.text3" :text="info.pattern"></TextEdit>
+                                <TextEdit :title=" dynamicTexts.text2" :material="info.material" :apiUrl="`/api/edit-costumes`" :id="count"></TextEdit>
+                                <TextEdit :title=" dynamicTexts.text3" :pattern="info.pattern" :apiUrl="`/api/edit-costumes`" :id="count"></TextEdit>
                             </div>
                             <hr>
-                            <TextEdit :title=" dynamicTexts.text4" :text="info.other"></TextEdit>
-                            <TextEdit :title=" dynamicTexts.text5" :text="info.characteristic"></TextEdit>
+                            <TextEdit :title=" dynamicTexts.text4" :other="info.other" :apiUrl="`/api/edit-costumes`" :id="count"></TextEdit>
+                            <TextEdit :title=" dynamicTexts.text5" :characteristic="info.characteristic" :apiUrl="`/api/edit-costumes`" :id="count"></TextEdit>
                             <hr>
                             <p><b>{{ dynamicTexts.text6 }}</b></p>
-                            <TextEdit :title=" dynamicTexts.text7" :text="info.male"></TextEdit>
-                            <TextEdit :title=" dynamicTexts.text8" :text="info.female"></TextEdit>
+                            <TextEdit :title=" dynamicTexts.text7" :male="info.male" :apiUrl="`/api/edit-description`" :sexId="1" :id="count"></TextEdit>
+                            <TextEdit :title=" dynamicTexts.text8" :female="info.female" :apiUrl="`/api/edit-description`" :sexId="2" :id="count"></TextEdit>
                         </template>
                     </div>
                 </div>
@@ -59,7 +59,7 @@
                 <Button type="nav">Gửi</Button>
             </div>
             <hr style="border: none; height: 2px; background-color: #f5f5f5;">
-            <div class="comment-list">
+            <div v-for="(comment, indexCmt) in comment" :key="indexCmt" class="comment-list">
                 <div class="box-infor">
                     <div class="box-infor__avatar">
                         <span>M</span>
@@ -68,7 +68,7 @@
                 </div>
                 <div class="box-comment">
                     <div class="box-comment__question">
-                        <p>Trang phục rất đẹp.</p>
+                        <p>{{ comment.content }}</p>
                     </div>
                 </div>
             </div>
@@ -184,11 +184,11 @@ import TextEdit from '@/components/TextEdit.vue'
             async loadComments(id) {
                 axiosInstance.post('/api/get-comments', {costumeId: id})
                 .then(response => {
+                    console.log(response.data)
                     response.data.forEach(item => {
                         const newItem = {...this.comments}
                         newItem.content = item.content
                         this.comment.push(newItem)
-                        console.log(this.comment);
                     })
                     
                 }

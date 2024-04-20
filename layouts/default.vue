@@ -20,6 +20,7 @@
         <Button v-if="!isLogin" type="register" @click="register">{{ registerBtn }}</Button>
         <img v-if="isLogin" class="user__avatar" src="https://lh3.googleusercontent.com/u/0/drive-viewer/AKGpihbDrspelpWewsXWvkQz_kkbEb2_Atp5O6Hxgijr1wk25-SQa7K54p1pqos5DP5cav6rw1DJWisOp85InFU2oRMFMOCB5O45Yxs=w1910-h885-v0">
         <div v-if="isLogin" class="user__name">
+          <p>{{ sub }}</p>
         </div>
       </v-app-bar>
       <Nuxt/>
@@ -100,16 +101,17 @@ export default {
       miniVariant: false,
       right: true,
       rightDrawer: false,
-      sub: '',
+      sub: 'a',
       url: '',
     }
   },
 
-  created() {
-    if(this.isEnglish) {
+  watch: {
+    isLogin(oldValue, newValue) {
       this.getData();
     }
   },
+
 
   beforeUpdate() {
     this.sendData();
@@ -118,7 +120,7 @@ export default {
   methods: {
     ...mapMutations(['setIsEnglish']),
     sendData() {
-      this.setIsEnglish(!this.isEnglish);
+      this.setIsEnglish(this.isEnglish);
     },
 
     getData() {
