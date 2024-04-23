@@ -13,7 +13,7 @@
             </span>
         </p>
         
-        <div class="button__edit">
+        <div v-show="isAdmin" class="button-edit">
             <button title="Chỉnh sửa" @click="editInfo">
                 <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" aria-hidden="true"
                     fill="none">
@@ -62,13 +62,22 @@ export default {
             } else if (this.female !== undefined) {
                 return this.female;
             }
-        }
+        },
+
+        isAdmin() {
+            return this.authority === 'admin';
+        },
     },
 
     created() {
         this.editText = this.displayValue;
         const newInfo = {...this.infocostume}
         const newDes = {...this.description}
+        const jwt = require('jsonwebtoken');
+        const token = localStorage.getItem("token");
+        if (token) {
+          this.authority = jwt.decode(localStorage.getItem('token')).role[0].authority
+        }
         newInfo.id = this.id;
         newDes.sexId = this.sexId;
         if (this.material !== undefined) {
@@ -181,6 +190,7 @@ export default {
             },
             updateCostume : [],
             updateDescription: [],
+            authority: null,
         }
     },
 }
@@ -191,13 +201,13 @@ export default {
     display: flex;
 }
 
-.button__edit {
+.button-edit {
     display: flex;
     justify-content: center;
     visibility: hidden;
 }
 
-.edit:hover .button__edit {
+.edit:hover .button-edit {
     visibility: visible;
 }
 

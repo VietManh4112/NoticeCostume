@@ -3,14 +3,15 @@
         <div class="form-img">
             <img src="@/assets/img/img.png" width="540" height="540">
         </div>
-        <div class="form-form" >
+        <div class="form-form">
             <h1 v-show="type === 'login'">{{ loginBtn }}</h1>
             <h1 v-show="type === 'register'">{{ registerBtn }}</h1>
             <form>
                 <div>
                     <ul>
                         <li class="google">
-                            <img src="https://cfcdn.apowersoft.info/astro/picwish/_astro/google.61020c54.svg" width="20" height="20" style="margin-right: 5px;">
+                            <img src="https://cfcdn.apowersoft.info/astro/picwish/_astro/google.61020c54.svg" width="20"
+                                height="20" style="margin-right: 5px;">
                             {{ google }}
                         </li>
                         <li class="facebook">
@@ -22,30 +23,32 @@
                     </ul>
                 </div>
                 <div class="display: absolute;">
-                <div class="border-line"></div>
+                    <div class="border-line"></div>
                     <span class="text-line">Hoặc</span>
                 </div>
                 <div style="position: relative;">
                     <TextField type="form-text" :placeholder="Name" v-model="name"></TextField>
-                    <p v-if="validateName" class="validateInput">Tên đăng nhập không được bỏ trống!</p>
+                    <p v-if="validateName" class="validateInput">{{ errorName }}</p>
                 </div>
                 <div style="position: relative;">
                     <TextField type="form-pass" :placeholder="Pass" v-model="pass"></TextField>
-                    <p  v-if="validatePass" class="validateInput">Mật khẩu không được bỏ trống!</p>
+                    <p v-if="validatePass" class="validateInput">Mật khẩu không được bỏ trống!</p>
                 </div>
                 <div style="position: relative;">
-                    <TextField v-show="type === 'register'" type="form-pass" :placeholder="ConfirmPass" v-model="confirmpass"></TextField>
+                    <TextField v-show="type === 'register'" type="form-pass" :placeholder="ConfirmPass"
+                        v-model="confirmpass"></TextField>
                     <p v-show="type === 'register'" class="validateInput">{{ validationMessage }}</p>
                 </div>
-                <div v-if="type === 'login'" style="display: flex;justify-content: flex-end;margin-bottom: 10px;">{{ fogotpass }}</div>
-                <Button v-show="type === 'login'" type="icon" @click="updateAccount">
-                    <p >{{ loginBtn }}</p>
+                <div v-if="type === 'login'" style="display: flex;justify-content: flex-end;margin-bottom: 10px;">{{
+                fogotpass }}</div>
+                <Button v-show="type === 'login'" type="icon" @click="login">
+                    <p>{{ loginBtn }}</p>
                 </Button>
 
                 <Button v-show="type === 'register'" type="icon">
                     <p>{{ registerBtn }}</p>
                 </Button>
-                
+
             </form>
         </div>
     </div>
@@ -56,118 +59,109 @@ import { mapState, mapMutations } from 'vuex';
 import Resource from '@/helper/resource.js'
 import TextField from '@/components/TextField.vue';
 import Button from '@/components/Button.vue'
-    export default {
-        name: "Form",
+export default {
+    name: "Form",
 
-        components: {
-            TextField,
-            Button,
+    components: {
+        TextField,
+        Button,
+    },
+
+    props: {
+        type: String,
+    },
+
+    computed: {
+        loginBtn() {
+            if (this.isEnglish) {
+                return Resource.loginBtn.en;
+            } else {
+                return Resource.loginBtn.vi;
+            }
         },
 
-        props: {
-            type: String,
+        registerBtn() {
+            if (this.isEnglish) {
+                return Resource.registerBtn.en;
+            } else {
+                return Resource.registerBtn.vi;
+            }
         },
 
-        computed: {
-            loginBtn() {
-                if (this.isEnglish) {
-                    return Resource.loginBtn.en; 
-                } else {
-                    return Resource.loginBtn.vi;
-                }
-            },
-
-            registerBtn() {
-                if (this.isEnglish) {
-                    return Resource.registerBtn.en; 
-                } else {
-                    return Resource.registerBtn.vi;
-                }
-            },
-
-            google() {
-                if (this.isEnglish) {
-                    return Resource.google.en; 
-                } else {
-                    return Resource.google.vi;
-                } 
-            },
-
-            fogotpass() {
-                if (this.isEnglish) {
-                    return Resource.fogotpass.en; 
-                } else {
-                    return Resource.fogotpass.vi;
-                } 
-            },
-
-            isEnglish() {
-                return this.$store.state.isEnglish;
-            },
-
-            ...mapState(['isLogin']),
-
-            isLogin: {
-                get() {
-                    return this.$store.state.isLogin;
-                },
-                set(value) {
-                    this.$store.commit('setIsLogin', value);
-                }
-            },
+        google() {
+            if (this.isEnglish) {
+                return Resource.google.en;
+            } else {
+                return Resource.google.vi;
+            }
         },
 
-        data() {
-            return {
-                Name: 'Tên đăng nhập',
-                Pass: 'Mật Khẩu',
-                ConfirmPass: 'Xác nhận mật khẩu',
-                name: '',
-                pass: '',
-                confirmpass: '',
-                validateName: false,
-                validatePass: false,
-                validationMessage: '',
-            };
+        fogotpass() {
+            if (this.isEnglish) {
+                return Resource.fogotpass.en;
+            } else {
+                return Resource.fogotpass.vi;
+            }
         },
 
-        methods: {
-            ...mapMutations(['setIsLogin']),
-            updateAccount() {
-                if (this.name.trim() === '') {
-                    this.validateName = true;
-                } else {
-                    this.validateName = false;
-                }
+        isEnglish() {
+            return this.$store.state.isEnglish;
+        },
+    },
 
-                if (this.pass.trim() === '') {
-                    this.validatePass = true;
-                } else {
-                    this.validatePass = false;
-                }
+    data() {
+        return {
+            Name: 'Tên đăng nhập',
+            Pass: 'Mật Khẩu',
+            ConfirmPass: 'Xác nhận mật khẩu',
+            name: '',
+            pass: '',
+            confirmpass: '',
+            validateName: false,
+            validatePass: false,
+            validationMessage: '',
+        };
+    },
 
-                if (this.confirmpass.trim() === '') {
-                    this.validationMessage = 'Xác nhận mật khẩu không được bỏ trống!';
-                } else if (this.confirmpass !== this.pass) {
-                    this.validationMessage = 'Mật khẩu không giống!';
-                } else {
-                    this.validationMessage = '';
-                }
-                const postData = {username: this.name, password: this.pass};
-                axiosInstance.post('/api/auth/sign-in', postData)
-                .then(response => {
-                    this.setIsLogin(true);
-                    localStorage.setItem('token', response.data);
-                    const tokenlocal = localStorage.getItem('token');
-                    setBearerToken(tokenlocal);
-                    this.$router.push(`/`);
-                })
-                .catch(error => {
-                    console.error('Error:', error);
-                });
-            },
-        }
-    }
+    methods: {
+        login() {
+            var error = [];
+            if (this.name.trim() === '') {
+                this.validateName = true;
+                this.errorName = "Tên đăng nhập không được bỏ trống!"
+                error.push('lỗi');
+            } else {
+                this.validateName = false;
+            }
+
+            if (this.pass.trim() === '') {
+                this.validatePass = true;
+                error.push('lỗi');
+            } else {
+                this.validatePass = false;
+            }
+
+            if (this.confirmpass.trim() === '') {
+                this.validationMessage = 'Xác nhận mật khẩu không được bỏ trống!';
+            } else if (this.confirmpass !== this.pass) {
+                this.validationMessage = 'Mật khẩu không giống!';
+            } else {
+                this.validationMessage = '';
+            }
+            const userData = { username: this.name, password: this.pass };
+            if (error.length == 0) {
+                this.$store.dispatch('login', userData)
+                    .then(() => {
+                        this.$router.push('/');
+                    })
+                    .catch((error) => {
+                        this.validateName = true;
+                        this.errorName = 'Tài khoản hoặc mật khẩu không chính xác';
+                    });
+            }
+        },
+    },
+}
 </script>
 
 <style>
@@ -176,11 +170,11 @@ import Button from '@/components/Button.vue'
     height: 91vh;
     display: flex;
     align-items: center;
-    background-image: radial-gradient(circle at 16.3021% 100%, rgba(229,112,34,70%) 0%, rgba(229,112,34,0%) 35%),
-                    radial-gradient(circle at 75.4264% 74.1960%, #F6CCB0 0%, rgba(246,204,176,0%) 40%),
-                    radial-gradient(circle at 14.1699% 17.4837%, #F6CCB0 0%, rgba(246,204,176,0%) 70%),
-                    radial-gradient(circle at 79.4987% 0%, rgba(229,112,34,72%) 0%, rgba(229,112,34,0%) 70%),
-                    radial-gradient(circle at 48.9014% 49.5215%, #FFF 0%, rgba(255,255,255,0%) 100%);
+    background-image: radial-gradient(circle at 16.3021% 100%, rgba(229, 112, 34, 70%) 0%, rgba(229, 112, 34, 0%) 35%),
+        radial-gradient(circle at 75.4264% 74.1960%, #F6CCB0 0%, rgba(246, 204, 176, 0%) 40%),
+        radial-gradient(circle at 14.1699% 17.4837%, #F6CCB0 0%, rgba(246, 204, 176, 0%) 70%),
+        radial-gradient(circle at 79.4987% 0%, rgba(229, 112, 34, 72%) 0%, rgba(229, 112, 34, 0%) 70%),
+        radial-gradient(circle at 48.9014% 49.5215%, #FFF 0%, rgba(255, 255, 255, 0%) 100%);
 }
 
 .form-form {
@@ -225,14 +219,15 @@ li:hover {
     border: 1px solid rgba(119, 118, 117, 30%);
 }
 
-.facebook, .apple {
+.facebook,
+.apple {
     width: 32px;
     height: 32px;
 }
 
 .border-line {
     width: 100%;
-    border-bottom: 1px solid rgba(153,153,153, 50%);
+    border-bottom: 1px solid rgba(153, 153, 153, 50%);
     margin-top: 40px;
     margin-bottom: 25px;
 }
@@ -245,7 +240,7 @@ li:hover {
     font-size: 16px;
     top: -39px;
     left: 42%;
-    color: rgba(153,153,153, 100%);
+    color: rgba(153, 153, 153, 100%);
     background-color: #FFF;
 }
 

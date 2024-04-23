@@ -33,19 +33,19 @@ const Resource = {
     },
     text2: {
         vi: 'Chất liệu:',
-        en:'Population (2019):'
+        en:'Material:'
     },
     text3: {
         vi: 'Họa tiết:',
-        en:'Population:'
+        en:'Pattern:'
     },
     text4: {
         vi: 'Thông tin thêm:',
-        en:'Language group:'
+        en:'Other:'
     },
     text5: {
         vi: 'Đặc điểm:',
-        en:'Proto language'
+        en:'Characteristic:'
     },
     text6: {
         vi: 'Trang phục truyền thống:',
@@ -53,11 +53,11 @@ const Resource = {
     },
     text7: {
         vi: 'Nam:',
-        en:'Traditional costume:'
+        en:'Male:'
     },
     text8: {
         vi: 'Nữ:',
-        en:'Traditional costume:'
+        en:'Female:'
     },
 }
 

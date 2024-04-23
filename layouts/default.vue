@@ -13,17 +13,26 @@
         </v-toolbar-items>
         <div class="toolbar__languages">
           <v-switch v-model="isEnglish" class="toolbar__switch" @click="sendData()"></v-switch>
-          <div v-if="isEnglish"><img src="https://assets.snapedit.app/images/flags/en.svg" class="toolbar__flag">English</div>
+          <div v-if="isEnglish"><img src="https://assets.snapedit.app/images/flags/en.svg" class="toolbar__flag">English
+          </div>
           <div v-else><img src="https://assets.snapedit.app/images/flags/vn.svg" class="toolbar__flag">Vietnamese</div>
         </div>
-        <Button v-if="!isLogin" type="login" @click="login">{{ loginBtn }}</Button>
-        <Button v-if="!isLogin" type="register" @click="register">{{ registerBtn }}</Button>
-        <img v-if="isLogin" class="user__avatar" src="https://lh3.googleusercontent.com/u/0/drive-viewer/AKGpihbDrspelpWewsXWvkQz_kkbEb2_Atp5O6Hxgijr1wk25-SQa7K54p1pqos5DP5cav6rw1DJWisOp85InFU2oRMFMOCB5O45Yxs=w1910-h885-v0">
-        <div v-if="isLogin" class="user__name">
+        <Button v-if="!hide" type="login" @click="login">{{ loginBtn }}</Button>
+        <Button v-if="!hide" type="register" @click="register">{{ registerBtn }}</Button>
+        <img v-if="hide" class="user__avatar" :src="url">
+        <div v-if="hide" class="user__name">
           <p>{{ sub }}</p>
         </div>
+        <button v-if="hide" @click="logout" style="display: flex;justify-content: center;align-items: center;" title="Thoát">
+          <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" class="icon-md">
+            <path d="M11 3H7C5.89543 3 5 3.89543 5 5V19C5 20.1046 5.89543 21 7 21H11" stroke="currentColor"
+              stroke-width="2" stroke-linecap="round"></path>
+            <path d="M20 12H11M20 12L16 16M20 12L16 8" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+              stroke-linejoin="round"></path>
+          </svg>
+        </button>
       </v-app-bar>
-      <Nuxt/>
+      <Nuxt />
     </v-container>
   </v-main>
 </template>
@@ -39,11 +48,11 @@ export default {
   components: {
     Button,
   },
-  
+
   computed: {
     title() {
       if (this.isEnglish) {
-        return Resource.Title.en; 
+        return Resource.Title.en;
       } else {
         return Resource.Title.vi;
       }
@@ -51,7 +60,7 @@ export default {
 
     loginBtn() {
       if (this.isEnglish) {
-        return Resource.loginBtn.en; 
+        return Resource.loginBtn.en;
       } else {
         return Resource.loginBtn.vi;
       }
@@ -59,14 +68,10 @@ export default {
 
     registerBtn() {
       if (this.isEnglish) {
-        return Resource.registerBtn.en; 
+        return Resource.registerBtn.en;
       } else {
         return Resource.registerBtn.vi;
       }
-    },
-
-    isLogin() {
-      return this.$store.state.isLogin;
     },
 
     ...mapState(['isEnglish']),
@@ -101,17 +106,24 @@ export default {
       miniVariant: false,
       right: true,
       rightDrawer: false,
-      sub: 'a',
+      hide: false,
+      sub: '',
       url: '',
     }
   },
 
-  watch: {
-    isLogin(oldValue, newValue) {
-      this.getData();
+  mounted() {
+    const jwt = require('jsonwebtoken');
+    const token = localStorage.getItem("token");
+    const decoded = jwt.decode(token);
+    if (decoded) {
+      this.sub = decoded.sub;
+      this.url = decoded.url;
+    }
+    if (token && token.trim() !== "") {
+      this.hide = true;
     }
   },
-
 
   beforeUpdate() {
     this.sendData();
@@ -123,25 +135,17 @@ export default {
       this.setIsEnglish(this.isEnglish);
     },
 
-    getData() {
-      const jwt = require('jsonwebtoken');
-
-      const token = localStorage.getItem('token');
-      const decoded = jwt.decode(token);
-      if (decoded) {
-        this.sub = decoded.sub;
-        this.url = decoded.url;
-        console.log('Subject:', sub);
-        console.log('Url:', url);
-      }
-    },
-
     login() {
       this.$router.push(`/login`);
     },
 
     register() {
       this.$router.push(`/register`);
+    },
+
+    logout() {
+      localStorage.setItem("token", "");
+      window.location.reload();
     }
   },
 

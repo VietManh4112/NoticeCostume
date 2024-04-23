@@ -141,7 +141,6 @@ import bg4 from '@/assets/img/bgcostume4.png';
       });
       // Bắt đầu tự động lướt qua sau mỗi 5 giây
       this.intervalId = setInterval(this.nextImage, 5000);
-
     },
 
     beforeDestroy() {
