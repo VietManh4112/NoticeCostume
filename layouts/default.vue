@@ -1,37 +1,43 @@
 <template>
   <v-main>
     <v-container>
-      <v-app-bar app color="primary" light>
-        <v-toolbar-title class="toolbar__title">{{ title }}</v-toolbar-title>
-        <v-spacer></v-spacer>
-        <v-toolbar-items class="toolbar__items">
-          <v-btn to="/">Home</v-btn>
-          <v-btn to="/project">Project</v-btn>
-          <v-btn to="/artist">Artist</v-btn>
-          <v-btn to="/repository">Repository</v-btn>
-          <v-btn to="/about">About</v-btn>
-        </v-toolbar-items>
-        <div class="toolbar__languages">
-          <v-switch v-model="isEnglish" class="toolbar__switch" @click="sendData()"></v-switch>
-          <div v-if="isEnglish"><img src="https://assets.snapedit.app/images/flags/en.svg" class="toolbar__flag">English
+      <v-app>
+        <v-app-bar app color="white" light>
+          <v-toolbar-title class="toolbar__title">{{ title }}</v-toolbar-title>
+          <v-spacer></v-spacer>
+          <v-toolbar-items class="toolbar__items">
+            <v-btn to="/">Home</v-btn>
+            <v-btn to="/project">Project</v-btn>
+            <v-btn to="/artist">Artist</v-btn>
+            <v-btn to="/repository">Repository</v-btn>
+            <v-btn to="/about">About</v-btn>
+          </v-toolbar-items>
+          <div class="toolbar__languages">
+            <v-switch v-model="isEnglish" class="toolbar__switch" @click="sendData()"></v-switch>
+            <div v-if="isEnglish"><img src="https://assets.snapedit.app/images/flags/en.svg"
+                class="toolbar__flag">English
+            </div>
+            <div v-else><img src="https://assets.snapedit.app/images/flags/vn.svg" class="toolbar__flag">Vietnamese
+            </div>
           </div>
-          <div v-else><img src="https://assets.snapedit.app/images/flags/vn.svg" class="toolbar__flag">Vietnamese</div>
-        </div>
-        <Button v-if="!hide" type="login" @click="login">{{ loginBtn }}</Button>
-        <Button v-if="!hide" type="register" @click="register">{{ registerBtn }}</Button>
-        <img v-if="hide" class="user__avatar" :src="url">
-        <div v-if="hide" class="user__name">
-          <p>{{ sub }}</p>
-        </div>
-        <button v-if="hide" @click="logout" style="display: flex;justify-content: center;align-items: center;" title="Thoát">
-          <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" class="icon-md">
-            <path d="M11 3H7C5.89543 3 5 3.89543 5 5V19C5 20.1046 5.89543 21 7 21H11" stroke="currentColor"
-              stroke-width="2" stroke-linecap="round"></path>
-            <path d="M20 12H11M20 12L16 16M20 12L16 8" stroke="currentColor" stroke-width="2" stroke-linecap="round"
-              stroke-linejoin="round"></path>
-          </svg>
-        </button>
-      </v-app-bar>
+          <Button v-if="!hide" type="login" @click="login">{{ loginBtn }}</Button>
+          <Button v-if="!hide" type="register" @click="register">{{ registerBtn }}</Button>
+          <img v-if="hide" class="user__avatar" :src="url">
+          <div v-if="hide" class="user__name">
+            <p>{{ sub }}</p>
+          </div>
+          <button v-if="hide" @click="logout" style="display: flex;justify-content: center;align-items: center;"
+            title="Thoát">
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
+              class="icon-md">
+              <path d="M11 3H7C5.89543 3 5 3.89543 5 5V19C5 20.1046 5.89543 21 7 21H11" stroke="currentColor"
+                stroke-width="2" stroke-linecap="round"></path>
+              <path d="M20 12H11M20 12L16 16M20 12L16 8" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                stroke-linejoin="round"></path>
+            </svg>
+          </button>
+        </v-app-bar>
+      </v-app>
       <Nuxt />
     </v-container>
   </v-main>
@@ -154,6 +160,14 @@ export default {
 
 <style>
 @import url('https://fonts.googleapis.com/css2?family=Maitree:wght@200;300;400;500;600;700&display=swap');
+
+.v-application--wrap {
+  min-height: 0px;
+}
+
+.v-toolbar__content {
+  font-family: 'Maitree', sans-serif;
+}
 
 .container {
   margin: 0;

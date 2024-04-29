@@ -67,8 +67,8 @@
         <div class="comment">
             <h2>Bình luận</h2>
             <div class="comment-textarea">
-                <textarea placeholder="Để lại bình luận của bạn tại đây." class="comment__text"></textarea>
-                <Button type="nav">Gửi</Button>
+                <textarea placeholder="Để lại bình luận của bạn tại đây." class="comment__text" v-model="commentText"></textarea>
+                <Button @click="addComment" type="nav">Gửi</Button>
             </div>
             <hr style="border: none; height: 2px; background-color: #f5f5f5;">
             <div v-for="(comment, indexCmt) in comment" :key="indexCmt" class="comment-list">
@@ -82,7 +82,7 @@
                     <div class="box-comment__question">
                         <p v-if="!editStatus[indexCmt]">{{ comment.content }}</p>
                         <span v-else> 
-                            <textarea v-model="editText[indexCmt]"></textarea>
+                            <textarea v-model="editText[indexCmt]" style="width: 60vw; height: 30px;"></textarea>
                             <div style="color: red; font-size: 10px;">
                                 nhấn esc để 
                                 <button style="color: #06F;" @click="cancelEdit(indexCmt)">hủy</button>  
@@ -125,7 +125,7 @@ import Resource from '@/helper/resource.js'
 import Button from '@/components/Button.vue'
 import Modal from '@/components/Modal.vue'
 import EthnicStore from "@/store/ethnic"
-import axiosInstance from '@/helper/api.js'
+import axiosInstance, {setBearerToken} from '@/helper/api.js'
 import TextEdit from '@/components/TextEdit.vue'
 export default {
     name: "CostumeInfomation",
@@ -162,6 +162,7 @@ export default {
         count(newValue, oldValue) {
             this.loadData(newValue);
             this.loadComments(newValue);
+            this.costumeId = newValue;
         }
     },
 
@@ -228,6 +229,7 @@ export default {
         async loadComments(id) {
             axiosInstance.post('/api/get-comments', { costumeId: id })
                 .then(response => {
+                    console.log(response.data)
                     response.data.forEach(item => {
                         const newItem = { ...this.comments }
                         newItem.content = item.content
@@ -252,6 +254,20 @@ export default {
         },
 
         deleteComment(index) {
+            const deleteComment = {
+                "id": '',
+                "costumeId": this.costumeId,
+                "userId": ''
+            };
+            const token = localStorage.getItem("token");
+            setBearerToken(token);
+            axiosInstance.delete('/api/post-comments', deleteComment)
+                .then(response => {
+                    window.location.reload();
+                }
+                ).catch(error => {
+                    console.error(error);
+                });
             console.log(this.comment[index].content);
         },
 
@@ -260,10 +276,38 @@ export default {
         },
 
         saveEdit(index) {
-            const editedText = this.editText[index];
-            console.log(editedText)
+            const updateComment = {
+                "id": '',
+                "content": this.editText[index],
+                "costumeId": this.costumeId
+            };
+            const token = localStorage.getItem("token");
+            setBearerToken(token);
+            axiosInstance.post('/api/update-comments', deleteComment)
+                .then(response => {
+                    window.location.reload();
+                }
+                ).catch(error => {
+                    console.error(error);
+                });
             this.$set(this.editStatus, index, false);
         },
+
+        async addComment() {
+            const addComment = {
+                "content": this.commentText,
+                "costumeId": this.costumeId
+            };
+            const token = localStorage.getItem("token");
+            setBearerToken(token);
+            axiosInstance.post('/api/post-comments', addComment)
+                .then(response => {
+                    window.location.reload();
+                }
+                ).catch(error => {
+                    console.error(error);
+                });
+        }
     },
 
     computed: {
@@ -303,6 +347,8 @@ export default {
                 name: '',
                 content: '',
             },
+            costumeId: 0,
+            commentText: '',
             comment: [],
             items: [],
             info: [],

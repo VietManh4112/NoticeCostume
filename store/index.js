@@ -1,6 +1,7 @@
 import Vue from 'vue';
 import Vuex from 'vuex';
-import axiosInstance, { setBearerToken } from '@/helper/api.js';
+import axiosInstance from '@/helper/api.js';
+
 
 Vue.use(Vuex);
 
@@ -21,7 +22,6 @@ export default function createStore() {
             .then(response => {
               localStorage.setItem('token', response.data);
               const tokenlocal = localStorage.getItem('token');
-              setBearerToken(tokenlocal);
               // Thực hiện chuyển hướng
               resolve();
             })

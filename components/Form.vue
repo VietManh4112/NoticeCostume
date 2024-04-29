@@ -45,7 +45,7 @@
                     <p>{{ loginBtn }}</p>
                 </Button>
 
-                <Button v-show="type === 'register'" type="icon">
+                <Button v-show="type === 'register'" type="icon" @click="register">
                     <p>{{ registerBtn }}</p>
                 </Button>
 
@@ -158,6 +158,32 @@ export default {
                         this.validateName = true;
                         this.errorName = 'Tài khoản hoặc mật khẩu không chính xác';
                     });
+            }
+        },
+
+        register() {
+            var error = [];
+            if (this.name.trim() === '') {
+                this.validateName = true;
+                this.errorName = "Tên đăng nhập không được bỏ trống!"
+                error.push('lỗi');
+            } else {
+                this.validateName = false;
+            }
+
+            if (this.pass.trim() === '') {
+                this.validatePass = true;
+                error.push('lỗi');
+            } else {
+                this.validatePass = false;
+            }
+
+            if (this.confirmpass.trim() === '') {
+                this.validationMessage = 'Xác nhận mật khẩu không được bỏ trống!';
+            } else if (this.confirmpass !== this.pass) {
+                this.validationMessage = 'Mật khẩu không giống!';
+            } else {
+                this.validationMessage = '';
             }
         },
     },
