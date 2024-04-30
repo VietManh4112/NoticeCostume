@@ -18,7 +18,6 @@ export default {
   router: {
     base: '/NoticeCostume/',
   },
-  buildDir: 'nuxt-dist',
 
   // Global CSS: https://go.nuxtjs.dev/config-css
   css: [],
@@ -86,6 +85,6 @@ export default {
 
   // Build Configuration: https://go.nuxtjs.dev/config-build
   build: {
-    publicPath: '/_nuxt/',
+    publicPath: '/assets/',
   },
 }
