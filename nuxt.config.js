@@ -16,7 +16,7 @@ export default {
 
   mode: 'static',
   router: {
-    base: 'NoticeCostume',
+    base: '/NoticeCostume/',
   },
   buildDir: 'nuxt-dist',
 
