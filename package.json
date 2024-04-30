@@ -14,7 +14,7 @@
     "lintfix": "prettier --write --list-different . && npm run lint:js -- --fix && npm run lint:style -- --fix",
     "prepare": "husky install",
     "predeploy": "nuxt generate",
-    "deploy": "gh-pages -d dist"
+    "deploy": "gh-pages -d dist --dotfiles=true"
   },
   "lint-staged": {
     "*.{js,ts,vue}": "eslint --cache",
