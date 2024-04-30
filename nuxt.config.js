@@ -16,8 +16,9 @@ export default {
 
   mode: 'static',
   router: {
-    base: 'NoticeCostume'
+    base: 'NoticeCostume',
   },
+  buildDir: 'nuxt-dist',
 
   // Global CSS: https://go.nuxtjs.dev/config-css
   css: [],
