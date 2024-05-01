@@ -28,16 +28,23 @@
                 </div>
                 <div style="position: relative;">
                     <TextField type="form-text" :placeholder="Name" v-model="name"></TextField>
-                    <p v-if="validateName" class="validateInput">{{ errorName }}</p>
+                    <p v-if="validateName && !isEnglish" class="validateInput">Tên đăng nhập không được bỏ trống!</p>
+                    <p v-if="validateName && isEnglish" class="validateInput">Username cannot be empty!</p>
+                    <p v-if="errorLogin && !isEnglish" class="validateInput">Tài khoản hoặc mật khẩu không chính xác</p>
+                    <p v-if="errorLogin && isEnglish" class="validateInput">Account or password is incorrect</p>
                 </div>
                 <div style="position: relative;">
                     <TextField type="form-pass" :placeholder="Pass" v-model="pass"></TextField>
-                    <p v-if="validatePass" class="validateInput">Mật khẩu không được bỏ trống!</p>
+                    <p v-if="validatePass && !isEnglish" class="validateInput">Mật khẩu không được bỏ trống!</p>
+                    <p v-if="validatePass && isEnglish" class="validateInput">Password cannot be left blank!</p>
                 </div>
                 <div style="position: relative;">
                     <TextField v-show="type === 'register'" type="form-pass" :placeholder="ConfirmPass"
                         v-model="confirmpass"></TextField>
-                    <p v-show="type === 'register'" class="validateInput">{{ validationMessage }}</p>
+                    <p v-show="type === 'register' && !isEnglish" class="validateInput">{{ validationMessageVn1 }}
+                        {{ validationMessageVn2 }}</p>
+                    <p v-show="type === 'register' && isEnglish" class="validateInput">{{ validationMessageEn1 }}
+                        {{ validationMessageEn2 }}</p>
                 </div>
                 <div v-if="type === 'login'" style="display: flex;justify-content: flex-end;margin-bottom: 10px;">{{
                 fogotpass }}</div>
@@ -54,8 +61,6 @@
     </div>
 </template>
 <script>
-import axiosInstance, { setBearerToken } from '@/helper/api.js'
-import { mapState, mapMutations } from 'vuex';
 import Resource from '@/helper/resource.js'
 import TextField from '@/components/TextField.vue';
 import Button from '@/components/Button.vue'
@@ -111,15 +116,19 @@ export default {
 
     data() {
         return {
-            Name: 'Tên đăng nhập',
-            Pass: 'Mật Khẩu',
-            ConfirmPass: 'Xác nhận mật khẩu',
+            Name: 'Username',
+            Pass: 'Password',
+            ConfirmPass: 'Confirm Password',
             name: '',
             pass: '',
             confirmpass: '',
             validateName: false,
             validatePass: false,
-            validationMessage: '',
+            validationMessageVn1: '',
+            validationMessageVn2: '',
+            validationMessageEn1: '',
+            validationMessageEn2: '',
+            errorLogin: false,
         };
     },
 
@@ -128,7 +137,6 @@ export default {
             var error = [];
             if (this.name.trim() === '') {
                 this.validateName = true;
-                this.errorName = "Tên đăng nhập không được bỏ trống!"
                 error.push('lỗi');
             } else {
                 this.validateName = false;
@@ -139,14 +147,6 @@ export default {
                 error.push('lỗi');
             } else {
                 this.validatePass = false;
-            }
-
-            if (this.confirmpass.trim() === '') {
-                this.validationMessage = 'Xác nhận mật khẩu không được bỏ trống!';
-            } else if (this.confirmpass !== this.pass) {
-                this.validationMessage = 'Mật khẩu không giống!';
-            } else {
-                this.validationMessage = '';
             }
             const userData = { username: this.name, password: this.pass };
             if (error.length == 0) {
@@ -155,8 +155,7 @@ export default {
                         this.$router.push('/');
                     })
                     .catch((error) => {
-                        this.validateName = true;
-                        this.errorName = 'Tài khoản hoặc mật khẩu không chính xác';
+                        this.errorLogin = true;
                     });
             }
         },
@@ -165,7 +164,6 @@ export default {
             var error = [];
             if (this.name.trim() === '') {
                 this.validateName = true;
-                this.errorName = "Tên đăng nhập không được bỏ trống!"
                 error.push('lỗi');
             } else {
                 this.validateName = false;
@@ -179,9 +177,15 @@ export default {
             }
 
             if (this.confirmpass.trim() === '') {
-                this.validationMessage = 'Xác nhận mật khẩu không được bỏ trống!';
+                this.validationMessageVn1 = 'Xác nhận mật khẩu không được bỏ trống!';
+                this.validationMessageVn2 = '';
+                this.validationMessageEn1 = 'Confirm password cannot be left blank!';
+                this.validationMessageEn2 = '';
             } else if (this.confirmpass !== this.pass) {
-                this.validationMessage = 'Mật khẩu không giống!';
+                this.validationMessageVn1 = '';
+                this.validationMessageVn2 = 'Xác nhận mật khẩu không giống!';
+                this.validationMessageEn1 = '';
+                this.validationMessageEn2 = 'Confirm Password is different!';
             } else {
                 this.validationMessage = '';
             }
