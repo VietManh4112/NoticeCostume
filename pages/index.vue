@@ -19,8 +19,8 @@
         <div class="search-items">
           <div v-for="(item, index) in filteredItems" :key="index" :style="{ top: (50 + index * 70) + 'px' }">
             <nuxt-link :to="'/ethnic/' + item.role" class="item__roles">
-              <div style="width: 120px;">
-                <img :src="item.imageUrl" :style="{ width: item.role === 'Không tìm thấy dân tộc' ? '30px' : '50px', height: item.role === 'Không tìm thấy dân tộc' ? '25px' : '45px' }">
+              <div v-if="item.role !== 'Không tìm thấy dân tộc'" tyle="width: 120px;">
+                <img :src="item.imageUrl" style="width: 50px; height: 45px"
               </div>
               <p>{{ item.role }}</p>
             </nuxt-link>
@@ -123,7 +123,7 @@ import bg4 from '@/assets/img/bgcostume4.png';
 
         const foundEthnics = filteredAndReversed.slice(0, 6);
         if (foundEthnics == 0) {
-          return [{imageUrl: "/NoticeCostume/assets/assets/img/search.png" ,role:"Không tìm thấy dân tộc"}];
+          return [{role:"Không tìm thấy dân tộc"}];
         } else {
           return foundEthnics;
         }
@@ -244,6 +244,7 @@ h2 {
 .item__roles {
   display: flex;
   align-items: center;
+  justify-content: center;
   width: 380px;
   height: 70px;
 }
