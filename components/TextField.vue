@@ -1,7 +1,12 @@
 <template>
     <div v-if="type === 'textfield'" class="textfield" :style="{'border-radius': value.length > 0 ? '30px 30px 0px 0px' : ''}">
         <img src="@/assets/img/search.png" width="15" height="15" class="textfield__img">
-        <input type="text" :value="value" @input="$emit('input', $event.target.value)"  placeholder="Tìm kiếm" class="textfield__search">
+        <input type="text" :value="value" @input="$emit('input', $event.target.value)" placeholder="Tìm kiếm" class="textfield__search">
+        <button v-if = "value.length > 0" title="xóa" @click="deleteInputSearch">
+            <svg width="8" height="9" viewBox="0 0 8 9" xmlns="http://www.w3.org/2000/svg">
+                <path d="M8 1.057 7.293.35 4 3.643.707.35 0 1.057 3.293 4.35 0 7.643l.707.707L4 5.057 7.293 8.35 8 7.643 4.707 4.35 8 1.057Z" fill="currentcolor"></path>
+            </svg>
+        </button>
     </div>
 
     <div v-else-if="type === 'form-text'">
@@ -26,6 +31,12 @@ export default {
         placeholder: String,
         value: String,
     },
+
+    methods: {
+        deleteInputSearch() {
+            this.$emit('input', "");
+        }
+    },
 }
 </script>
 
@@ -33,7 +44,7 @@ export default {
 .textfield {
     display: flex;
     align-items: center;
-    width: 400px;
+    width: 380px;
     height: 50px;
     border-radius: 30px;
     background-color: white;

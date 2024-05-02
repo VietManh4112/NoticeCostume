@@ -1,7 +1,7 @@
 <template>
     <div class="edit">
         <p><b>{{ title }}</b> 
-            <span v-if="!isEditing">{{ text }}</span>
+            <span v-if="!isEditing">{{ displayValue }}</span>
             <span v-else> 
                 <textarea v-model="editText" ref="textInput"></textarea>
                 <div style="color: red; font-size: 10px;">
@@ -13,7 +13,7 @@
             </span>
         </p>
         
-        <div class="button__edit">
+        <div v-show="isAdmin" class="button-edit">
             <button title="Chỉnh sửa" @click="editInfo">
                 <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" aria-hidden="true"
                     fill="none">
@@ -27,14 +27,78 @@
 </template>
 
 <script>
-import EthnicStore from "@/store/ethnic";
+import axiosInstance from '@/helper/api.js'
 export default {
     name: "TextEdit",
 
     props: {
         title: String,
-        text: String,
+        role: String,
+        material: String,
+        pattern: String,
+        other: String,
+        characteristic: String,
+        male: String,
+        female: String,
         apiUrl: String,
+        id: Number,
+        sexId: Number,
+    },
+
+    computed: {
+        displayValue() {
+            if (this.role !== undefined) {
+                return this.role;
+            } else if (this.material !== undefined) {
+                return this.material;
+            } else if (this.pattern !== undefined) {
+                return this.pattern;
+            } else if (this.other !== undefined) {
+                return this.other;
+            } else if (this.characteristic !== undefined) {
+                return this.characteristic;
+            } else if (this.male !== undefined) {
+                return this.male;
+            } else if (this.female !== undefined) {
+                return this.female;
+            }
+        },
+
+        isAdmin() {
+            return this.authority === 'admin';
+        },
+    },
+
+    created() {
+        this.editText = this.displayValue;
+        const newInfo = {...this.infocostume}
+        const newDes = {...this.description}
+        const jwt = require('jsonwebtoken');
+        const token = localStorage.getItem("token");
+        if (token) {
+          this.authority = jwt.decode(localStorage.getItem('token')).role[0].authority
+        }
+        newInfo.id = this.id;
+        newDes.sexId = this.sexId;
+        if (this.material !== undefined) {
+            newInfo.material = this.material;
+        }
+        if (this.pattern !== undefined) {
+            newInfo.pattern = this.pattern;
+        }
+        if (this.other !== undefined) {
+            newInfo.other = this.other;
+        }
+        if (this.characteristic !== undefined) {
+            newInfo.characteristic = this.characteristic;
+        }
+        if (this.male !== undefined) {
+            newDes.description = this.male;
+        } else if (this.female !== undefined) {
+            newDes.description = this.female;
+        }
+        this.updateCostume.push(newInfo);
+        this.updateDescription.push(newDes);
     },
 
     methods: {
@@ -46,7 +110,7 @@ export default {
                 });
 
                 this.editingItem = {
-                    text: this.text,
+                    displayValue: this.displayValue,
                 };
             }
         },
@@ -55,12 +119,37 @@ export default {
             this.isEditing = false;
         },
 
+        updateInfo(propName) {
+            if (this[propName] !== undefined) {
+                this.updateCostume.forEach(info => {
+                    info[propName] = this.editText;
+                });
+            }
+        },
+
         async save() {
             if (!this.editingItem) return;
             this.isEditing = false;            
             try {
-                const response = await EthnicStore.post(this.apiUrl, { name: this.editText });
-                console.log(response.data);
+                if (this.material !== undefined || this.pattern !== undefined || this.characteristic !== undefined ||this.other !== undefined) {
+                    this.updateInfo("material");
+                    this.updateInfo("pattern");
+                    this.updateInfo("characteristic");
+                    this.updateInfo("other");
+                    axiosInstance.post(this.apiUrl, this.updateCostume[0]);
+                } else {
+                    if (this.male !== undefined) {
+                        this.updateDescription.forEach(info => {
+                            info.description = this.editText;
+                        });
+                    }
+                    if (this.female !== undefined) {
+                        this.updateDescription.forEach(info => {
+                            info.description = this.editText;
+                        });
+                    }
+                    axiosInstance.post(this.apiUrl, this.updateDescription[0])
+                }
             } catch (error) {
                 console.error('Error saving data:', error);
             }
@@ -88,6 +177,20 @@ export default {
             isEditing: false,
             editText: this.text,
             editingItem: null,
+            infocostume: {
+                id: '',
+                material: '',
+                pattern: '',
+                other: '',
+                characteristic: '',
+            },
+            description: {
+                sexId: '',
+                description: '',
+            },
+            updateCostume : [],
+            updateDescription: [],
+            authority: null,
         }
     },
 }
@@ -98,13 +201,13 @@ export default {
     display: flex;
 }
 
-.button__edit {
+.button-edit {
     display: flex;
     justify-content: center;
     visibility: hidden;
 }
 
-.edit:hover .button__edit {
+.edit:hover .button-edit {
     visibility: visible;
 }
 

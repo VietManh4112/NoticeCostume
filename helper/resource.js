@@ -25,7 +25,7 @@ const Resource = {
     },
     mainText: {
         vi:'"54 dân tộc anh em" là cụm từ có lẽ khá quen thuộc với người Việt Nam. Nhưng liệu bạn có biết rõ những người anh em của chúng ta trông thế nào, ăn món gì, sống ra sao? Chúng tôi sẽ khắc họa lại những nét đặc trưng của trang phục các dân tộc, cho bạn đọc một cái nhìn sơ lược về diện mạo của những người anh em tưởng xa mà lại rất gần.',
-        en:'"54 ethnic groups" is a phrase that is probably quite familiar to Vietnamese people. But do you know what our brothers look like, what they eat, and how they live? We will portray the characteristics of ethnic costumes, giving readers a glimpse of the appearance of brothers who seem far away but are very close.'
+        en:'"54 ethnic groups" is a phrase that is probably quite familiar to Vietnamese people. But do you know clearly what our brothers look like, what they eat, and how they live? We will portray the characteristics of ethnic costumes, giving readers a glimpse of the appearance of brothers who seem far away but are actually very close.'
     },
     text1: {
         vi: 'Tên tự gọi:',
@@ -33,19 +33,19 @@ const Resource = {
     },
     text2: {
         vi: 'Chất liệu:',
-        en:'Population (2019):'
+        en:'Material:'
     },
     text3: {
         vi: 'Họa tiết:',
-        en:'Population:'
+        en:'Pattern:'
     },
     text4: {
         vi: 'Thông tin thêm:',
-        en:'Language group:'
+        en:'Other:'
     },
     text5: {
         vi: 'Đặc điểm:',
-        en:'Proto language'
+        en:'Characteristic:'
     },
     text6: {
         vi: 'Trang phục truyền thống:',
@@ -53,11 +53,11 @@ const Resource = {
     },
     text7: {
         vi: 'Nam:',
-        en:'Traditional costume:'
+        en:'Male:'
     },
     text8: {
         vi: 'Nữ:',
-        en:'Traditional costume:'
+        en:'Female:'
     },
 }
 
