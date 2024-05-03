@@ -153,6 +153,9 @@ export default {
                 this.$store.dispatch('login', userData)
                     .then(() => {
                         this.$router.push('/');
+                        setTimeout(() => {
+                            location.reload();
+                        }, 10);
                     })
                     .catch((error) => {
                         this.errorLogin = true;

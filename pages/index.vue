@@ -18,9 +18,9 @@
         </div>
         <div class="search-items">
           <div v-for="(item, index) in filteredItems" :key="index" :style="{ top: (50 + index * 70) + 'px' }">
-            <nuxt-link :to="'/ethnic/' + item.role" class="item__roles">
-              <div v-if="item.role !== 'Không tìm thấy dân tộc'" tyle="width: 120px;">
-                <img :src="item.imageUrl" style="width: 50px; height: 45px"
+            <nuxt-link :to="'/ethnic/' + item.role.normalize('NFD').replace(/[\u0300-\u036f]/g, '').toLowerCase()" class="item__roles" :style="{ 'justify-content': isFoundEthnic ? 'initial' : 'center' }">
+              <div v-if="isFoundEthnic" style="width: 120px;">
+                <img :src="item.imageUrl" style="width: 60px; height: 55px">
               </div>
               <p>{{ item.role }}</p>
             </nuxt-link>
@@ -79,6 +79,7 @@ import bg4 from '@/assets/img/bgcostume4.png';
         itemsPerPage: 10,
         currentIndexItem: 0,
         searchKeyword: '',
+        isFoundEthnic: true,
       }
     },
 
@@ -123,8 +124,15 @@ import bg4 from '@/assets/img/bgcostume4.png';
 
         const foundEthnics = filteredAndReversed.slice(0, 6);
         if (foundEthnics == 0) {
-          return [{role:"Không tìm thấy dân tộc"}];
+          if (!this.isEnglish) {
+            this.isFoundEthnic = false;
+            return [{role:"Không tìm thấy dân tộc"}];
+          } else {
+            this.isFoundEthnic = false;
+            return [{role:"No ethnicity found"}];
+          }
         } else {
+          this.isFoundEthnic = true;
           return foundEthnics;
         }
       },
@@ -139,6 +147,7 @@ import bg4 from '@/assets/img/bgcostume4.png';
             newItem.imageUrl = item.imageUrl
             newItem.role = item.name
             this.items.push(newItem)
+            console.log(this.items)
           })
         }
       ).catch(error => {
@@ -244,7 +253,6 @@ h2 {
 .item__roles {
   display: flex;
   align-items: center;
-  justify-content: center;
   width: 380px;
   height: 70px;
 }

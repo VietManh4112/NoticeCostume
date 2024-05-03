@@ -173,7 +173,7 @@ export default {
          */
         gotoNextPage() {
             const nextPageIndex = this.count + 1;
-            const nextPage = this.items[nextPageIndex - 1].role;
+            const nextPage = this.items[nextPageIndex - 1].role.normalize("NFD").replace(/[\u0300-\u036f]/g, "").toLowerCase();
             const nextPageEncoded = encodeURIComponent(nextPage);
             this.$router.push(`/ethnic/${nextPageEncoded}`);
         },
@@ -184,7 +184,7 @@ export default {
          */
         gotoPreviousPage() {
             const previousPageIndex = this.count - 1;
-            const previousPage = this.items[previousPageIndex - 1].role;
+            const previousPage = this.items[previousPageIndex - 1].role.normalize("NFD").replace(/[\u0300-\u036f]/g, "").toLowerCase();
             const previousPageEncoded = encodeURIComponent(previousPage);
             this.$router.push(`/ethnic/${previousPageEncoded}`);
         },

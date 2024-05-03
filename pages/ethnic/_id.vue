@@ -41,7 +41,7 @@ export default {
           newItem.index = item.id
           newItem.role = item.name
           this.items.push(newItem)
-          if (item.name.toLowerCase().includes(this.$route.params.id.toLowerCase())) {
+          if (item.name.normalize("NFD").replace(/[\u0300-\u036f]/g, "").toLowerCase().includes(this.$route.params.id.toLowerCase())) {
             this.count = Number(item.id);
           }
         })

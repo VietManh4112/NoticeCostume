@@ -1,7 +1,7 @@
 import axios from "axios";
 
 const EthnicStore = axios.create({
-  baseURL: 'http://47.128.166.252:8080',
+  baseURL: 'https://mycostumes.ddns.net',
   timeout: 5000,
   headers: {
       'Content-Type': 'application/json',
