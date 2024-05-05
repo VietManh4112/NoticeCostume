@@ -1,18 +1,18 @@
 <template>
     <div class="edit">
-        <p><b>{{ title }}</b> 
+        <p><b>{{ title }}</b>
             <span v-if="!isEditing">{{ displayValue }}</span>
-            <span v-else> 
+            <span v-else>
                 <textarea v-model="editText" ref="textInput"></textarea>
                 <div style="color: red; font-size: 10px;">
-                    nhấn esc để 
-                    <button style="color: #06F;" @click="cancel">hủy</button>  
+                    nhấn esc để
+                    <button style="color: #06F;" @click="cancel">hủy</button>
                     • nhấn enter để
-                    <button style="color: #06F;" @click="save">lưu</button> 
+                    <button style="color: #06F;" @click="save">lưu</button>
                 </div>
             </span>
         </p>
-        
+
         <div v-show="isAdmin" class="button-edit">
             <button title="Chỉnh sửa" @click="editInfo">
                 <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" aria-hidden="true"
@@ -71,12 +71,12 @@ export default {
 
     created() {
         this.editText = this.displayValue;
-        const newInfo = {...this.infocostume}
-        const newDes = {...this.description}
+        const newInfo = { ...this.infocostume }
+        const newDes = { ...this.description }
         const jwt = require('jsonwebtoken');
         const token = localStorage.getItem("token");
         if (token) {
-          this.authority = jwt.decode(localStorage.getItem('token')).role[0].authority
+            this.authority = jwt.decode(localStorage.getItem('token')).role[0].authority
         }
         newInfo.id = this.id;
         newDes.sexId = this.sexId;
@@ -129,14 +129,14 @@ export default {
 
         async save() {
             if (!this.editingItem) return;
-            this.isEditing = false;            
+            this.isEditing = false;
             try {
-                if (this.material !== undefined || this.pattern !== undefined || this.characteristic !== undefined ||this.other !== undefined) {
+                if (this.material !== undefined || this.pattern !== undefined || this.characteristic !== undefined || this.other !== undefined) {
                     this.updateInfo("material");
                     this.updateInfo("pattern");
                     this.updateInfo("characteristic");
                     this.updateInfo("other");
-                    axiosInstance.post(this.apiUrl, this.updateCostume[0]);
+                    await axiosInstance.post(this.apiUrl, this.updateCostume[0])
                 } else {
                     if (this.male !== undefined) {
                         this.updateDescription.forEach(info => {
@@ -188,7 +188,7 @@ export default {
                 sexId: '',
                 description: '',
             },
-            updateCostume : [],
+            updateCostume: [],
             updateDescription: [],
             authority: null,
         }
@@ -215,5 +215,4 @@ textarea {
     width: 41vw;
     background-color: #fff;
 }
-
 </style>

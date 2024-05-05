@@ -67,53 +67,56 @@
         <div class="comment">
             <h2>Bình luận</h2>
             <div class="comment-textarea">
-                <textarea placeholder="Để lại bình luận của bạn tại đây." class="comment__text" v-model="commentText"></textarea>
+                <textarea placeholder="Để lại bình luận của bạn tại đây." class="comment__text"
+                    v-model="commentText"></textarea>
                 <Button @click="addComment" type="nav">Gửi</Button>
             </div>
             <hr style="border: none; height: 2px; background-color: #f5f5f5;">
-            <div v-for="(comment, indexCmt) in comment" :key="indexCmt" class="comment-list">
-                <div class="box-infor">
-                    <div class="box-infor__avatar">
-                        <span>M</span>
+            <div v-for="(comment, indexCmt) in comment" :key="indexCmt">
+                <div v-if="comment.status.includes('0')" class="comment-list">
+                    <div class="box-infor">
+                        <img :src="comment.url" width="20px" height="20px" class="box-infor__avatar">
+                        <p class="box-infor__name">{{ comment.name }}</p>
                     </div>
-                    <p class="box-infor__name">Mạnh</p>
-                </div>
-                <div class="box-comment">
-                    <div class="box-comment__question">
-                        <p v-if="!editStatus[indexCmt]">{{ comment.content }}</p>
-                        <span v-else> 
-                            <textarea v-model="editText[indexCmt]" style="width: 60vw; height: 30px;"></textarea>
-                            <div style="color: red; font-size: 10px;">
-                                nhấn esc để 
-                                <button style="color: #06F;" @click="cancelEdit(indexCmt)">hủy</button>  
-                                • nhấn enter để
-                                <button style="color: #06F;" @click="saveEdit(indexCmt)">lưu</button> 
-                            </div>
-                        </span>
-                        <div class="comment-button">
-                            <button title="Chỉnh sửa" style="color: rgba(248, 248, 255, 80%); width: 30px; height: 30px;" @click="toggleEdit(indexCmt)">
-                                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24"
-                                    aria-hidden="true" fill="none">
-                                    <path fill="currentColor"
-                                        d="m13.96 5.46 4.58 4.58a1 1 0 0 0 1.42 0l1.38-1.38a2 2 0 0 0 0-2.82l-3.18-3.18a2 2 0 0 0-2.82 0l-1.38 1.38a1 1 0 0 0 0 1.42ZM2.11 20.16l.73-4.22a3 3 0 0 1 .83-1.61l7.87-7.87a1 1 0 0 1 1.42 0l4.58 4.58a1 1 0 0 1 0 1.42l-7.87 7.87a3 3 0 0 1-1.6.83l-4.23.73a1.5 1.5 0 0 1-1.73-1.73Z"
-                                        class></path>
-                                </svg>
-                            </button>
+                    <div class="box-comment">
+                        <div class="box-comment__question">
+                            <p v-if="!editStatus[indexCmt]">{{ comment.content }}</p>
+                            <span v-else>
+                                <textarea v-model="editText[indexCmt]" style="width: 60vw; height: 30px;"></textarea>
+                                <div style="color: red; font-size: 10px;">
+                                    nhấn để
+                                    <button style="color: #06F;" @click="cancelEdit(indexCmt)">hủy</button>
+                                    • nhấn để
+                                    <button style="color: #06F;" @click="saveEdit(indexCmt, comment.id)">lưu</button>
+                                </div>
+                            </span>
+                            <div v-if="userIdToken === comment.userId || sub.includes('admin')" class="comment-button">
+                                <button title="Chỉnh sửa"
+                                    style="color: rgba(248, 248, 255, 80%); width: 30px; height: 30px;"
+                                    @click="toggleEdit(indexCmt)">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24"
+                                        aria-hidden="true" fill="none">
+                                        <path fill="currentColor"
+                                            d="m13.96 5.46 4.58 4.58a1 1 0 0 0 1.42 0l1.38-1.38a2 2 0 0 0 0-2.82l-3.18-3.18a2 2 0 0 0-2.82 0l-1.38 1.38a1 1 0 0 0 0 1.42ZM2.11 20.16l.73-4.22a3 3 0 0 1 .83-1.61l7.87-7.87a1 1 0 0 1 1.42 0l4.58 4.58a1 1 0 0 1 0 1.42l-7.87 7.87a3 3 0 0 1-1.6.83l-4.23.73a1.5 1.5 0 0 1-1.73-1.73Z"
+                                            class></path>
+                                    </svg>
+                                </button>
 
-                            <button title="Xóa" style="color: red; width: 30px; height: 30px;" @click="deleteComment(indexCmt)">
-                                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24"
-                                    aria-hidden="true" fill="none">
-                                    <path fill="currentColor"
-                                        d="M14.25 1c.41 0 .75.34.75.75V3h5.25c.41 0 .75.34.75.75v.5c0 .41-.34.75-.75.75H3.75A.75.75 0 0 1 3 4.25v-.5c0-.41.34-.75.75-.75H9V1.75c0-.41.34-.75.75-.75h4.5Z"
-                                        class></path>
-                                    <path fill="currentColor" fill-rule="evenodd"
-                                        d="M5.06 7a1 1 0 0 0-1 1.06l.76 12.13a3 3 0 0 0 3 2.81h8.36a3 3 0 0 0 3-2.81l.75-12.13a1 1 0 0 0-1-1.06H5.07ZM11 12a1 1 0 1 0-2 0v6a1 1 0 1 0 2 0v-6Zm3-1a1 1 0 0 1 1 1v6a1 1 0 1 1-2 0v-6a1 1 0 0 1 1-1Z"
-                                        clip-rule="evenodd" class></path>
-                                </svg>
-                            </button>
+                                <button title="Xóa" style="color: red; width: 30px; height: 30px;"
+                                    @click="deleteComment(comment.id)">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24"
+                                        aria-hidden="true" fill="none">
+                                        <path fill="currentColor"
+                                            d="M14.25 1c.41 0 .75.34.75.75V3h5.25c.41 0 .75.34.75.75v.5c0 .41-.34.75-.75.75H3.75A.75.75 0 0 1 3 4.25v-.5c0-.41.34-.75.75-.75H9V1.75c0-.41.34-.75.75-.75h4.5Z"
+                                            class></path>
+                                        <path fill="currentColor" fill-rule="evenodd"
+                                            d="M5.06 7a1 1 0 0 0-1 1.06l.76 12.13a3 3 0 0 0 3 2.81h8.36a3 3 0 0 0 3-2.81l.75-12.13a1 1 0 0 0-1-1.06H5.07ZM11 12a1 1 0 1 0-2 0v6a1 1 0 1 0 2 0v-6Zm3-1a1 1 0 0 1 1 1v6a1 1 0 1 1-2 0v-6a1 1 0 0 1 1-1Z"
+                                            clip-rule="evenodd" class></path>
+                                    </svg>
+                                </button>
+                            </div>
                         </div>
                     </div>
-
                 </div>
             </div>
         </div>
@@ -125,7 +128,7 @@ import Resource from '@/helper/resource.js'
 import Button from '@/components/Button.vue'
 import Modal from '@/components/Modal.vue'
 import EthnicStore from "@/store/ethnic"
-import axiosInstance, {setBearerToken} from '@/helper/api.js'
+import axiosInstance, { setBearerToken } from '@/helper/api.js'
 import TextEdit from '@/components/TextEdit.vue'
 export default {
     name: "CostumeInfomation",
@@ -144,6 +147,14 @@ export default {
 
     mounted() {
         window.addEventListener('keydown', this.handleKeyDown);
+
+        const jwt = require('jsonwebtoken');
+        const token = localStorage.getItem("token");
+        const decoded = jwt.decode(token);
+        if (decoded) {
+            this.sub = decoded.sub;
+            this.userIdToken = decoded.id;
+        }
 
         EthnicStore.get('/api/get-ethnics')
             .then(response => {
@@ -210,7 +221,7 @@ export default {
         },
 
         async loadData(id) {
-            axiosInstance.get('/api/get-costumes/' + id)
+            await axiosInstance.get('/api/get-costumes/' + id)
                 .then(response => {
                     const newItem = { ...this.ethnic }
                     newItem.material = response.data.material
@@ -227,12 +238,16 @@ export default {
         },
 
         async loadComments(id) {
-            axiosInstance.post('/api/get-comments', { costumeId: id })
+            axiosInstance.post('/api/get-all-comments', { costumeId: id })
                 .then(response => {
-                    console.log(response.data)
                     response.data.forEach(item => {
                         const newItem = { ...this.comments }
-                        newItem.content = item.content
+                        newItem.id = item.commentDto.id
+                        newItem.status = item.commentDto.status
+                        newItem.content = item.commentDto.content
+                        newItem.name = item.name
+                        newItem.url = item.url
+                        newItem.userId = item.commentDto.userId
                         this.comment.push(newItem)
                     })
                 }
@@ -255,42 +270,43 @@ export default {
 
         deleteComment(index) {
             const deleteComment = {
-                "id": '',
+                "id": index,
                 "costumeId": this.costumeId,
-                "userId": ''
+                "userId": this.userIdToken
             };
+            console.log(deleteComment)
             const token = localStorage.getItem("token");
             setBearerToken(token);
-            axiosInstance.delete('/api/post-comments', deleteComment)
+            axiosInstance.post('/api/delete-comments', deleteComment)
                 .then(response => {
                     window.location.reload();
                 }
                 ).catch(error => {
                     console.error(error);
                 });
-            console.log(this.comment[index].content);
         },
 
         cancelEdit(index) {
             this.$set(this.editStatus, index, false);
         },
 
-        saveEdit(index) {
+        saveEdit(indexCmt, id) {
             const updateComment = {
-                "id": '',
-                "content": this.editText[index],
+                "id": id,
+                "content": this.editText[indexCmt],
                 "costumeId": this.costumeId
             };
             const token = localStorage.getItem("token");
             setBearerToken(token);
-            axiosInstance.post('/api/update-comments', deleteComment)
+            axiosInstance.post('/api/update-comments', updateComment)
                 .then(response => {
-                    window.location.reload();
+                    this.comment[indexCmt].content = this.editText[indexCmt];
+                    delete this.editText[indexCmt];
                 }
                 ).catch(error => {
                     console.error(error);
                 });
-            this.$set(this.editStatus, index, false);
+            this.$set(this.editStatus, indexCmt, false);
         },
 
         async addComment() {
@@ -307,7 +323,7 @@ export default {
                 ).catch(error => {
                     console.error(error);
                 });
-        }
+        },
     },
 
     computed: {
@@ -343,9 +359,12 @@ export default {
                 female: '',
             },
             comments: {
-                avatar: '',
+                id: '',
+                status: '',
+                url: '',
                 name: '',
                 content: '',
+                userId: '',
             },
             costumeId: 0,
             commentText: '',
@@ -354,7 +373,9 @@ export default {
             info: [],
             isDataFetched: false,
             editStatus: [],
-            editText: []
+            editText: [],
+            userIdToken: '',
+            sub: '',
         }
     }
 }
@@ -410,6 +431,7 @@ export default {
 
 .comment-list {
     height: 15vh;
+    padding: 20px;
 }
 
 .button__buy {
@@ -521,12 +543,6 @@ hr {
 .box-infor__avatar {
     width: 30px;
     height: 30px;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    color: #FFF;
-    font-weight: 900;
-    background-color: aqua;
     border-radius: 50%;
     margin-right: 10px;
 }

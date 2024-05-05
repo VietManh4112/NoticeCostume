@@ -40,6 +40,11 @@
       <div class="home-footer">
 
       </div>
+      <button @click="scrollToTop" v-if="showScroll" class="button--scroll">
+        <svg width="30" height="30" viewBox="0 0 36 36" fill="none">
+          <path d="M7 11L12 6L17 11M12 18V7" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" transform="scale(1.5)"></path>
+        </svg>
+      </button>
     </div>
 
 
@@ -69,7 +74,6 @@ import bg4 from '@/assets/img/bgcostume4.png';
         currentIndex: 0,
         intervalId: null,
         showAvatar: false,
-        // them 
         ethnic : {
           imageUrl: '',
           role: '',
@@ -80,6 +84,7 @@ import bg4 from '@/assets/img/bgcostume4.png';
         currentIndexItem: 0,
         searchKeyword: '',
         isFoundEthnic: true,
+        showScroll: false,
       }
     },
 
@@ -93,7 +98,7 @@ import bg4 from '@/assets/img/bgcostume4.png';
       itemsToShow() {
         return this.items.slice(0, this.currentIndexItem + this.itemsPerPage);
       },
-
+      
       maintitle() {
         if (this.isEnglish) {
           return Resource.mainTitle.en;
@@ -139,6 +144,8 @@ import bg4 from '@/assets/img/bgcostume4.png';
     },
 
     mounted() {
+      window.addEventListener("scroll", this.handleScroll);
+
       EthnicStore.get('/api/get-ethnics')
       .then(response => {
           response.data.forEach(item => {
@@ -158,6 +165,8 @@ import bg4 from '@/assets/img/bgcostume4.png';
     },
 
     beforeDestroy() {
+      window.removeEventListener("scroll", this.handleScroll);
+
       // Xóa interval khi component bị hủy
       clearInterval(this.intervalId);
     },
@@ -180,6 +189,14 @@ import bg4 from '@/assets/img/bgcostume4.png';
       moreEthnic() {
         this.index += this.numberEthnic;
       },
+
+      scrollToTop() {
+        window.scrollTo({ top: 700, behavior: "smooth" });
+      },
+
+      handleScroll() {
+        this.showScroll = window.scrollY > 900;
+      }
     },
   }
 </script>
@@ -322,6 +339,17 @@ svg:hover .image-caption {
   padding: 10px; /* Khoảng cách giữa các avatar */
   margin-bottom: 5vh;
   box-sizing: border-box; /* Đảm bảo tính toàn vẹn của phần tử */
+}
+
+.button--scroll {
+  position: fixed;
+  height: 30px;
+  bottom: 20px;
+  right: 20px;
+  z-index: 999;
+  cursor: pointer;
+  border-radius: 50%;
+  background-color: white;
 }
 </style>
 
