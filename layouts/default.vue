@@ -165,6 +165,10 @@ export default {
   min-height: 0px;
 }
 
+.v-application p {
+  margin-bottom: 0px;
+}
+
 .v-toolbar__content {
   font-family: 'Maitree', sans-serif;
 }

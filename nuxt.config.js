@@ -1,4 +1,5 @@
 import colors from 'vuetify/es5/util/colors'
+import axios from "axios";
 
 export default {
   // Global page headers: https://go.nuxtjs.dev/config-head
@@ -17,6 +18,25 @@ export default {
   mode: 'static',
   router: {
     base: '/NoticeCostume/',
+  },
+
+  generate: {
+    routes: async () => {
+      try {
+        const response = await axios.get('https://mycostumes.ddns.net/api/get-ethnics')
+        const ethnicData = response.data;
+
+        const normalizeEtnicName = (name) => {
+          return name.normalize("NFD").replace(/[\u0300-\u036f]/g, "").toLowerCase();
+        };
+      
+        const routes = ethnicData.map(ethnic => `/ethnic/${normalizeEtnicName(ethnic.name)}`);
+        return routes;
+      } catch (error) {
+        console.error(error);
+        return [];
+      }
+    }
   },
 
   // Global CSS: https://go.nuxtjs.dev/config-css

@@ -18,9 +18,9 @@
         </div>
         <div class="search-items">
           <div v-for="(item, index) in filteredItems" :key="index" :style="{ top: (50 + index * 70) + 'px' }">
-            <nuxt-link :to="'/ethnic/' + item.role" class="item__roles">
-              <div v-if="item.role !== 'Không tìm thấy dân tộc'" tyle="width: 120px;">
-                <img :src="item.imageUrl" style="width: 50px; height: 45px"
+            <nuxt-link :to="'/ethnic/' + item.role.normalize('NFD').replace(/[\u0300-\u036f]/g, '').toLowerCase()" class="item__roles" :style="{ 'justify-content': isFoundEthnic ? 'initial' : 'center' }">
+              <div v-if="isFoundEthnic" style="width: 120px;">
+                <img :src="item.imageUrl" style="width: 60px; height: 55px">
               </div>
               <p>{{ item.role }}</p>
             </nuxt-link>
@@ -40,6 +40,11 @@
       <div class="home-footer">
 
       </div>
+      <button @click="scrollToTop" v-if="showScroll" class="button--scroll">
+        <svg width="30" height="30" viewBox="0 0 36 36" fill="none">
+          <path d="M7 11L12 6L17 11M12 18V7" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" transform="scale(1.5)"></path>
+        </svg>
+      </button>
     </div>
 
 
@@ -69,7 +74,6 @@ import bg4 from '@/assets/img/bgcostume4.png';
         currentIndex: 0,
         intervalId: null,
         showAvatar: false,
-        // them 
         ethnic : {
           imageUrl: '',
           role: '',
@@ -79,6 +83,8 @@ import bg4 from '@/assets/img/bgcostume4.png';
         itemsPerPage: 10,
         currentIndexItem: 0,
         searchKeyword: '',
+        isFoundEthnic: true,
+        showScroll: false,
       }
     },
 
@@ -92,7 +98,7 @@ import bg4 from '@/assets/img/bgcostume4.png';
       itemsToShow() {
         return this.items.slice(0, this.currentIndexItem + this.itemsPerPage);
       },
-
+      
       maintitle() {
         if (this.isEnglish) {
           return Resource.mainTitle.en;
@@ -123,14 +129,23 @@ import bg4 from '@/assets/img/bgcostume4.png';
 
         const foundEthnics = filteredAndReversed.slice(0, 6);
         if (foundEthnics == 0) {
-          return [{role:"Không tìm thấy dân tộc"}];
+          if (!this.isEnglish) {
+            this.isFoundEthnic = false;
+            return [{role:"Không tìm thấy dân tộc"}];
+          } else {
+            this.isFoundEthnic = false;
+            return [{role:"No ethnicity found"}];
+          }
         } else {
+          this.isFoundEthnic = true;
           return foundEthnics;
         }
       },
     },
 
     mounted() {
+      window.addEventListener("scroll", this.handleScroll);
+
       EthnicStore.get('/api/get-ethnics')
       .then(response => {
           response.data.forEach(item => {
@@ -139,6 +154,7 @@ import bg4 from '@/assets/img/bgcostume4.png';
             newItem.imageUrl = item.imageUrl
             newItem.role = item.name
             this.items.push(newItem)
+            console.log(this.items)
           })
         }
       ).catch(error => {
@@ -149,6 +165,8 @@ import bg4 from '@/assets/img/bgcostume4.png';
     },
 
     beforeDestroy() {
+      window.removeEventListener("scroll", this.handleScroll);
+
       // Xóa interval khi component bị hủy
       clearInterval(this.intervalId);
     },
@@ -171,6 +189,14 @@ import bg4 from '@/assets/img/bgcostume4.png';
       moreEthnic() {
         this.index += this.numberEthnic;
       },
+
+      scrollToTop() {
+        window.scrollTo({ top: 700, behavior: "smooth" });
+      },
+
+      handleScroll() {
+        this.showScroll = window.scrollY > 900;
+      }
     },
   }
 </script>
@@ -244,7 +270,6 @@ h2 {
 .item__roles {
   display: flex;
   align-items: center;
-  justify-content: center;
   width: 380px;
   height: 70px;
 }
@@ -314,6 +339,17 @@ svg:hover .image-caption {
   padding: 10px; /* Khoảng cách giữa các avatar */
   margin-bottom: 5vh;
   box-sizing: border-box; /* Đảm bảo tính toàn vẹn của phần tử */
+}
+
+.button--scroll {
+  position: fixed;
+  height: 30px;
+  bottom: 20px;
+  right: 20px;
+  z-index: 999;
+  cursor: pointer;
+  border-radius: 50%;
+  background-color: white;
 }
 </style>
 
