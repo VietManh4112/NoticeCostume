@@ -41,8 +41,12 @@ export default {
           newItem.index = item.id
           newItem.role = item.name
           this.items.push(newItem)
-          if (item.name.normalize("NFD").replace(/[\u0300-\u036f]/g, "").toLowerCase().includes(this.$route.params.id.toLowerCase())) {
+          if (item.name.normalize("NFD").replace(/[\u0300-\u036f]/g, "").toLowerCase().includes(this.$route.params.id.toLowerCase()) && this.$route.params.id.toLowerCase() !== "lao" && this.$route.params.id.toLowerCase() !== "ma") {
             this.count = Number(item.id);
+          } else if(this.$route.params.id.toLowerCase() === "lao") {
+            this.count = 7;
+          } else if(this.$route.params.id.toLowerCase() === "ma") {
+            this.count = 43;
           }
         })
       }

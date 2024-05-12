@@ -3,32 +3,50 @@
         <div class="modal">
             <div v-if="type === 'modal-buy'" class="modal-content__buy">
                 <div class="flex">
-                    <p>Tên người nhận:</p>
-                    <TextField type="form-text" :placeholder="name"></TextField>
+                    <p v-if="!isEnglish">Tên người nhận:</p>
+                    <p v-else>Recipient's name:</p>
+                    <TextField type="form-text"></TextField>
                 </div>
                 <div class="flex">
-                    <p>Số điện thoại:</p>
-                    <TextField type="form-number" :placeholder="sdt"></TextField>
+                    <p v-if="!isEnglish">Số điện thoại:</p>
+                    <p v-else>Phone:</p>
+                    <TextField type="form-number"></TextField>
                 </div>
                 <div class="flex">
-                    <p>Địa chỉ:</p>
-                    <TextField type="form-text" :placeholder="address"></TextField>
+                    <p v-if="!isEnglish">Địa chỉ:</p>
+                    <p v-else>Address:</p>
+                    <TextField type="form-text"></TextField>
                 </div>
                 <div class="flex">
-                    <a>Kích cỡ:</a>
+                    <p v-if="!isEnglish">Kích cỡ:</p>
+                    <p v-else>Size:</p>
                     <span v-for="(size, index) in sizes" :key="index" style="margin-right: 20px;">
                         <Button type="normal" :class="{ active: selectedSize === size }" @click="selectSize(size)">{{ size }}</Button>
                     </span>
                 </div>
                 <div class="flex">
-                    <a>Số lượng:</a>
+                    <p v-if="!isEnglish">Số lượng:</p>
+                    <p v-else>Amount:</p>
                     <div style="margin: 24px 0;">
                         <Button type="normal" @click="subtraction" style="margin-right: -4.7px;">-</Button>
                         <input type="text" class="modal-input" v-model="amount">
                         <Button type="normal" @click="addition" style="margin-left: -5px;">+</Button>
                     </div>
                 </div>
-                <Button type="nav" @click="buyCostume">Đặt mua</Button>
+                <Button type="nav" @click="buyCostume">
+                    <span v-if="!isEnglish">Đặt mua</span>
+                    <span v-else>Order</span>
+                </Button>
+            </div>
+
+            <div v-else-if="type === 'modal-continue'" class="modal-content__continue">
+                <div class="flex" style="justify-content: center;">
+                    <p v-if="!isEnglish">Bạn cần đăng nhập để tiếp tục!</p>
+                </div>
+                <div class="flex" style="justify-content: center;">
+                    <Button type="register" @click="register">{{ registerBtn }}</Button>
+                    <Button type="login" @click="login">{{ loginBtn }}</Button>
+                </div>
             </div>
         </div>
     </div>
@@ -37,6 +55,7 @@
 <script>
 import TextField from '@/components/TextField.vue';
 import Button from '@/components/Button.vue'
+import Resource from '@/helper/resource.js'
     export default {
         name: "Modal",
 
@@ -49,11 +68,30 @@ import Button from '@/components/Button.vue'
             type: String,
         },
 
+        computed: {
+            isEnglish() {
+                return this.$store.state.isEnglish;
+            },
+
+            loginBtn() {
+                if (this.isEnglish) {
+                    return Resource.loginBtn.en;
+                } else {
+                    return Resource.loginBtn.vi;
+                }
+            },
+
+            registerBtn() {
+                if (this.isEnglish) {
+                    return Resource.registerBtn.en;
+                } else {
+                    return Resource.registerBtn.vi;
+                }
+            },
+        },
+
         data() {
             return {
-                name: 'Tên người nhận',
-                sdt: 'Số điện thoại',
-                address: 'Địa chỉ',
                 sizes: ['M', 'L', 'XL', 'XXL'],
                 selectedSize: null,
                 amount: 1,
@@ -77,7 +115,15 @@ import Button from '@/components/Button.vue'
 
             addition() {
                 this.amount++;
-            }
+            },
+
+            login() {
+                this.$router.push(`/login`);
+            },
+
+            register() {
+                this.$router.push(`/register`);
+            },
         }
     }
 </script>
@@ -94,7 +140,7 @@ import Button from '@/components/Button.vue'
     background-color: rgba(0, 0, 0, 50%);
 }
 
-.modal-content__buy,  .modal-content__edit{
+.modal-content__buy,  .modal-content__continue{
     margin: 8% auto;
     padding: 20px;
     width: 50%;
@@ -109,8 +155,9 @@ import Button from '@/components/Button.vue'
     position: relative;
 }
 
-.modal-content__edit {
-    margin: 4.8% auto;
+.modal-content__continue {
+    width: 25%;
+    margin: 15% auto;
 }
 
 .modal-input {
