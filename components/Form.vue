@@ -34,6 +34,13 @@
                     <p v-if="errorLogin && isEnglish" class="validateInput">Account or password is incorrect</p>
                 </div>
                 <div style="position: relative;">
+                    <TextField v-show="type === 'register'" type="form-text" :placeholder="Email" v-model="email"></TextField>
+                    <p v-show="type === 'register' && !isEnglish" class="validateInput">{{ validationEmailVn1 }}
+                        {{ validationEmailVn2 }}</p>
+                    <p v-show="type === 'register' && isEnglish" class="validateInput">{{ validationEmailEn1 }}
+                        {{ validationEmailEn2 }}</p>
+                </div>
+                <div style="position: relative;">
                     <TextField type="form-pass" :placeholder="Pass" v-model="pass"></TextField>
                     <p v-if="validatePass && !isEnglish" class="validateInput">Mật khẩu không được bỏ trống!</p>
                     <p v-if="validatePass && isEnglish" class="validateInput">Password cannot be left blank!</p>
@@ -117,13 +124,19 @@ export default {
     data() {
         return {
             Name: 'Username',
+            Email: 'Email',
             Pass: 'Password',
             ConfirmPass: 'Confirm Password',
             name: '',
             pass: '',
+            email: '',
             confirmpass: '',
             validateName: false,
             validatePass: false,
+            validationEmailVn1: '',
+            validationEmailVn2: '',
+            validationEmailEn1: '',
+            validationEmailEn2: '',
             validationMessageVn1: '',
             validationMessageVn2: '',
             validationMessageEn1: '',
@@ -179,18 +192,47 @@ export default {
                 this.validatePass = false;
             }
 
+            const regex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+            if (this.email.trim() === '') {
+                this.validationEmailVn1 = 'Email không được bỏ trống!';
+                this.validationEmailVn2 = '';
+                this.validationEmailEn1 = 'Email cannot be left blank!';
+                this.validationEmailEn2 = '';
+                error.push('lỗi');
+            } else if (regex.test(this.email) == false) {
+                this.validationEmailVn1 = '';
+                this.validationEmailVn2 = 'Email không đúng định dạng!';
+                this.validationEmailEn1 = '';
+                this.validationEmailEn2 = 'Invalid email!';
+                error.push('lỗi');
+            } else {
+                this.validateEmail = '';
+            }
+
             if (this.confirmpass.trim() === '') {
                 this.validationMessageVn1 = 'Xác nhận mật khẩu không được bỏ trống!';
                 this.validationMessageVn2 = '';
                 this.validationMessageEn1 = 'Confirm password cannot be left blank!';
                 this.validationMessageEn2 = '';
+                error.push('lỗi');
             } else if (this.confirmpass !== this.pass) {
                 this.validationMessageVn1 = '';
                 this.validationMessageVn2 = 'Xác nhận mật khẩu không giống!';
                 this.validationMessageEn1 = '';
                 this.validationMessageEn2 = 'Confirm Password is different!';
+                error.push('lỗi');
             } else {
                 this.validationMessage = '';
+            }
+            const userData = { username: this.name,email: this.email,password: this.pass };
+            if (error.length == 0) {
+                this.$store.dispatch('register', userData)
+                    .then(() => {
+                        this.$router.push('/login');
+                    })
+                    .catch((error) => {
+                        console.log(error)
+                    });
             }
         },
     },
