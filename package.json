@@ -25,6 +25,7 @@
     "@nuxtjs/pwa": "^3.3.5",
     "core-js": "^3.25.3",
     "eventemitter3": "5.0.1",
+    "google-auth-library": "^9.9.0",
     "jsonwebtoken": "^9.0.2",
     "nuxt": "^2.15.8",
     "vue": "^2.7.10",

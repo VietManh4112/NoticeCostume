@@ -20,6 +20,8 @@
 </template>
 <script>
 import Table from '@/components/Table.vue'
+import axiosInstance, { setBearerToken } from '@/helper/api.js'
+
 export default {
   components: {
     Table,
