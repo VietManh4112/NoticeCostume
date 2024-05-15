@@ -30,6 +30,21 @@ export default function createStore() {
             });
         });
       },
+      
+      register({ commit }, userData) {
+        return new Promise((resolve, reject) => {
+          axiosInstance.post('/api/auth/sign-up', userData)
+            .then(response => {
+              localStorage.setItem('token', response.data);
+              const tokenlocal = localStorage.getItem('token');
+              // Thực hiện chuyển hướng
+              resolve();
+            })
+            .catch(error => {
+              reject(error); // Trả về lỗi
+            });
+        });
+      },
     },
     getters: {
 

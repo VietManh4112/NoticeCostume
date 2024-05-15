@@ -124,7 +124,7 @@ import bg4 from '@/assets/img/bgcostume4.png';
         if (!keyword) return [];
 
         const filteredAndReversed = this.items.filter(item => {
-          return item.role.toLowerCase().includes(keyword.toLowerCase());
+          return item.role.normalize("NFD").replace(/[\u0300-\u036f]/g, "").toLowerCase().includes(keyword.toLowerCase());
         }).reverse();
 
         const foundEthnics = filteredAndReversed.slice(0, 6);
@@ -154,7 +154,6 @@ import bg4 from '@/assets/img/bgcostume4.png';
             newItem.imageUrl = item.imageUrl
             newItem.role = item.name
             this.items.push(newItem)
-            console.log(this.items)
           })
         }
       ).catch(error => {

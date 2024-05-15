@@ -19,13 +19,15 @@
                     </button>
                 </div>
                 <Modal v-if="hideModalBuy" type="modal-buy" @hide-modal="handleHideModalBuy"></Modal>
+                <Modal v-if="hideModalContinue" type="modal-continue" @hide-modal="handleHideModalContinue"></Modal>
                 <div v-for="(item, index) in items" :key="index" class="content-text">
-                    <div v-for="(info, indexinfo) in info" :key="indexinfo">
+                    <div v-for="(info, indexinfo) in (isEnglish ? [dataEthnicEn[count-1]] : info)" :key="indexinfo">
                         <template v-if="index === count - 1">
                             <div class="edit"><b>
                                     <p style="margin-right: 4px;">{{ dynamicTexts.text1 }}</p>
                                 </b>
-                                <p style="margin-left: 0;">{{ item.role }}</p>
+                                <p v-if="!isEnglish" style="margin-left: 0;">{{ item.role }}</p>
+                                <p v-else style="margin-left: 0;">{{ item.role.normalize('NFD').replace(/[\u0300-\u036f]/g, '') }}</p>
                             </div>
                             <hr>
                             <div>
@@ -42,9 +44,9 @@
                             <hr>
                             <p><b>{{ dynamicTexts.text6 }}</b></p>
                             <TextEdit :title="dynamicTexts.text7" :male="info.male" :apiUrl="`/api/edit-description`"
-                                :sexId="1" :id="count"></TextEdit>
+                                :sexId="info.idMale" :id="count"></TextEdit>
                             <TextEdit :title="dynamicTexts.text8" :female="info.female"
-                                :apiUrl="`/api/edit-description`" :sexId="2" :id="count"></TextEdit>
+                                :apiUrl="`/api/edit-description`" :sexId="info.idFemale" :id="count"></TextEdit>
                         </template>
                     </div>
                 </div>
@@ -156,15 +158,20 @@ export default {
           ).catch(error => {
               console.error(error);
           });
+          console.log(this.dataEthnicEn[0])
+
   },
 
-  watch: {
-      count(newValue, oldValue) {
-          this.loadData(newValue);
-          this.loadComments(newValue);
-          this.costumeId = newValue;
-      }
-  },
+
+
+    watch: {
+        count(newValue, oldValue) {
+            this.loadData(newValue);
+            this.loadComments(newValue);
+            this.costumeId = newValue;
+        }
+    },
+
 
     methods: {
         /**
@@ -201,17 +208,26 @@ export default {
           }
       },
 
-      buyCostume() {
-          this.hideModalBuy = true;
-      },
+        buyCostume() {
+            if (this.userIdToken === "") {
+                this.hideModalContinue = true;
+            } else {
+                this.hideModalBuy = true;
+            }
+        },
 
       handleHideModalBuy(value) {
           this.hideModalBuy = value;
       },
 
+        handleHideModalContinue(value) {
+            this.handleHideModalContinue = value;
+        },
+
         async loadData(id) {
             axiosInstance.get('/api/get-costumes/' + id)
                 .then(response => {
+                    console.log(response.data)
                     const newItem = { ...this.ethnic }
                     newItem.material = response.data.material
                     newItem.pattern = response.data.pattern
@@ -219,6 +235,8 @@ export default {
                     newItem.characteristic = response.data.characteristic
                     newItem.male = response.data.listCostumesDetail[0].description
                     newItem.female = response.data.listCostumesDetail[1].description
+                    newItem.idMale = response.data.listCostumesDetail[0].id
+                    newItem.idFemale = response.data.listCostumesDetail[1].id
                     this.info.push(newItem)
                 })
                 .catch(error => {
@@ -294,20 +312,26 @@ export default {
         },
 
         async addComment() {
-            const addComment = {
-                "content": this.commentText,
-                "costumeId": this.costumeId
-            };
-            const token = localStorage.getItem("token");
-            setBearerToken(token);
-            axiosInstance.post('/api/post-comments', addComment)
-                .then(response => {
-                    window.location.reload();
+            if (this.userIdToken === "") {
+                this.hideModalContinue = true;
+            } else {
+                const addComment = {
+                    "content": this.commentText,
+                    "costumeId": this.costumeId
+                };
+                if (this.commentText.trim() !== "") {
+                    const token = localStorage.getItem("token");
+                    setBearerToken(token);
+                    axiosInstance.post('/api/post-comments', addComment)
+                        .then(response => {
+                            window.location.reload();
+                        }
+                        ).catch(error => {
+                            console.error(error);
+                        });
                 }
-                ).catch(error => {
-                    console.error(error);
-                });
-        }
+            }
+        },
     },
 
   computed: {
@@ -329,10 +353,10 @@ export default {
       },
   },
 
-  data() {
-      return {
-
+    data() {
+        return {
             hideModalBuy: false,
+            hideModalContinue: false,
             ethnics: {
                 role: '',
                 material: '',
@@ -341,6 +365,8 @@ export default {
                 characteristic: '',
                 male: '',
                 female: '',
+                idMale: '',
+                idFemale: ''
             },
             comments: {
                 avatar: '',
@@ -354,7 +380,65 @@ export default {
             info: [],
             isDataFetched: false,
             editStatus: [],
-            editText: []
+            editText: [],
+            userIdToken: '',
+            sub: '',
+            dataEthnicEn: [
+                { material: 'Textile fabric', pattern: 'Mainly blue, red, yellow, and white colors are arranged alternately combined with embroidered thread patterns in each strip. There are additional square silver accessory strips attached.', other: '', characteristic: '', male: '', female: '' },
+                { material: '', pattern: '', other: '', characteristic: '', male: '', female: '' }, 
+                { material: '', pattern: '', other: '', characteristic: '', male: '', female: '' },
+                { material: '', pattern: '', other: '', characteristic: '', male: '', female: '' },
+                { material: '', pattern: '', other: '', characteristic: '', male: '', female: '' }, 
+                { material: '', pattern: '', other: '', characteristic: '', male: '', female: '' },
+                { material: '', pattern: '', other: '', characteristic: '', male: '', female: '' },
+                { material: '', pattern: '', other: '', characteristic: '', male: '', female: '' }, 
+                { material: '', pattern: '', other: '', characteristic: '', male: '', female: '' },
+                { material: '', pattern: '', other: '', characteristic: '', male: '', female: '' },
+                { material: '', pattern: '', other: '', characteristic: '', male: '', female: '' }, 
+                { material: '', pattern: '', other: '', characteristic: '', male: '', female: '' },
+                { material: '', pattern: '', other: '', characteristic: '', male: '', female: '' }, 
+                { material: '', pattern: '', other: '', characteristic: '', male: '', female: '' },
+                { material: '', pattern: '', other: '', characteristic: '', male: '', female: '' },
+                { material: '', pattern: '', other: '', characteristic: '', male: '', female: '' }, 
+                { material: '', pattern: '', other: '', characteristic: '', male: '', female: '' },
+                { material: '', pattern: '', other: '', characteristic: '', male: '', female: '' },
+                { material: '', pattern: '', other: '', characteristic: '', male: '', female: '' }, 
+                { material: '', pattern: '', other: '', characteristic: '', male: '', female: '' },
+                { material: '', pattern: '', other: '', characteristic: '', male: '', female: '' },
+                { material: '', pattern: '', other: '', characteristic: '', male: '', female: '' }, 
+                { material: '', pattern: '', other: '', characteristic: '', male: '', female: '' },
+                { material: '', pattern: '', other: '', characteristic: '', male: '', female: '' }, 
+                { material: '', pattern: '', other: '', characteristic: '', male: '', female: '' },
+                { material: '', pattern: '', other: '', characteristic: '', male: '', female: '' },
+                { material: '', pattern: '', other: '', characteristic: '', male: '', female: '' }, 
+                { material: '', pattern: '', other: '', characteristic: '', male: '', female: '' },
+                { material: '', pattern: '', other: '', characteristic: '', male: '', female: '' },
+                { material: '', pattern: '', other: '', characteristic: '', male: '', female: '' }, 
+                { material: '', pattern: '', other: '', characteristic: '', male: '', female: '' },
+                { material: '', pattern: '', other: '', characteristic: '', male: '', female: '' },
+                { material: '', pattern: '', other: '', characteristic: '', male: '', female: '' }, 
+                { material: '', pattern: '', other: '', characteristic: '', male: '', female: '' },
+                { material: '', pattern: '', other: '', characteristic: '', male: '', female: '' }, 
+                { material: '', pattern: '', other: '', characteristic: '', male: '', female: '' },
+                { material: '', pattern: '', other: '', characteristic: '', male: '', female: '' },
+                { material: '', pattern: '', other: '', characteristic: '', male: '', female: '' }, 
+                { material: '', pattern: '', other: '', characteristic: '', male: '', female: '' },
+                { material: '', pattern: '', other: '', characteristic: '', male: '', female: '' },
+                { material: '', pattern: '', other: '', characteristic: '', male: '', female: '' }, 
+                { material: '', pattern: '', other: '', characteristic: '', male: '', female: '' },
+                { material: '', pattern: '', other: '', characteristic: '', male: '', female: '' },
+                { material: '', pattern: '', other: '', characteristic: '', male: '', female: '' }, 
+                { material: '', pattern: '', other: '', characteristic: '', male: '', female: '' },
+                { material: '', pattern: '', other: '', characteristic: '', male: '', female: '' },
+                { material: '', pattern: '', other: '', characteristic: '', male: '', female: '' }, 
+                { material: '', pattern: '', other: '', characteristic: '', male: '', female: '' },
+                { material: '', pattern: '', other: '', characteristic: '', male: '', female: '' },
+                { material: '', pattern: '', other: '', characteristic: '', male: '', female: '' }, 
+                { material: '', pattern: '', other: '', characteristic: '', male: '', female: '' },
+                { material: '', pattern: '', other: '', characteristic: '', male: '', female: '' },
+                { material: '', pattern: '', other: '', characteristic: '', male: '', female: '' }, 
+                { material: '', pattern: '', other: '', characteristic: '', male: '', female: '' }
+            ]
         }
     }
 }
