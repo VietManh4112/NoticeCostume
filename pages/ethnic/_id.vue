@@ -47,6 +47,8 @@ export default {
             this.count = 7;
           } else if(this.$route.params.id.toLowerCase() === "ma") {
             this.count = 43;
+          } else if(this.$route.params.id.toLowerCase() === "co") {
+            this.count = 36;
           }
         })
       }

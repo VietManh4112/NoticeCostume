@@ -4,7 +4,7 @@
             <span v-if="!isEditing">{{ displayValue }}</span>
             <span v-else>
                 <textarea v-model="editText" ref="textInput"></textarea>
-                <div style="color: red; font-size: 10px;">
+                <div style="color: red; font-size: 10px; z-index: 9999;">
                     nhấn esc để
                     <button style="color: #06F;" @click="cancel">hủy</button>
                     • nhấn enter để
@@ -137,6 +137,12 @@ export default {
                     this.updateInfo("characteristic");
                     this.updateInfo("other");
                     await axiosInstance.post(this.apiUrl, this.updateCostume[0])
+                        .then(response => {
+                            window.location.reload();
+                        }
+                        ).catch(error => {
+                            console.error(error);
+                        });
                 } else {
                     if (this.male !== undefined) {
                         this.updateDescription.forEach(info => {
@@ -149,6 +155,12 @@ export default {
                         });
                     }
                     axiosInstance.post(this.apiUrl, this.updateDescription[0])
+                        .then(response => {
+                            window.location.reload();
+                        }
+                        ).catch(error => {
+                            console.error(error);
+                        });
                 }
             } catch (error) {
                 console.error('Error saving data:', error);

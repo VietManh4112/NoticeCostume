@@ -278,7 +278,7 @@ h2 {
   background-color: rgba(128, 127, 127,10%);
 }
 
-a {
+.search-items a {
   text-decoration: none;
 }
 

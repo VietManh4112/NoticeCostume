@@ -1,7 +1,7 @@
 <template>
     <div>
         <div class="modal">
-            <div v-if="type === 'modal-buy'" class="modal-content__buy">
+            <div v-if="type === 'modal-buy'" class="modal-content__buy" ref="modalBuy">
                 <div class="flex">
                     <p v-if="!isEnglish">Tên người nhận:</p>
                     <p v-else>Recipient's name:</p>
@@ -21,7 +21,8 @@
                     <p v-if="!isEnglish">Kích cỡ:</p>
                     <p v-else>Size:</p>
                     <span v-for="(size, index) in sizes" :key="index" style="margin-right: 20px;">
-                        <Button type="normal" :class="{ active: selectedSize === size }" @click="selectSize(size)">{{ size }}</Button>
+                        <Button type="normal" :class="{ active: selectedSize === size }" @click="selectSize(size)">{{
+                size }}</Button>
                     </span>
                 </div>
                 <div class="flex">
@@ -39,7 +40,7 @@
                 </Button>
             </div>
 
-            <div v-else-if="type === 'modal-continue'" class="modal-content__continue">
+            <div v-else-if="type === 'modal-continue'" class="modal-content__continue" ref="modalContinue">
                 <div class="flex" style="justify-content: center;">
                     <p v-if="!isEnglish">Bạn cần đăng nhập để tiếp tục!</p>
                 </div>
@@ -56,76 +57,108 @@
 import TextField from '@/components/TextField.vue';
 import Button from '@/components/Button.vue'
 import Resource from '@/helper/resource.js'
-    export default {
-        name: "Modal",
+export default {
+    name: "Modal",
 
-        components: {
-            TextField ,
-            Button,
+    components: {
+        TextField,
+        Button,
+    },
+
+    props: {
+        type: String,
+        hideModalBuy: Boolean,
+        hideModalContinue: Boolean,
+    },
+
+    mounted() {
+        if (!this.bodyClickListenerSet) {
+            setTimeout(() => {
+                document.body.addEventListener('click', this.handleBodyClick);
+                this.bodyClickListenerSet = true;
+            }, 500);
+        }
+    },
+
+    destroyed() {
+        document.body.removeEventListener('click', this.handleBodyClick);
+    },
+
+    computed: {
+        isEnglish() {
+            return this.$store.state.isEnglish;
         },
 
-        props: {
-            type: String,
-        },
-
-        computed: {
-            isEnglish() {
-                return this.$store.state.isEnglish;
-            },
-
-            loginBtn() {
-                if (this.isEnglish) {
-                    return Resource.loginBtn.en;
-                } else {
-                    return Resource.loginBtn.vi;
-                }
-            },
-
-            registerBtn() {
-                if (this.isEnglish) {
-                    return Resource.registerBtn.en;
-                } else {
-                    return Resource.registerBtn.vi;
-                }
-            },
-        },
-
-        data() {
-            return {
-                sizes: ['M', 'L', 'XL', 'XXL'],
-                selectedSize: null,
-                amount: 1,
+        loginBtn() {
+            if (this.isEnglish) {
+                return Resource.loginBtn.en;
+            } else {
+                return Resource.loginBtn.vi;
             }
         },
 
-        methods: {
-            selectSize(size) {
-                this.selectedSize = size;
-            },
+        registerBtn() {
+            if (this.isEnglish) {
+                return Resource.registerBtn.en;
+            } else {
+                return Resource.registerBtn.vi;
+            }
+        },
+    },
 
-            buyCostume() {
-                this.$emit('hide-modal', false);
-            },
-
-            subtraction() {
-                if (this.amount > 1) {
-                    this.amount--;
-                }
-            },
-
-            addition() {
-                this.amount++;
-            },
-
-            login() {
-                this.$router.push(`/login`);
-            },
-
-            register() {
-                this.$router.push(`/register`);
-            },
+    data() {
+        return {
+            sizes: ['M', 'L', 'XL', 'XXL'],
+            selectedSize: null,
+            amount: 1,
+            bodyClickListenerSet: false
         }
-    }
+    },
+
+    methods: {
+        selectSize(size) {
+            this.selectedSize = size;
+        },
+
+        buyCostume() {
+            this.$emit('hide-modal__buy', false);
+        },
+
+        subtraction() {
+            if (this.amount > 1) {
+                this.amount--;
+            }
+        },
+
+        addition() {
+            this.amount++;
+        },
+
+        login() {
+            this.$router.push(`/login`);
+        },
+
+        register() {
+            this.$router.push(`/register`);
+        },
+
+        handleBodyClick(event) {
+            if (this.hideModalContinue) {
+                const modal = this.$refs.modalContinue;
+                if (!modal.contains(event.target)) {
+                    this.$emit('hide-modal__continue', false)
+                }
+            }
+
+            if (this.hideModalBuy) {
+                const modal = this.$refs.modalBuy;
+                if (!modal.contains(event.target)) {
+                    this.$emit('hide-modal__buy', false)
+                }
+            }
+        }
+    },
+}
 </script>
 
 <style>
@@ -140,7 +173,8 @@ import Resource from '@/helper/resource.js'
     background-color: rgba(0, 0, 0, 50%);
 }
 
-.modal-content__buy,  .modal-content__continue{
+.modal-content__buy,
+.modal-content__continue {
     margin: 8% auto;
     padding: 20px;
     width: 50%;
@@ -163,7 +197,7 @@ import Resource from '@/helper/resource.js'
 .modal-input {
     width: 55px;
     height: 40px;
-    border: 1px solid rgba(0,0,0,9%);
+    border: 1px solid rgba(0, 0, 0, 9%);
     text-align: center;
 }
 
@@ -176,13 +210,13 @@ import Resource from '@/helper/resource.js'
     margin-bottom: 24px;
 }
 
-.modal a, .modal p {
+.modal a,
+.modal p {
     width: 250px;
 }
 
 .active {
-  color: red;
-  border: 1px solid red;
+    color: red;
+    border: 1px solid red;
 }
-
 </style>

@@ -32,6 +32,7 @@
                     <p v-if="validateName && isEnglish" class="validateInput">Username cannot be empty!</p>
                     <p v-if="errorLogin && !isEnglish" class="validateInput">Tài khoản hoặc mật khẩu không chính xác</p>
                     <p v-if="errorLogin && isEnglish" class="validateInput">Account or password is incorrect</p>
+                    <p v-show="type === 'register'" class="validateInput">{{ errorRegister }}</p>
                 </div>
                 <div style="position: relative;">
                     <TextField v-show="type === 'register'" type="form-text" :placeholder="Email" v-model="email"></TextField>
@@ -141,6 +142,7 @@ export default {
             validationMessageVn2: '',
             validationMessageEn1: '',
             validationMessageEn2: '',
+            errorRegister: '',
             errorLogin: false,
         };
     },
@@ -177,17 +179,17 @@ export default {
         },
 
         register() {
-            var error = [];
+            var errors = [];
             if (this.name.trim() === '') {
                 this.validateName = true;
-                error.push('lỗi');
+                errors.push('lỗi');
             } else {
                 this.validateName = false;
             }
 
             if (this.pass.trim() === '') {
                 this.validatePass = true;
-                error.push('lỗi');
+                errors.push('lỗi');
             } else {
                 this.validatePass = false;
             }
@@ -198,13 +200,13 @@ export default {
                 this.validationEmailVn2 = '';
                 this.validationEmailEn1 = 'Email cannot be left blank!';
                 this.validationEmailEn2 = '';
-                error.push('lỗi');
+                errors.push('lỗi');
             } else if (regex.test(this.email) == false) {
                 this.validationEmailVn1 = '';
                 this.validationEmailVn2 = 'Email không đúng định dạng!';
                 this.validationEmailEn1 = '';
                 this.validationEmailEn2 = 'Invalid email!';
-                error.push('lỗi');
+                errors.push('lỗi');
             } else {
                 this.validateEmail = '';
             }
@@ -214,24 +216,24 @@ export default {
                 this.validationMessageVn2 = '';
                 this.validationMessageEn1 = 'Confirm password cannot be left blank!';
                 this.validationMessageEn2 = '';
-                error.push('lỗi');
+                errors.push('lỗi');
             } else if (this.confirmpass !== this.pass) {
                 this.validationMessageVn1 = '';
                 this.validationMessageVn2 = 'Xác nhận mật khẩu không giống!';
                 this.validationMessageEn1 = '';
                 this.validationMessageEn2 = 'Confirm Password is different!';
-                error.push('lỗi');
+                errors.push('lỗi');
             } else {
                 this.validationMessage = '';
             }
             const userData = { username: this.name,email: this.email,password: this.pass };
-            if (error.length == 0) {
+            if (errors.length == 0) {
                 this.$store.dispatch('register', userData)
                     .then(() => {
                         this.$router.push('/login');
                     })
                     .catch((error) => {
-                        console.log(error)
+                        this.errorRegister = error.response.data.message;
                     });
             }
         },
