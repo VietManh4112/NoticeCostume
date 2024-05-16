@@ -43,6 +43,7 @@
             <div v-else-if="type === 'modal-continue'" class="modal-content__continue" ref="modalContinue">
                 <div class="flex" style="justify-content: center;">
                     <p v-if="!isEnglish">Bạn cần đăng nhập để tiếp tục!</p>
+                    <p v-if="isEnglish">You need to log in to continue!</p>
                 </div>
                 <div class="flex" style="justify-content: center;">
                     <Button type="register" @click="register">{{ registerBtn }}</Button>

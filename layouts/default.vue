@@ -8,7 +8,6 @@
           <v-toolbar-items class="toolbar__items">
             <v-btn to="/">Home</v-btn>
             <v-btn to="/project">Project</v-btn>
-            <v-btn to="/artist">Artist</v-btn>
             <v-btn to="/repository">Repository</v-btn>
             <v-btn to="/about">About</v-btn>
           </v-toolbar-items>
@@ -188,7 +187,7 @@ export default {
 }
 
 .toolbar__items {
-  width: 40vw;
+  width: 35vw;
   display: flex;
   justify-content: flex-start;
 }

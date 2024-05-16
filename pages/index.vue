@@ -41,7 +41,7 @@
 
       </div>
       <button @click="scrollToTop" v-if="showScroll" class="button--scroll">
-        <svg width="30" height="30" viewBox="0 0 36 36" fill="none">
+        <svg width="40" height="40" viewBox="0 0 36 36" fill="none">
           <path d="M7 11L12 6L17 11M12 18V7" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" transform="scale(1.5)"></path>
         </svg>
       </button>
@@ -51,7 +51,6 @@
   </div>
 </template>
 <script>
-import axiosInstance, { setBearerToken } from '@/helper/api.js'
 import Resource from '@/helper/resource.js'
 import Avatar from '@/components/Avatar.vue';
 import Button from '@/components/Button.vue';
@@ -342,9 +341,9 @@ svg:hover .image-caption {
 
 .button--scroll {
   position: fixed;
-  height: 30px;
+  height: 40px;
   bottom: 20px;
-  right: 20px;
+  right: 50px;
   z-index: 999;
   cursor: pointer;
   border-radius: 50%;
