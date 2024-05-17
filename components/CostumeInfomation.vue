@@ -35,21 +35,21 @@
                             <hr>
                             <div>
                                 <TextEdit :title="dynamicTexts.text2" :material="info.material"
-                                    :apiUrl="`/api/edit-costumes`" :id="count"></TextEdit>
+                                    :apiUrl="`/api/edit-costumes`" :id="count" @is-edit="edit" :isEdit="isEdit"></TextEdit>
                                 <TextEdit :title="dynamicTexts.text3" :pattern="info.pattern"
-                                    :apiUrl="`/api/edit-costumes`" :id="count"></TextEdit>
+                                    :apiUrl="`/api/edit-costumes`" :id="count" @is-edit="edit" :isEdit="isEdit"></TextEdit>
                             </div>
                             <hr>
                             <TextEdit :title="dynamicTexts.text4" :other="info.other" :apiUrl="`/api/edit-costumes`"
-                                :id="count"></TextEdit>
+                                :id="count" @is-edit="edit" :isEdit="isEdit"></TextEdit>
                             <TextEdit :title="dynamicTexts.text5" :characteristic="info.characteristic"
-                                :apiUrl="`/api/edit-costumes`" :id="count"></TextEdit>
+                                :apiUrl="`/api/edit-costumes`" :id="count" @is-edit="edit" :isEdit="isEdit"></TextEdit>
                             <hr>
                             <p><b>{{ dynamicTexts.text6 }}</b></p>
                             <TextEdit :title="dynamicTexts.text7" :male="info.male" :apiUrl="`/api/edit-description`"
-                                :sexId="info.idMale" :id="count"></TextEdit>
+                                :sexId="info.idMale" :id="count" @is-edit="edit" :isEdit="isEdit"></TextEdit>
                             <TextEdit :title="dynamicTexts.text8" :female="info.female"
-                                :apiUrl="`/api/edit-description`" :sexId="info.idFemale" :id="count"></TextEdit>
+                                :apiUrl="`/api/edit-description`" :sexId="info.idFemale" :id="count" @is-edit="edit" :isEdit="isEdit"></TextEdit>
                         </template>
                     </div>
                 </div>
@@ -364,6 +364,10 @@ export default {
                 }
             }
         },
+
+        edit(value) {
+            this.isEdit = value;
+        }
     },
 
     computed: {
@@ -419,6 +423,7 @@ export default {
             userIdToken: '',
             sub: '',
             placeholderComment: '',
+            isEdit: false,
             dataEthnicEn: [
                 { material: 'Textile fabric', pattern: 'Mainly blue, red, yellow, and white colors are arranged alternately combined with embroidered thread patterns in each strip. There are additional square silver accessory strips attached.', other: "For the older generation, traditional clothing is the most precious and closest dowry when a girl returns to her husband's family. For the younger generation, clothing represents filial piety, inheritance and preservation. as well as pride for parents and grandparents and the ethnic community.", characteristic: 'The costumes are similar to those of Thai people, mixed a lot in both materials and styles.', male: 'Quite simple, mostly black indigo. The shirt has no collar and is tight-fitting, the buttons are tied with fabric buttons. The pants have a drawstring waistband and straight wide legs.', female: 'Tops, short skirts, scarves, belts and other jewelry. Characterized by two sleeves decorated with alternating blue, red, yellow, and white patches. The skirt is the same style as the Thai dress, but has many woven patterns along the skirt body.' },
                 { material: 'Fabric.', pattern: "Ha Nhi Hoa women's costumes are mainly red, or red mixed with white. Ha Nhi Den women's costumes are mainly black, decorated with white or blue patterns. Decorative motifs are different between Ha Nhi branches but all represent the harmony between human and natural elements.", other: 'Black Ha Nhi women already wear scarves, especially indigo scarves, which means to announce: I am married. According to the spiritual customs of the Ha Nhi people, the top of the head is the part that holds the soul, so when you get married, you have to keep the soul tightly, so wearing a scarf on it will keep the soul longer.', characteristic: '', male: 'Simple: clothes, headgear and belt. The shirt is tailored with slits in the armpits and chest, narrow across, and fastened together with fabric buttons. Pants with lame legs, high crotch, short waistband and legs, tightened with a fabric belt.', female: "Shirt, bib, pants, belt and head scarf. The distinctive features of Ha Nhi Den women's costumes are their hair and head scarf. When Black Ha Nhi women get married, they often braid their hair into a roll, then wrap it around their head, then wear a scarf." },

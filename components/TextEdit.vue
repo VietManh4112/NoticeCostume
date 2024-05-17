@@ -13,7 +13,7 @@
             </span>
         </p>
 
-        <div v-show="isAdmin" class="button-edit">
+        <div v-show="isAdmin && !isEdit" class="button-edit">
             <button title="Chỉnh sửa" @click="editInfo">
                 <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" aria-hidden="true"
                     fill="none">
@@ -43,6 +43,7 @@ export default {
         apiUrl: String,
         id: Number,
         sexId: Number,
+        isEdit: Boolean,
     },
 
     computed: {
@@ -105,6 +106,7 @@ export default {
         editInfo() {
             if (!this.isEditing) {
                 this.isEditing = true;
+                this.$emit('is-edit', true)
                 this.$nextTick(() => {
                     this.$refs.textInput.focus();
                 });
@@ -116,6 +118,7 @@ export default {
         },
 
         cancel() {
+            this.$emit('is-edit', false)
             this.isEditing = false;
         },
 
