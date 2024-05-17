@@ -1,169 +1,353 @@
 <template>
     <div>
-        <div class="modal">
-            <div v-if="type === 'modal-buy'" class="modal-content__buy" ref="modalBuy">
-                <div class="flex">
-                    <p v-if="!isEnglish">Tên người nhận:</p>
-                    <p v-else>Recipient's name:</p>
-                    <TextField type="form-text"></TextField>
-                </div>
-                <div class="flex">
-                    <p v-if="!isEnglish">Số điện thoại:</p>
-                    <p v-else>Phone:</p>
-                    <TextField type="form-number"></TextField>
-                </div>
-                <div class="flex">
-                    <p v-if="!isEnglish">Địa chỉ:</p>
-                    <p v-else>Address:</p>
-                    <TextField type="form-text"></TextField>
-                </div>
-                <div class="flex">
-                    <p v-if="!isEnglish">Kích cỡ:</p>
-                    <p v-else>Size:</p>
-                    <span v-for="(size, index) in sizes" :key="index" style="margin-right: 20px;">
-                        <Button type="normal" :class="{ active: selectedSize === size }" @click="selectSize(size)">{{
-                size }}</Button>
-                    </span>
-                </div>
-                <div class="flex">
-                    <p v-if="!isEnglish">Số lượng:</p>
-                    <p v-else>Amount:</p>
-                    <div style="margin: 24px 0;">
-                        <Button type="normal" @click="subtraction" style="margin-right: -4.7px;">-</Button>
-                        <input type="text" class="modal-input" v-model="amount">
-                        <Button type="normal" @click="addition" style="margin-left: -5px;">+</Button>
-                    </div>
-                </div>
-                <Button type="nav" @click="buyCostume">
-                    <span v-if="!isEnglish">Đặt mua</span>
-                    <span v-else>Order</span>
-                </Button>
+      <div class="modal">
+        <div
+          v-if="type === 'modal-buy'"
+          class="modal-content__buy"
+          ref="modalBuy"
+        >
+          <div class="flex">
+            <p v-if="!isEnglish">Tên người nhận:</p>
+            <p v-else>Recipient's name:</p>
+            <TextField type="form-text"></TextField>
+          </div>
+          <div class="flex">
+            <p v-if="!isEnglish">Số điện thoại:</p>
+            <p v-else>Phone:</p>
+            <TextField type="form-number"></TextField>
+          </div>
+          <div class="flex">
+            <p v-if="!isEnglish">Địa chỉ:</p>
+            <p v-else>Address:</p>
+            <TextField type="form-text"></TextField>
+          </div>
+          <div class="flex">
+            <p v-if="!isEnglish">Kích cỡ:</p>
+            <p v-else>Size:</p>
+            <span
+              v-for="(size, index) in sizes"
+              :key="index"
+              style="margin-right: 20px"
+            >
+              <Button
+                type="normal"
+                :class="{ active: selectedSize === size }"
+                @click="selectSize(size)"
+                >{{ size }}</Button
+              >
+            </span>
+          </div>
+          <div class="flex">
+            <p v-if="!isEnglish">Số lượng:</p>
+            <p v-else>Amount:</p>
+            <div style="margin: 24px 0">
+              <Button
+                type="normal"
+                @click="subtraction"
+                style="margin-right: -4.7px"
+                >-</Button
+              >
+              <input type="text" class="modal-input" v-model="amount" />
+              <Button type="normal" @click="addition" style="margin-left: -5px"
+                >+</Button
+              >
             </div>
-
-            <div v-else-if="type === 'modal-continue'" class="modal-content__continue" ref="modalContinue">
-                <div class="flex" style="justify-content: center;">
-                    <p v-if="!isEnglish">Bạn cần đăng nhập để tiếp tục!</p>
-                    <p v-if="isEnglish">You need to log in to continue!</p>
-                </div>
-                <div class="flex" style="justify-content: center;">
-                    <Button type="register" @click="register">{{ registerBtn }}</Button>
-                    <Button type="login" @click="login">{{ loginBtn }}</Button>
-                </div>
-            </div>
+          </div>
+          <Button type="nav" @click="buyCostume">
+            <span v-if="!isEnglish">Đặt mua</span>
+            <span v-else>Order</span>
+          </Button>
         </div>
+  
+        <div v-if="type === 'modal-add'" class="modal-content__buy">
+          <div class="flex">
+            <p v-if="!isEnglish">Mã sản phẩm</p>
+            <p v-else>Product's name:</p>
+            <TextField type="form-text" v-model="productId"></TextField>
+          </div>
+  
+          <div class="flex">
+            <p v-if="!isEnglish">Kích cỡ:</p>
+            <p v-else>Size:</p>
+            <span
+              v-for="(size, index) in sizes"
+              :key="index"
+              style="margin-right: 20px"
+            >
+              <Button
+                type="normal"
+                :class="{ active: selectedSize === size }"
+                @click="selectSize(size)"
+                >{{ size }}</Button
+              >
+            </span>
+          </div>
+          <div class="flex">
+            <p v-if="!isEnglish">Số lượng:</p>
+            <p v-else>Amount:</p>
+            <div style="margin: 24px 0">
+              <Button
+                type="normal"
+                @click="subtraction"
+                style="margin-right: -4.7px"
+                >-</Button
+              >
+              <input type="text" class="modal-input" v-model="amount" />
+              <Button type="normal" @click="addition" style="margin-left: -5px"
+                >+</Button
+              >
+            </div>
+          </div>
+          <Button type="nav" @click="addInvetery">
+            <span v-if="!isEnglish">Xác nhận</span>
+            <span v-else>Ok</span>
+          </Button>
+        </div>
+  
+        <div v-if="type === 'modal-edit'" class="modal-content__buy">
+          <!-- <div class="flex">
+            <p v-if="!isEnglish">Mã sản phẩm</p>
+            <p v-else>Product's name:</p>
+            <TextField type="form-text" v-model="productId"></TextField>
+          </div>
+  
+          <div class="flex">
+            <p v-if="!isEnglish">Kích cỡ:</p>
+            <p v-else>Size:</p>
+            <span
+              v-for="(size, index) in sizes"
+              :key="index"
+              style="margin-right: 20px"
+            >
+              <Button
+                type="normal"
+                :class="{ active: selectedSize === size }"
+                @click="selectSize(size)"
+                >{{ size }}</Button
+              >
+            </span>
+          </div> -->
+          <div class="title-edit">Nhập số lượng bạn muốn bớt</div>
+          <div class="flex">
+            <p v-if="!isEnglish">Số lượng:</p>
+            <p v-else>Amount:</p>
+            <div style="margin: 24px 0">
+              <Button
+                type="normal"
+                @click="subtractionEdit"
+                style="margin-right: -4.7px"
+                >-</Button
+              >
+              <input type="text" class="modal-input" v-model="quantityEdit" />
+              <Button
+                type="normal"
+                @click="additionEdit"
+                style="margin-left: -5px"
+                >+</Button
+              >
+            </div>
+          </div>
+          <Button type="nav" @click="editInvetery">
+            <span v-if="!isEnglish">Xác nhận</span>
+            <span v-else>Ok</span>
+          </Button>
+        </div>
+  
+        <div
+          v-else-if="type === 'modal-continue'"
+          class="modal-content__continue"
+          ref="modalContinue"
+        >
+          <div class="flex" style="justify-content: center">
+            <p v-if="!isEnglish">Bạn cần đăng nhập để tiếp tục!</p>
+            <p v-if="isEnglish">You need to log in to continue!</p>
+          </div>
+          <div class="flex" style="justify-content: center">
+            <Button type="register" @click="register">{{ registerBtn }}</Button>
+            <Button type="login" @click="login">{{ loginBtn }}</Button>
+          </div>
+        </div>
+      </div>
     </div>
-</template>
-
-<script>
-import TextField from '@/components/TextField.vue';
-import Button from '@/components/Button.vue'
-import Resource from '@/helper/resource.js'
-export default {
-    name: "Modal",
-
+  </template>
+  
+  <script>
+  import axiosInstance, { setBearerToken } from '@/helper/api.js'
+  import TextField from '@/components/TextField.vue'
+  import Button from '@/components/Button.vue'
+  import Resource from '@/helper/resource.js'
+  export default {
+    name: 'Modal',
+  
     components: {
-        TextField,
-        Button,
+      TextField,
+      Button,
     },
-
+  
     props: {
-        type: String,
-        hideModalBuy: Boolean,
-        hideModalContinue: Boolean,
+      type: String,
+      hideModalBuy: Boolean,
+      hideModalContinue: Boolean,
+      quantityEdit: Number,
+      costumeIdEdit: Number,
+      sizeEdit: String,
+      costumeId: Number,
     },
-
+  
     mounted() {
-        if (!this.bodyClickListenerSet) {
-            setTimeout(() => {
-                document.body.addEventListener('click', this.handleBodyClick);
-                this.bodyClickListenerSet = true;
-            }, 500);
-        }
+      if (!this.bodyClickListenerSet) {
+        setTimeout(() => {
+          document.body.addEventListener('click', this.handleBodyClick)
+          this.bodyClickListenerSet = true
+        }, 500)
+      }
     },
-
+  
     destroyed() {
-        document.body.removeEventListener('click', this.handleBodyClick);
+      document.body.removeEventListener('click', this.handleBodyClick)
     },
-
+  
     computed: {
-        isEnglish() {
-            return this.$store.state.isEnglish;
-        },
-
-        loginBtn() {
-            if (this.isEnglish) {
-                return Resource.loginBtn.en;
-            } else {
-                return Resource.loginBtn.vi;
-            }
-        },
-
-        registerBtn() {
-            if (this.isEnglish) {
-                return Resource.registerBtn.en;
-            } else {
-                return Resource.registerBtn.vi;
-            }
-        },
+      isEnglish() {
+        return this.$store.state.isEnglish
+      },
+  
+      loginBtn() {
+        if (this.isEnglish) {
+          return Resource.loginBtn.en
+        } else {
+          return Resource.loginBtn.vi
+        }
+      },
+  
+      registerBtn() {
+        if (this.isEnglish) {
+          return Resource.registerBtn.en
+        } else {
+          return Resource.registerBtn.vi
+        }
+      },
     },
-
+  
     data() {
-        return {
-            sizes: ['M', 'L', 'XL', 'XXL'],
-            selectedSize: null,
-            amount: 1,
-            bodyClickListenerSet: false
-        }
+      return {
+        sizes: ['M', 'L', 'XL', 'XXL'],
+        selectedSize: null,
+        amount: 1,
+        bodyClickListenerSet: false,
+        productId: 0,
+      }
     },
-
+  
     methods: {
-        selectSize(size) {
-            this.selectedSize = size;
-        },
-
-        buyCostume() {
-            this.$emit('hide-modal__buy', false);
-        },
-
-        subtraction() {
-            if (this.amount > 1) {
-                this.amount--;
-            }
-        },
-
-        addition() {
-            this.amount++;
-        },
-
-        login() {
-            this.$router.push(`/login`);
-        },
-
-        register() {
-            this.$router.push(`/register`);
-        },
-
-        handleBodyClick(event) {
-            if (this.hideModalContinue) {
-                const modal = this.$refs.modalContinue;
-                if (!modal.contains(event.target)) {
-                    this.$emit('hide-modal__continue', false)
-                }
-            }
-
-            if (this.hideModalBuy) {
-                const modal = this.$refs.modalBuy;
-                if (!modal.contains(event.target)) {
-                    this.$emit('hide-modal__buy', false)
-                }
-            }
+      selectSize(size) {
+        this.selectedSize = size
+      },
+  
+      buyCostume() {
+        this.$emit('hide-modal__buy', false)
+        const data = {
+          costumeId: this.costumeId,
+          size: this.selectedSize,
+          quantity: this.amount,
+          price: 20.0.toFixed(1)
         }
+        console.log(data)
+        const token = localStorage.getItem('token')
+        setBearerToken(token)
+        axiosInstance
+          .post('/api/create-order', data)
+          .then((response) => {
+            window.location.reload()
+          })
+          .catch((error) => {
+            console.error(error)
+          })
+      },
+  
+      subtraction() {
+        if (this.amount > 1) {
+          this.amount--
+        }
+      },
+      subtractionEdit() {
+        if (this.quantityEdit > 1) {
+          this.quantityEdit--
+        }
+      },
+      addition() {
+        this.amount++
+      },
+      additionEdit() {
+        this.quantityEdit++
+      },
+  
+      login() {
+        this.$router.push(`/login`)
+      },
+  
+      register() {
+        this.$router.push(`/register`)
+      },
+  
+      handleBodyClick(event) {
+        if (this.hideModalContinue) {
+          const modal = this.$refs.modalContinue
+          if (!modal.contains(event.target)) {
+            this.$emit('hide-modal__continue', false)
+          }
+        }
+  
+        if (this.hideModalBuy) {
+          const modal = this.$refs.modalBuy
+          if (!modal.contains(event.target)) {
+            this.$emit('hide-modal__buy', false)
+          }
+        }
+      },
+      addInvetery() {
+        const data = {
+          costumeId: this.productId,
+          size: this.selectedSize,
+          quantity: this.amount,
+        }
+        console.log(data)
+        const token = localStorage.getItem('token')
+        setBearerToken(token)
+        axiosInstance
+          .post('/api/add-inventory', data)
+          .then((response) => {
+            window.location.reload()
+          })
+          .catch((error) => {
+            console.error(error)
+          })
+      },
+  
+      editInvetery() {
+        const data = {
+          costumeId: this.costumeIdEdit,
+          size: this.sizeEdit,
+          quantity: Number(this.quantityEdit),
+        }
+        console.log(data)
+        const token = localStorage.getItem('token')
+        setBearerToken(token)
+        axiosInstance
+          .post('/api/remove-inventory', data)
+          .then((response) => {
+            window.location.reload()
+          })
+          .catch((error) => {
+            console.error(error)
+          })
+      },
     },
-}
-</script>
-
-<style>
-.modal {
+  }
+  </script>
+  
+  <style>
+  .modal {
     position: fixed;
     z-index: 1;
     left: 0;
@@ -172,15 +356,15 @@ export default {
     height: 100%;
     overflow: auto;
     background-color: rgba(0, 0, 0, 50%);
-}
-
-.modal-content__buy,
-.modal-content__continue {
+  }
+  
+  .modal-content__buy,
+  .modal-content__continue {
     margin: 8% auto;
     padding: 20px;
     width: 50%;
     color: black;
-    background-color: #F9F2E0;
+    background-color: #f9f2e0;
     box-shadow: 9px 9px 16px rgba(0, 0, 0, 44%);
     text-align: center;
     border-radius: 20px;
@@ -188,36 +372,37 @@ export default {
     transform: scale(1);
     transition: transform 1s;
     position: relative;
-}
-
-.modal-content__continue {
+  }
+  
+  .modal-content__continue {
     width: 25%;
     margin: 15% auto;
-}
-
-.modal-input {
+  }
+  
+  .modal-input {
     width: 55px;
     height: 40px;
     border: 1px solid rgba(0, 0, 0, 9%);
     text-align: center;
-}
-
-.flex {
+  }
+  
+  .flex {
     display: flex;
     align-items: center;
-}
-
-.modal p {
+  }
+  
+  .modal p {
     margin-bottom: 24px;
-}
-
-.modal a,
-.modal p {
+  }
+  
+  .modal a,
+  .modal p {
     width: 250px;
-}
-
-.active {
+  }
+  
+  .active {
     color: red;
     border: 1px solid red;
-}
-</style>
+  }
+  </style>
+  
