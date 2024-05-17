@@ -27,7 +27,7 @@ export default {
         const ethnicData = response.data;
 
         const normalizeEtnicName = (name) => {
-          return name.normalize("NFD").replace(/[\u0300-\u036f]/g, "").toLowerCase();
+          return name.normalize("NFD").replace(/[\u0300-\u036f]/g, "").replace(/\s/g, "").toLowerCase();
         };
       
         const routes = ethnicData.map(ethnic => `/ethnic/${normalizeEtnicName(ethnic.name)}`);

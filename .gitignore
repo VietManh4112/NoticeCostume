@@ -71,6 +71,8 @@ typings/
 # Nuxt generate
 dist
 nuxt-dist
+dist .ethnic/co-ho /
+ethnic/co-ho /
 
 # vuepress build output
 .vuepress/dist
