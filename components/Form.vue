@@ -7,25 +7,6 @@
             <h1 v-show="type === 'login'">{{ loginBtn }}</h1>
             <h1 v-show="type === 'register'">{{ registerBtn }}</h1>
             <form>
-                <div>
-                    <ul>
-                        <li class="google">
-                            <img src="https://cfcdn.apowersoft.info/astro/picwish/_astro/google.61020c54.svg" width="20"
-                                height="20" style="margin-right: 5px;">
-                            {{ google }}
-                        </li>
-                        <li class="facebook">
-                            <img src="https://cfcdn.apowersoft.info/astro/picwish/_astro/facebook.d531e827.svg">
-                        </li>
-                        <li class="apple">
-                            <img src="https://cfcdn.apowersoft.info/astro/picwish/_astro/apple.650e301d.svg">
-                        </li>
-                    </ul>
-                </div>
-                <div class="display: absolute;">
-                    <div class="border-line"></div>
-                    <span class="text-line">Hoặc</span>
-                </div>
                 <div style="position: relative;">
                     <TextField type="form-text" :placeholder="Name" v-model="name"></TextField>
                     <p v-if="validateName && !isEnglish" class="validateInput">Tên đăng nhập không được bỏ trống!</p>
@@ -54,8 +35,6 @@
                     <p v-show="type === 'register' && isEnglish" class="validateInput">{{ validationMessageEn1 }}
                         {{ validationMessageEn2 }}</p>
                 </div>
-                <div v-if="type === 'login'" style="display: flex;justify-content: flex-end;margin-bottom: 10px;">{{
-                fogotpass }}</div>
                 <Button v-show="type === 'login'" type="icon" @click="login">
                     <p>{{ loginBtn }}</p>
                 </Button>
@@ -242,6 +221,12 @@ export default {
 </script>
 
 <style>
+@media (max-width: 1400px) {
+    .form-form {
+        margin-left: 100px !important;
+    }
+}
+
 .form {
     width: 100vw;
     height: 91vh;

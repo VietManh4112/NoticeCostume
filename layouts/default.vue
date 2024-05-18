@@ -202,10 +202,9 @@ export default {
 
 
 .toolbar__title {
-  width: 20vw;
+  width: 22vw;
   display: flex;
-  justify-content: flex-start;
-  margin-left: 5vw;
+  justify-content: center;
 }
 
 .toolbar__items {

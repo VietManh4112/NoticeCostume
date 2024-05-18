@@ -13,5 +13,6 @@ module.exports = {
     "keyframes-name-pattern": null,
     "selector-class-pattern": null,
     "font-family-name-quotes": null,
+    "media-feature-range-notation": "prefix"
   },
 }

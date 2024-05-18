@@ -184,6 +184,10 @@ export default {
             }
     },
 
+    beforeDestroy() {
+        window.removeEventListener('keydown', this.handleKeyDown);
+    },
+
     watch: {
         count(newValue, oldValue) {
             this.loadData(newValue);
@@ -486,6 +490,20 @@ export default {
 </script>
 
 <style>
+@media (max-width: 1400px) {
+    .left-bar, .right-bar {
+        width: 25vw !important;
+    }
+
+    .content {
+        width: 50vw !important;
+    }
+
+    .content-text {
+        font-size: 12px !important;
+    }
+}
+
 .container {
     margin: 0;
     padding: 0;
