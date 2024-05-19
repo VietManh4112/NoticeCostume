@@ -15,7 +15,7 @@
 
     <div v-else-if="type === 'form-text'">
         <input type="text" :placeholder="placeholder" @input="$emit('input', $event.target.value)"
-            class="textfield__form">
+            class="textfield__form" >
     </div>
 
     <div v-else-if="type === 'form-number'">

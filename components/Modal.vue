@@ -9,17 +9,17 @@
         <div class="flex">
           <p v-if="!isEnglish">Tên người nhận:</p>
           <p v-else>Recipient's name:</p>
-          <TextField type="form-text"></TextField>
+          <TextField type="form-text" v-model="name"></TextField>
         </div>
         <div class="flex">
           <p v-if="!isEnglish">Số điện thoại:</p>
           <p v-else>Phone:</p>
-          <TextField type="form-number"></TextField>
+          <TextField type="form-text" v-model="phone"></TextField>
         </div>
         <div class="flex">
           <p v-if="!isEnglish">Địa chỉ:</p>
           <p v-else>Address:</p>
-          <TextField type="form-text"></TextField>
+          <TextField type="form-text" v-model="adress"></TextField>
         </div>
         <div class="flex">
           <p v-if="!isEnglish">Kích cỡ:</p>
@@ -55,6 +55,64 @@
         </div>
         <Button type="nav" @click="buyCostume">
           <span v-if="!isEnglish">Đặt mua</span>
+          <span v-else>Order</span>
+        </Button>
+      </div>
+
+      <div
+        v-if="type === 'modal-detail'" 
+        class="modal-content__buy"
+        ref="modalBuy"
+      >
+        <div class="flex">
+          <p v-if="!isEnglish">Mã sản phẩm:</p>
+          <p v-else>Recipient's name:</p>
+          <input type="text" class="modal-input input-detail" v-model="costumeIdDetail" />
+         
+
+        </div>
+        <div class="flex">
+          <p v-if="!isEnglish">Số lượng:</p>
+          <p v-else>Recipient's name:</p>
+          
+          <input type="text" class="modal-input input-detail" v-model="quantityDetail" />
+
+        </div>
+        <div class="flex">
+          <p v-if="!isEnglish">Giá:</p>
+          <p v-else>Recipient's name:</p>
+          
+          <input type="text" class="modal-input input-detail" v-model="priceDetail" />
+
+        </div>
+        <div class="flex">
+          <p v-if="!isEnglish">Kích thước:</p>
+          <p v-else>Recipient's name:</p>
+          
+          <input type="text" class="modal-input input-detail" v-model="sizeDetail" />
+
+        </div>
+        <div class="flex">
+          <p v-if="!isEnglish">Tên khách hàng:</p>
+          <p v-else>Recipient's name:</p>
+       
+          <input type="text" class="modal-input input-detail" v-model="nameDetail" />
+
+        </div>
+        <div class="flex">
+          <p v-if="!isEnglish">Số điện thoại:</p>
+          <p v-else>Recipient's name:</p>
+          <input type="text" class="modal-input input-detail" v-model="phoneNumberDetail" />
+         
+        </div>
+        <div class="flex">
+          <p v-if="!isEnglish">Địa chỉ</p>
+          <p v-else>Recipient's name:</p>
+          <input type="text" class="modal-input input-detail" v-model="addressDetail" style="margin-bottom: 10px;" />
+        
+        </div>
+        <Button type="nav" @click="closeModalDetail" style="margin: 20px 0;">
+          <span v-if="!isEnglish">Oke</span>
           <span v-else>Order</span>
         </Button>
       </div>
@@ -192,6 +250,13 @@ export default {
     costumeIdEdit: Number,
     sizeEdit: String,
     costumeId: Number,
+    costumeIdDetail: String,
+    quantityDetail: String,
+    priceDetail: String,
+    sizeDetail: String,
+    nameDetail: String,
+    phoneNumberDetail: String,
+    addressDetail: String,
   },
 
   mounted() {
@@ -234,8 +299,13 @@ export default {
       sizes: ['M', 'L', 'XL', 'XXL'],
       selectedSize: null,
       amount: 1,
+      price: 20,
       bodyClickListenerSet: false,
       productId: 0,
+      phone: '',
+      name: '',
+      adress: '',
+      hideModalDetail: false
     }
   },
 
@@ -250,7 +320,10 @@ export default {
         costumeId: this.costumeId,
         size: this.selectedSize,
         quantity: this.amount,
-        price: (20.0).toFixed(1),
+        price: this.price,
+        name: this.name,
+        phoneNumber: this.phone.toString(),
+        address: this.adress,
       }
       console.log(data)
       const token = localStorage.getItem('token')
@@ -322,6 +395,10 @@ export default {
         .catch((error) => {
           console.error(error)
         })
+    },
+    closeModalDetail() {
+      console.log(this.costumeIdDetail)
+      window.location.reload()
     },
 
     editInvetery() {
@@ -399,7 +476,9 @@ export default {
 .modal p {
   width: 250px;
 }
-
+.input-detail{
+  width: 300px;
+}
 .active {
   color: red;
   border: 1px solid red;

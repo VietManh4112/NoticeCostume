@@ -3,41 +3,62 @@
     <table cellspacing="0" v-show="type === 'userCheckCart'" id="userCheckCart">
       <thead>
         <th style="width: 5%">STT</th>
-        <th style="width: 20%">Mã sản phẩm</th>
-        <th style="width: 15%">Số lượng</th>
-        <th style="width: 20%">Giá</th>
-        <th style="width: 15%">Kích thước</th>
+        <th style="width: 15%">Mã sản phẩm</th>
+        <th style="width: 15%">Mã khách hàng</th>
+        <th style="width: 10%">Giá tiền</th>
+        <th style="width: 20%">Thời gian đặt</th>
+        <th style="width: 10%">Trạng thái</th>
       </thead>
       <tbody>
-        <tr v-for="(item, index) in cartItems" :key="index">
+        <tr
+          v-for="(item, index) in cartItemsUserOrder"
+          :key="index"
+          @click="openModalDetail(item.id)"
+        >
           <td>{{ index + 1 }}</td>
-          <td>{{ item.costumeId }}</td>
           <td>{{ item.id }}</td>
-          <td>{{ item.quantity }}</td>
-          <td>{{ item.size }}</td>
+          <td>{{ item.userId }}</td>
+          <td>{{ item.totalAmount }}</td>
+          <td>{{ item.orderDate }}</td>
+          <td>{{ item.status }}</td>
         </tr>
       </tbody>
     </table>
+    <Modal
+      v-if="hideModalDetail"
+      type="modal-detail"
+      :costumeIdDetail="costumeIdDetail"
+      :quantityDetail="quantityDetail"
+      :priceDetail="priceDetail"
+      :sizeDetail="sizeDetail"
+      :nameDetail="nameDetail"
+      :phoneNumberDetail="phoneNumberDetail"
+      :addressDetail="addressDetail"
+    ></Modal>
     <table cellspacing="0" v-show="type === 'adminCheckOrder'">
       <thead>
         <th style="width: 5%">STT</th>
-        <th style="width: 20%">Mã sản phẩm</th>
-        <th style="width: 15%">Số lượng</th>
-        <th style="width: 20%">Giá</th>
-        <th style="width: 15%">Kích thước</th>
-        <th style="width: 10%">Xóa</th>
+        <th style="width: 15%">Mã sản phẩm</th>
+        <th style="width: 15%">Mã khách hàng</th>
+        <th style="width: 10%">Giá tiền</th>
+        <th style="width: 20%">Thời gian đặt</th>
+        <th style="width: 10%">Trạng thái</th>
+        <th style="width: 10%">Hủy</th>
       </thead>
       <tbody>
-        <tr v-for="(item, index) in cartItems" :key="index">
+        <tr v-for="(item, index) in cartItemsOrder" :key="index" @click="openModalDetail(item.id)">
           <td>{{ index + 1 }}</td>
-          <td>{{ item.costumeId }}</td>
           <td>{{ item.id }}</td>
-          <td>{{ item.quantity }}</td>
-          <td>{{ item.size }}</td>
+          <td>{{ item.userId }}</td>
+          <td>{{ item.totalAmount }}</td>
+          <td>{{ item.orderDate }}</td>
+          <td>{{ item.status }}</td>
           <td>
             <span
+              @click="cancelOrder(item.id)"
               style="cursor: pointer; text-decoration: underline; color: red"
-              >Xóa</span
+            >
+              Hủy</span
             >
           </td>
         </tr>
@@ -72,7 +93,7 @@
               aria-hidden="true"
               fill="none"
               class="icon-edit"
-              @click="openModalEdit(item.costumeId,item.quantity,item.size)"
+              @click="openModalEdit(item.costumeId, item.quantity, item.size)"
             >
               <path
                 fill="currentColor"
@@ -125,11 +146,23 @@ export default {
   data() {
     return {
       cartItems: [],
-      hideModalEddit: false,
+      cartItemsOrder: [],
+      cartItemsUserOrder: [],
+      hideModalEdit: false,
+      hideModalDetail: false,
+      costumeIdDetail: '',
+      quantityDetail: '',
+      priceDetail: '',
+      sizeDetail: '',
+      nameDetail: '',
+      phoneNumberDetail: '',
+      addressDetail: '',
     }
   },
   mounted() {
     this.fetchCartItems()
+    this.loadAdminCheckOrder()
+    this.loadUserCheckOrder()
   },
   methods: {
     fetchCartItems() {
@@ -182,6 +215,44 @@ export default {
       //   console.error('Lỗi khi gọi API: Không có dữ liệu trong this.cartItems')
       // }
     },
+    loadAdminCheckOrder() {
+      const token = localStorage.getItem('token')
+      setBearerToken(token)
+      axiosInstance
+        .get('/api/get-all-orders')
+        .then((response) => {
+          if (response.data) {
+            this.cartItemsOrder = response.data
+            this.populateCartTable()
+            console.log('Data')
+            console.log(response.data)
+          } else {
+            console.error('Lỗi khi gọi API: Không nhận được dữ liệu JSON')
+          }
+        })
+        .catch((error) => {
+          console.error('Lỗi khi gọi API:', error)
+        })
+    },
+    loadUserCheckOrder() {
+      const token = localStorage.getItem('token')
+      setBearerToken(token)
+      axiosInstance
+        .get('/api/get-order')
+        .then((response) => {
+          if (response.data) {
+            this.cartItemsUserOrder = response.data
+            this.populateCartTable()
+            console.log('Data')
+            console.log(response.data)
+          } else {
+            console.error('Lỗi khi gọi API: Không nhận được dữ liệu JSON')
+          }
+        })
+        .catch((error) => {
+          console.error('Lỗi khi gọi API:', error)
+        })
+    },
     deleteItem(index) {
       console.log(this.cartItems)
       console.log(this.cartItems[index].id)
@@ -200,8 +271,47 @@ export default {
           console.error('Error deleting data:', error)
         })
     },
-    openModalEdit(customerId,quantity,size) {
-      this.$emit('hidemodaledit',customerId, quantity,size)
+    openModalEdit(customerId, quantity, size) {
+      this.$emit('hidemodaledit', customerId, quantity, size)
+    },
+    openModalDetail(index) {
+      const id = index
+      this.hideModalDetail = true
+      const token = localStorage.getItem('token')
+      setBearerToken(token)
+      axiosInstance
+        .get('/api/get-order/' + id)
+        .then((response) => {
+          if (response.data) {
+            this.costumeIdDetail = response.data[0].costumeId.toString()
+            this.quantityDetail = response.data[0].quantity.toString()
+            this.priceDetail = response.data[0].price.toString()
+            this.sizeDetail = response.data[0].size
+            this.nameDetail = response.data[0].name
+            this.phoneNumberDetail = response.data[0].phoneNumber
+            this.addressDetail = response.data[0].address
+            console.log(response.data)
+          } else {
+            console.error('Lỗi khi gọi API: Không nhận được dữ liệu JSON')
+          }
+        })
+        .catch((error) => {
+          console.error('Lỗi khi gọi API:', error)
+        })
+    },
+    cancelOrder(index) {
+      const id = index
+      console.log(id)
+      const token = localStorage.getItem('token')
+      setBearerToken(token)
+      axiosInstance
+        .post('/api/cancel-order/' + id)
+        .then((response) => {
+          window.location.reload()
+        })
+        .catch((error) => {
+          console.error('Error deleting data:', error)
+        })
     },
   },
 }

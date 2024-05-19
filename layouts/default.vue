@@ -30,7 +30,7 @@
               />Vietnamese
             </div>
           </div>
-          <div @click="viewOrder">
+          <div @click="viewOrder" v-show="isUser">
             <svg
               xmlns="http://www.w3.org/2000/svg"
               class="icon icon-tabler icon-tabler-shopping-cart"
@@ -174,6 +174,7 @@ export default {
       drawer: false,
       fixed: false,
       isAdmin: false,
+      isUser: false,
       authority: null,
       items: [
         {
@@ -214,6 +215,11 @@ export default {
     }
     if (this.authority === 'admin') {
       this.isAdmin = true
+      this.isUser = true
+    }
+    if (this.authority === 'user') {
+     
+      this.isUser = true
     }
   },
 
@@ -240,7 +246,23 @@ export default {
       window.location.reload()
     },
     viewOrder() {
-      this.$router.push('/viewOrder')
+      const jwt = require('jsonwebtoken')
+      const token = localStorage.getItem('token')
+      const decoded = jwt.decode(token)
+
+      if (token) {
+        this.authority = jwt.decode(
+          localStorage.getItem('token')
+        ).role[0].authority
+      }
+      if (this.authority === 'admin') {
+        this.isAdmin = true
+        this.$router.push('/viewOrder')
+        this.isUser = true
+      } else if (this.authority === 'user') {
+        this.$router.push('/viewUserOrder')
+        this.isUser = true
+      }
     },
     viewWareHouse() {
       this.$router.push('/viewWareHouse')
