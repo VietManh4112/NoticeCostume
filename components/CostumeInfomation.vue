@@ -1,5 +1,7 @@
 <template>
   <div>
+    <Toast type="toastSuccess" :messageSuccess="messageSuccess" v-if="visibleToastSuccess"></Toast>
+    <Toast type="toastFail" :messageFail="messageFail" v-if="visibleToastFail"></Toast>
     <div class="main">
       <div class="left-bar">
         <img :src="imgleft" class="img-costume img-left" />
@@ -7,18 +9,9 @@
       <div class="content">
         <div class="button__buy">
           <button @click="buyCostume" title="Đặt hàng">
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              class="icon icon-tabler icon-tabler-shopping-cart"
-              width="24"
-              height="24"
-              viewBox="0 0 24 24"
-              stroke-width="2"
-              stroke="currentColor"
-              fill="none"
-              stroke-linecap="round"
-              stroke-linejoin="round"
-            >
+            <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-shopping-cart" width="24"
+              height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round"
+              stroke-linejoin="round">
               <path stroke="none" d="M0 0h24v24H0z" fill="none" />
               <circle cx="6" cy="19" r="2" />
               <circle cx="17" cy="19" r="2" />
@@ -27,36 +20,14 @@
             </svg>
           </button>
         </div>
-        <Modal
-          v-if="hideModalBuy"
-          type="modal-buy"
-          @hide-modal__buy="handleHideModalBuy"
-          :hideModalBuy="hideModalBuy"
-          :costumeId="count"
-        ></Modal>
-        <Modal
-          v-if="hideModalContinue"
-          type="modal-continue"
-          @hide-modal__continue="handleHideModalContinue"
-          :hideModalContinue="hideModalContinue"
-        ></Modal>
-        <Toast
-          :type="toastSuccess"
-          :messageSuccess="messageSuccess"
-          v-if="visibleToastSuccess"
-        ></Toast>
-        <Toast
-          :type="toastFail"
-          :message="message"
-          v-show="visibleToastFail"
-        ></Toast>
+        <Modal v-if="hideModalBuy" type="modal-buy" @hide-modal__buy="handleHideModalBuy" :hideModalBuy="hideModalBuy"
+          :costumeId="count"></Modal>
+        <Modal v-if="hideModalContinue" type="modal-continue" @hide-modal__continue="handleHideModalContinue"
+          :hideModalContinue="hideModalContinue"></Modal>
         <div v-for="(item, index) in items" :key="index" class="content-text">
-          <div
-            v-for="(info, indexinfo) in isEnglish
-              ? [dataEthnicEn[count - 1]]
-              : info"
-            :key="indexinfo"
-          >
+          <div v-for="(info, indexinfo) in isEnglish
+        ? [dataEthnicEn[count - 1]]
+        : info" :key="indexinfo">
             <template v-if="index === count - 1">
               <div class="edit">
                 <b>
@@ -64,85 +35,41 @@
                 </b>
                 <p v-if="!isEnglish" style="margin-left: 0">{{ item.role }}</p>
                 <p v-else style="margin-left: 0">
-                  {{
-                    item.role.normalize('NFD').replace(/[\u0300-\u036f]/g, '')
-                  }}
+                  {{ item.role.normalize('NFD').replace(/[\u0300-\u036f]/g, '') }}
                 </p>
               </div>
               <hr />
               <div>
-                <TextEdit
-                  :title="dynamicTexts.text2"
-                  :material="info.material"
-                  :apiUrl="`/api/edit-costumes`"
-                  :id="count"
-                  @is-edit="edit"
-                  :isEdit="isEdit"
-                ></TextEdit>
-                <TextEdit
-                  :title="dynamicTexts.text3"
-                  :pattern="info.pattern"
-                  :apiUrl="`/api/edit-costumes`"
-                  :id="count"
-                  @is-edit="edit"
-                  :isEdit="isEdit"
-                ></TextEdit>
+                <TextEdit :title="dynamicTexts.text2" :material="info.material" :apiUrl="`/api/edit-costumes`"
+                  :id="count" @is-edit="edit" :isEdit="isEdit" @updateData="updateData"></TextEdit>
+                <TextEdit :title="dynamicTexts.text3" :pattern="info.pattern" :apiUrl="`/api/edit-costumes`" :id="count"
+                  @is-edit="edit" :isEdit="isEdit" @updateData="updateData"></TextEdit>
               </div>
               <hr />
-              <TextEdit
-                :title="dynamicTexts.text4"
-                :other="info.other"
-                :apiUrl="`/api/edit-costumes`"
-                :id="count"
-                @is-edit="edit"
-                :isEdit="isEdit"
-              ></TextEdit>
-              <TextEdit
-                :title="dynamicTexts.text5"
-                :characteristic="info.characteristic"
-                :apiUrl="`/api/edit-costumes`"
-                :id="count"
-                @is-edit="edit"
-                :isEdit="isEdit"
-              ></TextEdit>
+              <TextEdit :title="dynamicTexts.text4" :other="info.other" :apiUrl="`/api/edit-costumes`" :id="count"
+                @is-edit="edit" :isEdit="isEdit" @updateData="updateData"></TextEdit>
+              <TextEdit :title="dynamicTexts.text5" :characteristic="info.characteristic" :apiUrl="`/api/edit-costumes`"
+                :id="count" @is-edit="edit" :isEdit="isEdit" @updateData="updateData"></TextEdit>
               <hr />
               <p>
                 <b>{{ dynamicTexts.text6 }}</b>
               </p>
-              <TextEdit
-                :title="dynamicTexts.text7"
-                :male="info.male"
-                :apiUrl="`/api/edit-description`"
-                :sexId="info.idMale"
-                :id="count"
-                @is-edit="edit"
-                :isEdit="isEdit"
-              ></TextEdit>
-              <TextEdit
-                :title="dynamicTexts.text8"
-                :female="info.female"
-                :apiUrl="`/api/edit-description`"
-                :sexId="info.idFemale"
-                :id="count"
-                @is-edit="edit"
-                :isEdit="isEdit"
-              ></TextEdit>
+              <TextEdit :title="dynamicTexts.text7" :male="info.male" :apiUrl="`/api/edit-description`"
+                :sexId="info.idMale" :id="count" @is-edit="edit" :isEdit="isEdit" @updateData="updateData"></TextEdit>
+              <TextEdit :title="dynamicTexts.text8" :female="info.female" :apiUrl="`/api/edit-description`"
+                :sexId="info.idFemale" :id="count" @is-edit="edit" :isEdit="isEdit" @updateData="updateData"></TextEdit>
             </template>
           </div>
         </div>
         <div class="content-logo">
           <div class="content-logo__btn">
-            <Button @click="gotoPreviousPage" :disabled="count === 1" type="nav"
-              >Previous</Button
-            >
+            <Button @click="gotoPreviousPage" :disabled="count === 1" type="nav">Previous</Button>
           </div>
           <div class="content-logo__img">
             <img src="@/assets/img/logo.png" class="img-logo" />
           </div>
           <div class="content-logo__btn">
-            <Button @click="gotoNextPage" :disabled="count === 54" type="nav"
-              >Next</Button
-            >
+            <Button @click="gotoNextPage" :disabled="count === 54" type="nav">Next</Button>
           </div>
         </div>
       </div>
@@ -154,12 +81,8 @@
       <h2 v-if="!isEnglish">Bình luận</h2>
       <h2 v-else>Comment</h2>
       <div class="comment-textarea">
-        <textarea
-          :placeholder="placeholderComment"
-          class="comment__text"
-          v-model="commentText"
-          :readonly="this.authority === 'admin'"
-        ></textarea>
+        <textarea :placeholder="placeholderComment" class="comment__text" v-model="commentText"
+          :readonly="this.authority === 'admin'"></textarea>
         <Button @click="addComment" type="nav">
           <p v-if="!isEnglish">Gửi</p>
           <p v-else>Send</p>
@@ -169,89 +92,49 @@
       <div v-for="(comment, indexCmt) in comment" :key="indexCmt">
         <div v-if="comment.status.includes('0')" class="comment-list">
           <div class="box-infor">
-            <img
-              :src="comment.url"
-              width="20px"
-              height="20px"
-              class="box-infor__avatar"
-            />
+            <img :src="comment.url" width="20px" height="20px" class="box-infor__avatar" />
             <p class="box-infor__name">{{ comment.name }}</p>
           </div>
           <div class="box-comment">
             <div class="box-comment__question">
               <p v-if="!editStatus[indexCmt]">{{ comment.content }}</p>
               <span v-else>
-                <textarea
-                  v-model="editText[indexCmt]"
-                  style="width: 60vw; height: 30px"
-                ></textarea>
+                <textarea v-model="editText[indexCmt]" style="width: 60vw; height: 30px"></textarea>
                 <div style="color: red; font-size: 10px">
                   nhấn để
                   <button style="color: #06f" @click="cancelEdit(indexCmt)">
                     hủy
                   </button>
                   • nhấn để
-                  <button
-                    style="color: #06f"
-                    @click="saveEdit(indexCmt, comment.id)"
-                  >
+                  <button style="color: #06f" @click="saveEdit(indexCmt, comment.id)">
                     lưu
                   </button>
                 </div>
               </span>
               <div class="comment-button">
-                <button
-                  v-if="userIdToken === comment.userId"
-                  title="Chỉnh sửa"
-                  style="
+                <button v-if="userIdToken === comment.userId" title="Chỉnh sửa" style="
                     color: rgba(248, 248, 255, 80%);
                     width: 30px;
                     height: 30px;
-                  "
-                  @click="toggleEdit(indexCmt)"
-                >
-                  <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    width="20"
-                    height="20"
-                    viewBox="0 0 24 24"
-                    aria-hidden="true"
-                    fill="none"
-                  >
-                    <path
-                      fill="currentColor"
+                  " @click="toggleEdit(indexCmt)">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" aria-hidden="true"
+                    fill="none">
+                    <path fill="currentColor"
                       d="m13.96 5.46 4.58 4.58a1 1 0 0 0 1.42 0l1.38-1.38a2 2 0 0 0 0-2.82l-3.18-3.18a2 2 0 0 0-2.82 0l-1.38 1.38a1 1 0 0 0 0 1.42ZM2.11 20.16l.73-4.22a3 3 0 0 1 .83-1.61l7.87-7.87a1 1 0 0 1 1.42 0l4.58 4.58a1 1 0 0 1 0 1.42l-7.87 7.87a3 3 0 0 1-1.6.83l-4.23.73a1.5 1.5 0 0 1-1.73-1.73Z"
-                      class
-                    ></path>
+                      class></path>
                   </svg>
                 </button>
 
-                <button
-                  v-if="userIdToken === comment.userId || sub.includes('admin')"
-                  title="Xóa"
-                  style="color: red; width: 30px; height: 30px"
-                  @click="deleteComment(comment.id)"
-                >
-                  <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    width="20"
-                    height="20"
-                    viewBox="0 0 24 24"
-                    aria-hidden="true"
-                    fill="none"
-                  >
-                    <path
-                      fill="currentColor"
+                <button v-if="userIdToken === comment.userId || sub.includes('admin')" title="Xóa"
+                  style="color: red; width: 30px; height: 30px" @click="deleteComment(comment.id, indexCmt)">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" aria-hidden="true"
+                    fill="none">
+                    <path fill="currentColor"
                       d="M14.25 1c.41 0 .75.34.75.75V3h5.25c.41 0 .75.34.75.75v.5c0 .41-.34.75-.75.75H3.75A.75.75 0 0 1 3 4.25v-.5c0-.41.34-.75.75-.75H9V1.75c0-.41.34-.75.75-.75h4.5Z"
-                      class
-                    ></path>
-                    <path
-                      fill="currentColor"
-                      fill-rule="evenodd"
+                      class></path>
+                    <path fill="currentColor" fill-rule="evenodd"
                       d="M5.06 7a1 1 0 0 0-1 1.06l.76 12.13a3 3 0 0 0 3 2.81h8.36a3 3 0 0 0 3-2.81l.75-12.13a1 1 0 0 0-1-1.06H5.07ZM11 12a1 1 0 1 0-2 0v6a1 1 0 1 0 2 0v-6Zm3-1a1 1 0 0 1 1 1v6a1 1 0 1 1-2 0v-6a1 1 0 0 1 1-1Z"
-                      clip-rule="evenodd"
-                      class
-                    ></path>
+                      clip-rule="evenodd" class></path>
                   </svg>
                 </button>
               </div>
@@ -270,6 +153,7 @@ import Modal from '@/components/Modal.vue'
 import EthnicStore from '@/store/ethnic'
 import axiosInstance, { setBearerToken } from '@/helper/api.js'
 import TextEdit from '@/components/TextEdit.vue'
+import Toast from '@/components/Toast.vue'
 export default {
   name: 'CostumeInfomation',
 
@@ -277,6 +161,7 @@ export default {
     Button,
     Modal,
     TextEdit,
+    Toast,
   },
 
   props: {
@@ -386,11 +271,21 @@ export default {
       }
     },
 
-    handleHideModalBuy(value, visibleToast, message) {
+    handleHideModalBuy(value, visibleToast, message, statusToast) {
       this.hideModalBuy = value
-      this.visibleToastSuccess = visibleToast
-      this.messageSuccess = message
-      console.log(this.message)
+      if (statusToast) {
+        this.visibleToastSuccess = visibleToast
+        this.messageSuccess = message
+        setTimeout(() => {
+          this.visibleToastSuccess = false
+        }, 3000)
+      } else {
+        this.visibleToastFail = visibleToast
+        this.messageFail = message
+        setTimeout(() => {
+          this.visibleToastFail = false
+        }, 3000)
+      }
     },
 
     handleHideModalContinue(value) {
@@ -401,7 +296,6 @@ export default {
       await axiosInstance
         .get('/api/get-costumes/' + id)
         .then((response) => {
-          console.log(response.data)
           const newItem = { ...this.ethnic }
           newItem.material = response.data.material
           newItem.pattern = response.data.pattern
@@ -450,22 +344,35 @@ export default {
       this.$set(this.editText, index, this.comment[index].content)
     },
 
-    deleteComment(index) {
+    deleteComment(index, indexCmt) {
       const deleteComment = {
         id: index,
         costumeId: this.costumeId,
         userId: this.userIdToken,
       }
-      console.log(deleteComment)
       const token = localStorage.getItem('token')
       setBearerToken(token)
       axiosInstance
         .post('/api/delete-comments', deleteComment)
         .then((response) => {
-          window.location.reload()
+          this.comment[indexCmt].status = '1';
+          this.visibleToastSuccess = true
+          if (!this.isEnglish) {
+            this.messageSuccess = 'Thành công'
+          } else {
+            this.messageSuccess = 'Successfully'
+          }
+          setTimeout(() => {
+            this.visibleToastSuccess = false
+          }, 3000)
         })
         .catch((error) => {
-          console.error(error)
+          this.visibleToastFail = true
+          if (!this.isEnglish) {
+            this.messageFail = 'Thất bại'
+          } else {
+            this.messageFail = 'Failure'
+          }
         })
     },
 
@@ -486,9 +393,23 @@ export default {
         .then((response) => {
           this.comment[indexCmt].content = this.editText[indexCmt]
           delete this.editText[indexCmt]
+          this.visibleToastSuccess = true
+          if (!this.isEnglish) {
+            this.messageSuccess = 'Thành công'
+          } else {
+            this.messageSuccess = 'Successfully'
+          }
+          setTimeout(() => {
+            this.visibleToastSuccess = false
+          }, 3000)
         })
         .catch((error) => {
-          console.error(error)
+          this.visibleToastFail = true
+          if (!this.isEnglish) {
+            this.messageFail = 'Thất bại'
+          } else {
+            this.messageFail = 'Failure'
+          }
         })
       this.$set(this.editStatus, indexCmt, false)
     },
@@ -519,6 +440,36 @@ export default {
     edit(value) {
       this.isEdit = value
     },
+
+    updateData(value, textData, visibleToast, message, statusToast) {
+      if (textData.includes('material')) {
+        this.info[0].material = value;
+      } else if (textData.includes('pattern')) {
+        this.info[0].pattern = value;
+      } else if (textData.includes('characteristic')) {
+        this.info[0].characteristic = value;
+      } else if (textData.includes('other')) {
+        this.info[0].other = value;
+      } else if (textData.includes('male')) {
+        this.info[0].male = value;
+      } else if (textData.includes('female')) {
+        this.info[0].female = value;
+      }
+
+      if (statusToast) {
+        this.visibleToastSuccess = visibleToast
+        this.messageSuccess = message
+        setTimeout(() => {
+          this.visibleToastSuccess = false
+        }, 3000)
+      } else {
+        this.visibleToastFail = visibleToast
+        this.messageFail = message
+        setTimeout(() => {
+          this.visibleToastFail = false
+        }, 3000)
+      }
+    }
   },
 
   computed: {
@@ -542,10 +493,16 @@ export default {
 
   data() {
     return {
+      textData: '',
       hideModalBuy: false,
       hideModalContinue: false,
       messageSuccess: '',
       visibleToastSuccess: false,
+      messageFail: '',
+      visibleToastFail: false,
+      message: '',
+      visibleToast: false,
+      statusToast: false,
       ethnics: {
         role: '',
         material: '',
@@ -1188,6 +1145,7 @@ export default {
 
 <style>
 @media (max-width: 1400px) {
+
   .left-bar,
   .right-bar {
     width: 25vw !important;
@@ -1212,31 +1170,21 @@ export default {
 */
 .main {
   display: flex;
-  background-image: radial-gradient(
-      circle at 16.3021% 100%,
+  background-image: radial-gradient(circle at 16.3021% 100%,
       rgba(229, 112, 34, 70%) 0%,
-      rgba(229, 112, 34, 0%) 35%
-    ),
-    radial-gradient(
-      circle at 75.4264% 74.196%,
+      rgba(229, 112, 34, 0%) 35%),
+    radial-gradient(circle at 75.4264% 74.196%,
       #f6ccb0 0%,
-      rgba(246, 204, 176, 0%) 40%
-    ),
-    radial-gradient(
-      circle at 14.1699% 17.4837%,
+      rgba(246, 204, 176, 0%) 40%),
+    radial-gradient(circle at 14.1699% 17.4837%,
       #f6ccb0 0%,
-      rgba(246, 204, 176, 0%) 70%
-    ),
-    radial-gradient(
-      circle at 79.4987% 0%,
+      rgba(246, 204, 176, 0%) 70%),
+    radial-gradient(circle at 79.4987% 0%,
       rgba(229, 112, 34, 72%) 0%,
-      rgba(229, 112, 34, 0%) 70%
-    ),
-    radial-gradient(
-      circle at 48.9014% 49.5215%,
+      rgba(229, 112, 34, 0%) 70%),
+    radial-gradient(circle at 48.9014% 49.5215%,
       #fff 0%,
-      rgba(255, 255, 255, 0%) 100%
-    );
+      rgba(255, 255, 255, 0%) 100%);
   width: 100vw;
   height: 91vh;
 }

@@ -27,7 +27,7 @@
 </template>
 
 <script>
-import axiosInstance from '@/helper/api.js'
+import axiosInstance, { setBearerToken } from '@/helper/api.js'
 export default {
     name: "TextEdit",
 
@@ -67,6 +67,10 @@ export default {
 
         isAdmin() {
             return this.authority === 'admin';
+        },
+
+        isEnglish() {
+            return this.$store.state.isEnglish
         },
     },
 
@@ -122,10 +126,18 @@ export default {
             this.isEditing = false;
         },
 
-        updateInfo(propName) {
+        updateInfo(propName, textData) {
             if (this[propName] !== undefined) {
                 this.updateCostume.forEach(info => {
                     info[propName] = this.editText;
+                    this.visibleToastSuccess = true
+                    if (!this.isEnglish) {
+                        this.message = 'Thành công'
+                    } else {
+                        this.message = 'Successfully'
+                    }
+                    this.statusToast = true
+                    this.$emit('updateData', this.editText, textData)
                 });
             }
         },
@@ -134,32 +146,44 @@ export default {
             if (!this.editingItem) return;
             this.isEditing = false;
             try {
+                const token = localStorage.getItem('token')
+                setBearerToken(token)
                 if (this.material !== undefined || this.pattern !== undefined || this.characteristic !== undefined || this.other !== undefined) {
-                    this.updateInfo("material");
-                    this.updateInfo("pattern");
-                    this.updateInfo("characteristic");
-                    this.updateInfo("other");
+                    this.updateInfo("material", "material");
+                    this.updateInfo("pattern", "pattern");
+                    this.updateInfo("characteristic", "characteristic");
+                    this.updateInfo("other", "other");
                     await axiosInstance.post(this.apiUrl, this.updateCostume[0])
                         .then(response => {
-                            window.location.reload();
+                            this.$emit('is-edit', false)
+                            this.$emit('updateData', '', '', this.visibleToastSuccess, this.message, this.statusToast)
                         }
                         ).catch(error => {
-                            console.error(error);
+                            this.visibleToastFail = true
+                            if (!this.isEnglish) {
+                                this.message = 'Thất bại'
+                            } else {
+                                this.message = 'Failure'
+                            }
+                            this.statusToast = false
+                            this.$emit('updateData', '', '', this.visibleToastFail, this.message, this.statusToast)
                         });
                 } else {
                     if (this.male !== undefined) {
                         this.updateDescription.forEach(info => {
                             info.description = this.editText;
+                            this.$emit('updateData', this.editText, "male")
                         });
                     }
                     if (this.female !== undefined) {
                         this.updateDescription.forEach(info => {
                             info.description = this.editText;
+                            this.$emit('updateData', this.editText, "female")
                         });
                     }
                     axiosInstance.post(this.apiUrl, this.updateDescription[0])
                         .then(response => {
-                            window.location.reload();
+                            this.$emit('is-edit', false)
                         }
                         ).catch(error => {
                             console.error(error);
@@ -190,6 +214,11 @@ export default {
     data() {
         return {
             isEditing: false,
+            textData: '',
+            message: '',
+            visibleToastSuccess: true,
+            visibleToastFail: false,
+            statusToast: false,
             editText: this.text,
             editingItem: null,
             infocostume: {

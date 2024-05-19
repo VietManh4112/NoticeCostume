@@ -33,7 +33,7 @@
             d="M12 4a8 8 0 1 0 8 8 8 8 0 0 0-8-8zm1 13h-2v-2h2zm0-4h-2v-6h2z"
           />
         </svg>
-        <p class="toast-description">{{ message }}</p>
+        <p class="toast-description">{{ messageFail }}</p>
       </div>
     </div>
   </div>
@@ -43,7 +43,7 @@ export default {
   name: 'Toast',
   props: {
     type: String,
-    message: String,
+    messageFail: String,
     messageSuccess: String,
   },
 }
@@ -53,7 +53,7 @@ export default {
   display: flex;
   text-align: center;
   justify-items: center;
-  width: 400px;
+  width: 500px;
   height: 40px;
   border-radius: 1px;
   line-height: 40px;
@@ -61,6 +61,7 @@ export default {
   right: -300px;
   top: 580px;
   animation: toast-slide-in 1s forwards;
+  z-index: 999;
 }
 
 @keyframes toast-slide-in {

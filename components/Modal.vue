@@ -1,11 +1,7 @@
 <template>
   <div>
     <div class="modal">
-      <div
-        v-if="type === 'modal-buy'"
-        class="modal-content__buy"
-        ref="modalBuy"
-      >
+      <div v-if="type === 'modal-buy'" class="modal-content__buy" ref="modalBuy">
         <div class="flex">
           <p v-if="!isEnglish">Tên người nhận:</p>
           <p v-else>Recipient's name:</p>
@@ -24,33 +20,18 @@
         <div class="flex">
           <p v-if="!isEnglish">Kích cỡ:</p>
           <p v-else>Size:</p>
-          <span
-            v-for="(size, index) in sizes"
-            :key="index"
-            style="margin-right: 20px"
-          >
-            <Button
-              type="normal"
-              :class="{ active: selectedSize === size }"
-              @click="selectSize(size)"
-              >{{ size }}</Button
-            >
+          <span v-for="(size, index) in sizes" :key="index" style="margin-right: 20px">
+            <Button type="normal" :class="{ active: selectedSize === size }" @click="selectSize(size)">{{ size
+              }}</Button>
           </span>
         </div>
         <div class="flex">
           <p v-if="!isEnglish">Số lượng:</p>
           <p v-else>Amount:</p>
           <div style="margin: 24px 0">
-            <Button
-              type="normal"
-              @click="subtraction"
-              style="margin-right: -4.7px"
-              >-</Button
-            >
+            <Button type="normal" @click="subtraction" style="margin-right: -4.7px">-</Button>
             <input type="text" class="modal-input" v-model="amount" />
-            <Button type="normal" @click="addition" style="margin-left: -5px"
-              >+</Button
-            >
+            <Button type="normal" @click="addition" style="margin-left: -5px">+</Button>
           </div>
         </div>
         <Button type="nav" @click="buyCostume">
@@ -59,78 +40,45 @@
         </Button>
       </div>
 
-      <div
-        v-if="type === 'modal-detail'"
-        class="modal-content__buy"
-        ref="modalBuy"
-      >
+      <div v-if="type === 'modal-detail'" class="modal-content__buy" ref="modalBuy">
         <div class="flex">
           <p v-if="!isEnglish">Mã sản phẩm:</p>
           <p v-else>Recipient's name:</p>
-          <input
-            type="text"
-            class="modal-input input-detail"
-            v-model="costumeIdDetail"
-          />
+          <input type="text" class="modal-input input-detail" v-model="costumeIdDetail" />
         </div>
         <div class="flex">
           <p v-if="!isEnglish">Số lượng:</p>
           <p v-else>Recipient's name:</p>
 
-          <input
-            type="text"
-            class="modal-input input-detail"
-            v-model="quantityDetail"
-          />
+          <input type="text" class="modal-input input-detail" v-model="quantityDetail" />
         </div>
         <div class="flex">
           <p v-if="!isEnglish">Giá:</p>
           <p v-else>Recipient's name:</p>
 
-          <input
-            type="text"
-            class="modal-input input-detail"
-            v-model="priceDetail"
-          />
+          <input type="text" class="modal-input input-detail" v-model="priceDetail" />
         </div>
         <div class="flex">
           <p v-if="!isEnglish">Kích thước:</p>
           <p v-else>Recipient's name:</p>
 
-          <input
-            type="text"
-            class="modal-input input-detail"
-            v-model="sizeDetail"
-          />
+          <input type="text" class="modal-input input-detail" v-model="sizeDetail" />
         </div>
         <div class="flex">
           <p v-if="!isEnglish">Tên khách hàng:</p>
           <p v-else>Recipient's name:</p>
 
-          <input
-            type="text"
-            class="modal-input input-detail"
-            v-model="nameDetail"
-          />
+          <input type="text" class="modal-input input-detail" v-model="nameDetail" />
         </div>
         <div class="flex">
           <p v-if="!isEnglish">Số điện thoại:</p>
           <p v-else>Recipient's name:</p>
-          <input
-            type="text"
-            class="modal-input input-detail"
-            v-model="phoneNumberDetail"
-          />
+          <input type="text" class="modal-input input-detail" v-model="phoneNumberDetail" />
         </div>
         <div class="flex">
           <p v-if="!isEnglish">Địa chỉ</p>
           <p v-else>Recipient's name:</p>
-          <input
-            type="text"
-            class="modal-input input-detail"
-            v-model="addressDetail"
-            style="margin-bottom: 10px"
-          />
+          <input type="text" class="modal-input input-detail" v-model="addressDetail" style="margin-bottom: 10px" />
         </div>
         <Button type="nav" @click="closeModalDetail" style="margin: 20px 0">
           <span v-if="!isEnglish">Oke</span>
@@ -148,33 +96,18 @@
         <div class="flex">
           <p v-if="!isEnglish">Kích cỡ:</p>
           <p v-else>Size:</p>
-          <span
-            v-for="(size, index) in sizes"
-            :key="index"
-            style="margin-right: 20px"
-          >
-            <Button
-              type="normal"
-              :class="{ active: selectedSize === size }"
-              @click="selectSize(size)"
-              >{{ size }}</Button
-            >
+          <span v-for="(size, index) in sizes" :key="index" style="margin-right: 20px">
+            <Button type="normal" :class="{ active: selectedSize === size }" @click="selectSize(size)">{{ size
+              }}</Button>
           </span>
         </div>
         <div class="flex">
           <p v-if="!isEnglish">Số lượng:</p>
           <p v-else>Amount:</p>
           <div style="margin: 24px 0">
-            <Button
-              type="normal"
-              @click="subtraction"
-              style="margin-right: -4.7px"
-              >-</Button
-            >
+            <Button type="normal" @click="subtraction" style="margin-right: -4.7px">-</Button>
             <input type="text" class="modal-input" v-model="amount" />
-            <Button type="normal" @click="addition" style="margin-left: -5px"
-              >+</Button
-            >
+            <Button type="normal" @click="addition" style="margin-left: -5px">+</Button>
           </div>
         </div>
         <Button type="nav" @click="addInvetery">
@@ -211,19 +144,9 @@
           <p v-if="!isEnglish">Số lượng:</p>
           <p v-else>Amount:</p>
           <div style="margin: 24px 0">
-            <Button
-              type="normal"
-              @click="subtractionEdit"
-              style="margin-right: -4.7px"
-              >-</Button
-            >
+            <Button type="normal" @click="subtractionEdit" style="margin-right: -4.7px">-</Button>
             <input type="text" class="modal-input" v-model="quantityEdit" />
-            <Button
-              type="normal"
-              @click="additionEdit"
-              style="margin-left: -5px"
-              >+</Button
-            >
+            <Button type="normal" @click="additionEdit" style="margin-left: -5px">+</Button>
           </div>
         </div>
         <Button type="nav" @click="editInvetery">
@@ -232,11 +155,7 @@
         </Button>
       </div>
 
-      <div
-        v-else-if="type === 'modal-continue'"
-        class="modal-content__continue"
-        ref="modalContinue"
-      >
+      <div v-else-if="type === 'modal-continue'" class="modal-content__continue" ref="modalContinue">
         <div class="flex" style="justify-content: center">
           <p v-if="!isEnglish">Bạn cần đăng nhập để tiếp tục!</p>
           <p v-if="isEnglish">You need to log in to continue!</p>
@@ -329,10 +248,10 @@ export default {
       hideModalDetail: false,
       toastSuccess: 'toastSuccess',
       toastFail: 'toastFail',
-      messageSuccess: '',
       message: '',
       visibleToastSuccess: true,
       visibleToastFail: false,
+      statusToast: false,
     }
   },
 
@@ -351,40 +270,36 @@ export default {
         phoneNumber: this.phone.toString(),
         address: this.adress,
       }
-
-      this.visibleToastSuccess = false
-      this.messageSuccess = 'Bạn đã đặt hàng thành công'
-      this.$emit(
-        'hide-modal__buy',
-        false,
-        this.visibleToastSuccess,
-        this.messageSuccess
-      )
-
       const token = localStorage.getItem('token')
       setBearerToken(token)
-      axiosInstance
-        .post('/api/create-order', data)
+      axiosInstance.post('/api/create-order', data)
         .then((response) => {
-          this.visibleToastSuccess = false
-          this.messageSuccess = 'Bạn đã đặt hàng thành công'
-          this.$emit(
-            'hide-modal__buy',
-            false,
-            this.visibleToastSuccess,
-            this.messageSuccess
-          )
+          this.visibleToastSuccess = true
+          if (!this.isEnglish) {
+            this.message = 'Bạn đã đặt hàng thành công'
+          } else {
+            this.message = 'You have placed your order successfully'
+          }
+          this.statusToast = true
+          this.$emit('hide-modal__buy',false,this.visibleToastSuccess,this.message, this.statusToast)
         })
         .catch((error) => {
           this.visibleToastFail = true
-          console.log(this.visibleToastFail)
-          if (
-            error.response.status === 500 &&
-            error.response.data.message === 'Inventory costume not found.'
-          ) {
-            this.message = 'Kho hàng đã hết sản phẩm này'
+          this.statusToast = false
+          if (error.response.status === 500 && error.response.data.message === 'Inventory costume not found.') {
+            if (!this.isEnglish) {
+              this.message = 'Đặt hàng k thành công : Kho đã hết hàng'
+            } else {
+              this.message = 'Order not successful: Warehouse is out of stock'
+            }
+            this.$emit('hide-modal__buy',false,this.visibleToastFail,this.message, this.statusToast)
           } else {
-            this.message = 'Bạn đặt hàng không thành công'
+            if (!this.isEnglish) {
+              this.message = 'Đặt hàng k thành công : Không tìm thấy sản phẩm'
+            } else {
+              this.message = 'Order not successful: Product not found'
+            }
+            this.$emit('hide-modal__buy',false,this.visibleToastFail,this.message, this.statusToast)
           }
         })
     },
@@ -394,11 +309,13 @@ export default {
         this.amount--
       }
     },
+
     subtractionEdit() {
       if (this.quantityEdit > 1) {
         this.quantityEdit--
       }
     },
+
     addition() {
       this.amount++
     },
@@ -429,17 +346,16 @@ export default {
         }
       }
     },
+
     addInvetery() {
       const data = {
         costumeId: this.productId,
         size: this.selectedSize,
         quantity: this.amount,
       }
-      console.log(data)
       const token = localStorage.getItem('token')
       setBearerToken(token)
-      axiosInstance
-        .post('/api/add-inventory', data)
+      axiosInstance.post('/api/add-inventory', data)
         .then((response) => {
           window.location.reload()
         })
@@ -447,6 +363,7 @@ export default {
           console.error(error)
         })
     },
+
     closeModalDetail() {
       console.log(this.costumeIdDetail)
       window.location.reload()
@@ -458,11 +375,9 @@ export default {
         size: this.sizeEdit,
         quantity: Number(this.quantityEdit),
       }
-      console.log(data)
       const token = localStorage.getItem('token')
       setBearerToken(token)
-      axiosInstance
-        .post('/api/remove-inventory', data)
+      axiosInstance.post('/api/remove-inventory', data)
         .then((response) => {
           window.location.reload()
         })
@@ -527,9 +442,11 @@ export default {
 .modal p {
   width: 250px;
 }
+
 .input-detail {
   width: 300px;
 }
+
 .active {
   color: red;
   border: 1px solid red;

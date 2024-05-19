@@ -19,13 +19,24 @@
 <script>
 import Table from '@/components/Table.vue'
 import Button from '@/components/Button.vue'
-import axiosInstance, { setBearerToken } from '@/helper/api.js'
-import ButtonVue from '~/components/Button.vue'
 
 export default {
   components: {
     Table,
     Button,
+  },
+
+  mounted() {
+    const jwt = require('jsonwebtoken')
+    const token = localStorage.getItem('token')
+    if (token) {
+      this.authority = jwt.decode(
+        localStorage.getItem('token')
+      ).role[0].authority
+    }
+    if (this.authority !== 'admin') {
+      this.$router.push('/error')
+    }
   },
 
   data() {
@@ -39,7 +50,8 @@ export default {
       isEnglish: false,
       quantityEdit: 1,
       costumeIdEdit: 1,
-      sizeEdit: ''
+      sizeEdit: '',
+      authority: null,
     }
   },
   methods: {

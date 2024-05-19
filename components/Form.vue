@@ -12,7 +12,7 @@
                         <div style="position: relative;">
                             <TextField type="form-text" :placeholder="Name" v-model="name"></TextField>
                             <span v-if="errors.length" class="validateInput">{{ errors[0] }}</span>
-                            <p v-if="errorLogin && isEnglish" class="validateInput">Account or password is incorrect</p>
+                            <p v-if="errorLogin" class="validateInput">Account or password is incorrect</p>
                             <p v-show="type === 'register'" class="validateInput">{{ errorRegister }}</p>
                         </div>
                     </ValidationProvider>
