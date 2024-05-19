@@ -60,58 +60,79 @@
       </div>
 
       <div
-        v-if="type === 'modal-detail'" 
+        v-if="type === 'modal-detail'"
         class="modal-content__buy"
         ref="modalBuy"
       >
         <div class="flex">
           <p v-if="!isEnglish">Mã sản phẩm:</p>
           <p v-else>Recipient's name:</p>
-          <input type="text" class="modal-input input-detail" v-model="costumeIdDetail" />
-         
-
+          <input
+            type="text"
+            class="modal-input input-detail"
+            v-model="costumeIdDetail"
+          />
         </div>
         <div class="flex">
           <p v-if="!isEnglish">Số lượng:</p>
           <p v-else>Recipient's name:</p>
-          
-          <input type="text" class="modal-input input-detail" v-model="quantityDetail" />
 
+          <input
+            type="text"
+            class="modal-input input-detail"
+            v-model="quantityDetail"
+          />
         </div>
         <div class="flex">
           <p v-if="!isEnglish">Giá:</p>
           <p v-else>Recipient's name:</p>
-          
-          <input type="text" class="modal-input input-detail" v-model="priceDetail" />
 
+          <input
+            type="text"
+            class="modal-input input-detail"
+            v-model="priceDetail"
+          />
         </div>
         <div class="flex">
           <p v-if="!isEnglish">Kích thước:</p>
           <p v-else>Recipient's name:</p>
-          
-          <input type="text" class="modal-input input-detail" v-model="sizeDetail" />
 
+          <input
+            type="text"
+            class="modal-input input-detail"
+            v-model="sizeDetail"
+          />
         </div>
         <div class="flex">
           <p v-if="!isEnglish">Tên khách hàng:</p>
           <p v-else>Recipient's name:</p>
-       
-          <input type="text" class="modal-input input-detail" v-model="nameDetail" />
 
+          <input
+            type="text"
+            class="modal-input input-detail"
+            v-model="nameDetail"
+          />
         </div>
         <div class="flex">
           <p v-if="!isEnglish">Số điện thoại:</p>
           <p v-else>Recipient's name:</p>
-          <input type="text" class="modal-input input-detail" v-model="phoneNumberDetail" />
-         
+          <input
+            type="text"
+            class="modal-input input-detail"
+            v-model="phoneNumberDetail"
+          />
         </div>
         <div class="flex">
           <p v-if="!isEnglish">Địa chỉ</p>
           <p v-else>Recipient's name:</p>
-          <input type="text" class="modal-input input-detail" v-model="addressDetail" style="margin-bottom: 10px;" />
-        
+          <input
+            type="text"
+            class="modal-input input-detail"
+            v-model="addressDetail"
+            style="margin-bottom: 10px"
+          />
         </div>
-        <Button type="nav" @click="closeModalDetail" style="margin: 20px 0;">
+        <Button type="nav" @click="closeModalDetail" style="margin: 20px 0">
           <span v-if="!isEnglish">Oke</span>
           <span v-else>Order</span>
         </Button>
@@ -305,7 +326,13 @@ export default {
       phone: '',
       name: '',
       adress: '',
-      hideModalDetail: false
+      hideModalDetail: false,
+      toastSuccess: 'toastSuccess',
+      toastFail: 'toastFail',
+      messageSuccess: '',
+      message: '',
+      visibleToastSuccess: true,
+      visibleToastFail: false,
     }
   },
 
@@ -315,7 +342,6 @@ export default {
     },
 
     buyCostume() {
-      this.$emit('hide-modal__buy', false)
       const data = {
         costumeId: this.costumeId,
         size: this.selectedSize,
@@ -325,16 +351,41 @@ export default {
         phoneNumber: this.phone.toString(),
         address: this.adress,
       }
-      console.log(data)
+
+      this.visibleToastSuccess = false
+      this.messageSuccess = 'Bạn đã đặt hàng thành công'
+      this.$emit(
+        'hide-modal__buy',
+        false,
+        this.visibleToastSuccess,
+        this.messageSuccess
+      )
+
       const token = localStorage.getItem('token')
       setBearerToken(token)
       axiosInstance
         .post('/api/create-order', data)
         .then((response) => {
-          window.location.reload()
+          this.visibleToastSuccess = false
+          this.messageSuccess = 'Bạn đã đặt hàng thành công'
+          this.$emit(
+            'hide-modal__buy',
+            false,
+            this.visibleToastSuccess,
+            this.messageSuccess
+          )
         })
         .catch((error) => {
-          console.error(error)
+          this.visibleToastFail = true
+          console.log(this.visibleToastFail)
+          if (
+            error.response.status === 500 &&
+            error.response.data.message === 'Inventory costume not found.'
+          ) {
+            this.message = 'Kho hàng đã hết sản phẩm này'
+          } else {
+            this.message = 'Bạn đặt hàng không thành công'
+          }
         })
     },
 
@@ -476,7 +527,7 @@ export default {
 .modal p {
   width: 250px;
 }
-.input-detail{
+.input-detail {
   width: 300px;
 }
 .active {
