@@ -16,7 +16,7 @@
             <div class="flex">
               <p v-if="!isEnglish">Số điện thoại:</p>
               <p v-else>Phone:</p>
-              <TextField type="form-number" v-model="phone"></TextField>
+              <TextField type="form-text" v-model="phone"></TextField>
               <span v-if="errors.length" class="validateInput">{{ errors[0] }}</span>
             </div>
           </ValidationProvider>
@@ -162,7 +162,10 @@
               >
             </span>
           </div> -->
-        <div class="title-edit">Nhập số lượng bạn muốn bớt</div>
+        <div style="display: flex;justify-content: center;align-items: center;">
+          <p v-if="!isEnglish">Nhập số lượng bạn muốn bớt</p>
+          <p v-else>Enter the amount you want to reduce</p>
+        </div>
         <div class="flex">
           <p v-if="!isEnglish">Số lượng:</p>
           <p v-else>Amount:</p>
@@ -398,7 +401,13 @@ export default {
                 window.location.reload()
               })
               .catch((error) => {
-                console.error(error)
+                this.visibleToastFail = true
+                if (!this.isEnglish) {
+                  this.message = 'Thất bại'
+                } else {
+                  this.message = 'Failure'
+                }
+                this.$emit('toastStatus', this.visibleToastFail, this.message)
               })
           }
         })
@@ -422,7 +431,13 @@ export default {
           window.location.reload()
         })
         .catch((error) => {
-          console.error(error)
+          this.visibleToastFail = true
+          if (!this.isEnglish) {
+            this.message = 'Thất bại'
+          } else {
+            this.message = 'Failure'
+          }
+          this.$emit('toastStatus', this.visibleToastFail, this.message)
         })
     },
   },
@@ -431,6 +446,7 @@ export default {
 
 <style scoped>
 @import url('https://fonts.googleapis.com/css2?family=Maitree:wght@200;300;400;500;600;700&display=swap');
+
 .modal {
   position: fixed;
   z-index: 1;

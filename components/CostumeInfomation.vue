@@ -26,8 +26,8 @@
           :hideModalContinue="hideModalContinue"></Modal>
         <div v-for="(item, index) in items" :key="index" class="content-text">
           <div v-for="(info, indexinfo) in isEnglish
-        ? [dataEthnicEn[count - 1]]
-        : info" :key="indexinfo">
+      ? [dataEthnicEn[count - 1]]
+      : info" :key="indexinfo">
             <template v-if="index === count - 1">
               <div class="edit">
                 <b>
@@ -375,6 +375,9 @@ export default {
           } else {
             this.messageFail = 'Failure'
           }
+          setTimeout(() => {
+            this.visibleToastFail = false
+          }, 3000)
         })
     },
 
@@ -412,6 +415,9 @@ export default {
           } else {
             this.messageFail = 'Failure'
           }
+          setTimeout(() => {
+            this.visibleToastFail = false
+          }, 3000)
         })
       this.$set(this.editStatus, indexCmt, false)
     },
@@ -433,7 +439,15 @@ export default {
               window.location.reload()
             })
             .catch((error) => {
-              console.error(error)
+              this.visibleToastFail = true
+              if (!this.isEnglish) {
+                this.messageFail = 'Thất bại'
+              } else {
+                this.messageFail = 'Failure'
+              }
+              setTimeout(() => {
+                this.visibleToastFail = false
+              }, 3000)
             })
         }
       }
@@ -1151,6 +1165,7 @@ export default {
 
 <style>
 @import url('https://fonts.googleapis.com/css2?family=Maitree:wght@200;300;400;500;600;700&display=swap');
+
 @media (max-width: 1400px) {
 
   .left-bar,

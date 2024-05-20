@@ -1,5 +1,6 @@
 <template>
   <div>
+    <Toast type="toastFail" :messageFail="messageFail" v-if="visibleToastFail"></Toast>
     <div class="button__add">
       <Button type="nav" @click="addInvetery" class="btn-add">
         <span v-if="!isEnglish">Thêm</span>
@@ -8,19 +9,20 @@
     </div>
     <Table :type="adminCheckProduct" class="tbl" @hidemodaledit="openModalEdit">
     </Table>
-    <Modal v-if="hideModalAdd" type="modal-add"></Modal>
+    <Modal v-if="hideModalAdd" type="modal-add" @toastStatus="toastStatus"></Modal>
     <Modal v-if="hideModalEdit" :quantityEdit="quantityEdit" :costumeIdEdit="costumeIdEdit" :sizeEdit="sizeEdit"
-      type="modal-edit"></Modal>
+      type="modal-edit" @toastStatus="toastStatus"></Modal>
   </div>
 </template>
 <script>
 import Table from '@/components/Table.vue'
 import Button from '@/components/Button.vue'
-
+import Toast from '@/components/Toast.vue'
 export default {
   components: {
     Table,
     Button,
+    Toast,
   },
 
   computed: {
@@ -54,6 +56,8 @@ export default {
       costumeIdEdit: 1,
       sizeEdit: '',
       authority: null,
+      messageFail: '',
+      visibleToastFail: false,
     }
   },
   methods: {
@@ -67,11 +71,20 @@ export default {
       this.sizeEdit = size
 
     },
+
+    toastStatus(visibleToast, message) {
+      this.visibleToastFail = visibleToast
+      this.messageFail = message
+      setTimeout(() => {
+        this.visibleToastFail = false
+      }, 3000)
+    }
   },
 }
 </script>
 <style>
 @import url('https://fonts.googleapis.com/css2?family=Maitree:wght@200;300;400;500;600;700&display=swap');
+
 .btn-add {
   border-radius: 5px;
   position: absolute;

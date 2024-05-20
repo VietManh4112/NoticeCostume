@@ -1,4 +1,5 @@
 <template>
+  <Toast type="toastFail" :messageFail="messageFail" v-if="visibleToastFail"></Toast>
   <div class="table">
     <table cellspacing="0" v-show="type === 'userCheckCart'" id="userCheckCart">
       <thead>
@@ -19,19 +20,29 @@
           <p v-if="!isEnglish">Thời gian đặt</p>
           <p v-else>Set time</p>
         </th>
+        <th style="width: 15%">
+          <p v-if="!isEnglish">Thanh toán</p>
+          <p v-else>Payment</p>
+        </th>
         <th style="width: 10%">
-          <p v-if="!isEnglish">Trạng thái</p>
-          <p v-else>Status</p>
+          <p v-if="!isEnglish">Hủy</p>
+          <p v-else>Cancel</p>
         </th>
       </thead>
       <tbody>
-        <tr v-for="(item, index) in cartItemsUserOrder" :key="index" @click="openModalDetail(item.id)">
-          <td>{{ index + 1 }}</td>
-          <td>{{ item.id }}</td>
-          <td>{{ item.userId }}</td>
-          <td>{{ item.totalAmount }}</td>
-          <td>{{ item.orderDate }}</td>
-          <td>{{ item.status }}</td>
+        <tr v-for="(item, index) in cartItemsUserOrder" :key="index">
+          <td @click="openModalDetail(item.id)">{{ index + 1 }}</td>
+          <td @click="openModalDetail(item.id)">{{ item.id }}</td>
+          <td @click="openModalDetail(item.id)">{{ item.userId }}</td>
+          <td @click="openModalDetail(item.id)">{{ item.totalAmount }}</td>
+          <td @click="openModalDetail(item.id)">{{ item.orderDate }}</td>
+          <td @click="openModalDetail(item.id)">{{ item.status }}</td>
+          <td>
+            <span @click="cancelOrder(item.id)" style="cursor: pointer; text-decoration: underline; color: red">
+              <p v-if="!isEnglish">Hủy</p>
+              <p v-else>Cancel</p>
+            </span>
+          </td>
         </tr>
       </tbody>
     </table>
@@ -57,9 +68,9 @@
           <p v-if="!isEnglish">Thời gian đặt</p>
           <p v-else>Set time</p>
         </th>
-        <th style="width: 10%">
-          <p v-if="!isEnglish">Trạng thái</p>
-          <p v-else>Status</p>
+        <th style="width: 15%">
+          <p v-if="!isEnglish">Thanh toán</p>
+          <p v-else>Payment</p>
         </th>
         <th style="width: 10%">
           <p v-if="!isEnglish">Hủy</p>
@@ -134,11 +145,14 @@
 
 <script>
 import axiosInstance, { setBearerToken } from '@/helper/api.js'
+import Toast from '@/components/Toast.vue'
 import EthnicStore from '@/store/ethnic'
 
 export default {
   name: 'Table',
-  component: {},
+  components: {
+    Toast,
+  },
   props: {
     type: String,
   },
@@ -163,12 +177,33 @@ export default {
       nameDetail: '',
       phoneNumberDetail: '',
       addressDetail: '',
+      messageFail: '',
+      visibleToastFail: false,
     }
   },
   mounted() {
-    this.fetchCartItems()
-    this.loadAdminCheckOrder()
-    this.loadUserCheckOrder()
+    const jwt = require('jsonwebtoken')
+    const token = localStorage.getItem('token')
+    const decoded = jwt.decode(token)
+    if (decoded) {
+      this.sub = decoded.sub
+      this.url = decoded.url
+    }
+    if (token && token.trim() !== '') {
+      this.hide = true
+    }
+    if (token) {
+      this.authority = jwt.decode(
+        localStorage.getItem('token')
+      ).role[0].authority
+    }
+    if (this.authority === 'admin') {
+      this.fetchCartItems()
+      this.loadAdminCheckOrder()
+    }
+    if (this.authority === 'user') {
+      this.loadUserCheckOrder()
+    }
   },
   methods: {
     fetchCartItems() {
@@ -265,7 +300,15 @@ export default {
           window.location.reload()
         })
         .catch((error) => {
-          console.error('Error deleting data:', error)
+          this.visibleToastFail = true
+          if (!this.isEnglish) {
+            this.messageFail = 'Thất bại'
+          } else {
+            this.messageFail = 'Failure'
+          }
+          setTimeout(() => {
+            this.visibleToastFail = false
+          }, 3000)
         })
     },
     openModalEdit(customerId, quantity, size) {
@@ -305,7 +348,15 @@ export default {
           window.location.reload()
         })
         .catch((error) => {
-          console.error('Error deleting data:', error)
+          this.visibleToastFail = true
+          if (!this.isEnglish) {
+            this.messageFail = 'Thất bại'
+          } else {
+            this.messageFail = 'Failure'
+          }
+          setTimeout(() => {
+            this.visibleToastFail = false
+          }, 3000)
         })
     },
   },
@@ -313,6 +364,7 @@ export default {
 </script>
 <style>
 @import url('https://fonts.googleapis.com/css2?family=Maitree:wght@200;300;400;500;600;700&display=swap');
+
 .table {
   width: 100%;
 }
