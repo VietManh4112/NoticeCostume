@@ -202,7 +202,10 @@ export default {
 
     logout() {
       localStorage.setItem('token', '')
-      window.location.reload()
+      this.$router.push(`/`)
+      setTimeout(() => {
+        window.location.reload()
+      },10)
     },
     viewOrder() {
       const jwt = require('jsonwebtoken')
