@@ -300,7 +300,7 @@ export default {
               costumeId: this.costumeId,
               size: this.selectedSize,
               quantity: this.amount,
-              price: this.price,
+              price: this.priceCostume,
               name: this.name,
               phoneNumber: this.phone.toString(),
               address: this.adress,
