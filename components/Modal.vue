@@ -2,20 +2,39 @@
   <div>
     <div class="modal">
       <div v-if="type === 'modal-buy'" class="modal-content__buy" ref="modalBuy">
+        <ValidationObserver ref="observer">
+          <ValidationProvider v-slot="{ errors }" name="Name" rules="required">
+            <div class="flex">
+              <p v-if="!isEnglish">Tên người nhận:</p>
+              <p v-else>Recipient's name:</p>
+              <TextField type="form-text" v-model="name"></TextField>
+              <span v-if="errors.length" class="validateInput">{{ errors[0] }}</span>
+            </div>
+          </ValidationProvider>
+
+          <ValidationProvider v-slot="{ errors }" name="Phone" rules="required">
+            <div class="flex">
+              <p v-if="!isEnglish">Số điện thoại:</p>
+              <p v-else>Phone:</p>
+              <TextField type="form-number" v-model="phone"></TextField>
+              <span v-if="errors.length" class="validateInput">{{ errors[0] }}</span>
+            </div>
+          </ValidationProvider>
+
+          <ValidationProvider v-slot="{ errors }" name="Address" rules="required">
+            <div class="flex">
+              <p v-if="!isEnglish">Địa chỉ:</p>
+              <p v-else>Address:</p>
+              <TextField type="form-text" v-model="adress"></TextField>
+              <span v-if="errors.length" class="validateInput">{{ errors[0] }}</span>
+            </div>
+          </ValidationProvider>
+        </ValidationObserver>
+
         <div class="flex">
-          <p v-if="!isEnglish">Tên người nhận:</p>
-          <p v-else>Recipient's name:</p>
-          <TextField type="form-text" v-model="name"></TextField>
-        </div>
-        <div class="flex">
-          <p v-if="!isEnglish">Số điện thoại:</p>
-          <p v-else>Phone:</p>
-          <TextField type="form-text" v-model="phone"></TextField>
-        </div>
-        <div class="flex">
-          <p v-if="!isEnglish">Địa chỉ:</p>
-          <p v-else>Address:</p>
-          <TextField type="form-text" v-model="adress"></TextField>
+          <p v-if="!isEnglish">Giá tiền:</p>
+          <p v-else>Price:</p>
+          <p>{{ priceCostume.toLocaleString('en-US') }} {{ currencyCostume }}</p>
         </div>
         <div class="flex">
           <p v-if="!isEnglish">Kích cỡ:</p>
@@ -40,27 +59,26 @@
         </Button>
       </div>
 
-      <div v-if="type === 'modal-detail'" class="modal-content__buy" ref="modalBuy">
+      <div v-if="type === 'modal-detail'" class="modal-content__buy">
         <div class="flex">
           <p v-if="!isEnglish">Mã sản phẩm:</p>
-          <p v-else>Recipient's name:</p>
+          <p v-else>Product code:</p>
           <input type="text" class="modal-input input-detail" v-model="costumeIdDetail" />
         </div>
         <div class="flex">
           <p v-if="!isEnglish">Số lượng:</p>
-          <p v-else>Recipient's name:</p>
-
+          <p v-else>Amount:</p>
           <input type="text" class="modal-input input-detail" v-model="quantityDetail" />
         </div>
         <div class="flex">
           <p v-if="!isEnglish">Giá:</p>
-          <p v-else>Recipient's name:</p>
+          <p v-else>Price:</p>
 
           <input type="text" class="modal-input input-detail" v-model="priceDetail" />
         </div>
         <div class="flex">
           <p v-if="!isEnglish">Kích thước:</p>
-          <p v-else>Recipient's name:</p>
+          <p v-else>Size:</p>
 
           <input type="text" class="modal-input input-detail" v-model="sizeDetail" />
         </div>
@@ -72,27 +90,32 @@
         </div>
         <div class="flex">
           <p v-if="!isEnglish">Số điện thoại:</p>
-          <p v-else>Recipient's name:</p>
+          <p v-else>Phone:</p>
           <input type="text" class="modal-input input-detail" v-model="phoneNumberDetail" />
         </div>
         <div class="flex">
           <p v-if="!isEnglish">Địa chỉ</p>
-          <p v-else>Recipient's name:</p>
+          <p v-else>Address:</p>
           <input type="text" class="modal-input input-detail" v-model="addressDetail" style="margin-bottom: 10px" />
         </div>
         <Button type="nav" @click="closeModalDetail" style="margin: 20px 0">
-          <span v-if="!isEnglish">Oke</span>
-          <span v-else>Order</span>
+          <span v-if="!isEnglish">Đóng</span>
+          <span v-else>Close</span>
         </Button>
       </div>
 
       <div v-if="type === 'modal-add'" class="modal-content__buy">
-        <div class="flex">
-          <p v-if="!isEnglish">Mã sản phẩm</p>
-          <p v-else>Product's name:</p>
-          <TextField type="form-text" v-model="productId"></TextField>
-        </div>
+        <ValidationObserver ref="observerAdd">
+          <ValidationProvider v-slot="{ errors }" name="Product's name" rules="required">
+            <div class="flex">
+              <p v-if="!isEnglish">Mã sản phẩm</p>
+              <p v-else>Product's name:</p>
+              <TextField type="form-text" v-model="productId"></TextField>
+              <span v-if="errors.length" class="validateInput">{{ errors[0] }}</span>
+            </div>
 
+          </ValidationProvider>
+        </ValidationObserver>
         <div class="flex">
           <p v-if="!isEnglish">Kích cỡ:</p>
           <p v-else>Size:</p>
@@ -171,6 +194,7 @@
 
 <script>
 import axiosInstance, { setBearerToken } from '@/helper/api.js'
+import { ValidationObserver, ValidationProvider } from 'vee-validate';
 import TextField from '@/components/TextField.vue'
 import Button from '@/components/Button.vue'
 import Resource from '@/helper/resource.js'
@@ -178,6 +202,8 @@ export default {
   name: 'Modal',
 
   components: {
+    ValidationObserver,
+    ValidationProvider,
     TextField,
     Button,
   },
@@ -197,6 +223,8 @@ export default {
     nameDetail: String,
     phoneNumberDetail: String,
     addressDetail: String,
+    priceCostume: Number,
+    currencyCostume: String,
   },
 
   mounted() {
@@ -237,15 +265,16 @@ export default {
   data() {
     return {
       sizes: ['M', 'L', 'XL', 'XXL'],
-      selectedSize: null,
+      selectedSize: 'M',
       amount: 1,
       price: 20,
       bodyClickListenerSet: false,
-      productId: 0,
+      productId: '',
       phone: '',
       name: '',
       adress: '',
-      hideModalDetail: false,
+      price: '',
+      hideModalDetail: true,
       toastSuccess: 'toastSuccess',
       toastFail: 'toastFail',
       message: '',
@@ -261,47 +290,53 @@ export default {
     },
 
     buyCostume() {
-      const data = {
-        costumeId: this.costumeId,
-        size: this.selectedSize,
-        quantity: this.amount,
-        price: this.price,
-        name: this.name,
-        phoneNumber: this.phone.toString(),
-        address: this.adress,
+      if (this.$refs.observer) {
+        this.$refs.observer.validate().then(success => {
+          if (success) {
+            const data = {
+              costumeId: this.costumeId,
+              size: this.selectedSize,
+              quantity: this.amount,
+              price: this.price,
+              name: this.name,
+              phoneNumber: this.phone.toString(),
+              address: this.adress,
+            }
+            const token = localStorage.getItem('token')
+            setBearerToken(token)
+            axiosInstance.post('/api/create-order', data)
+              .then((response) => {
+                this.visibleToastSuccess = true
+                if (!this.isEnglish) {
+                  this.message = 'Bạn đã đặt hàng thành công'
+                } else {
+                  this.message = 'You have placed your order successfully'
+                }
+                this.statusToast = true
+                this.$emit('hide-modal__buy', false, this.visibleToastSuccess, this.message, this.statusToast)
+              })
+              .catch((error) => {
+                this.visibleToastFail = true
+                this.statusToast = false
+                if (error.response.status === 500 && error.response.data.message === 'Inventory costume not found.') {
+                  if (!this.isEnglish) {
+                    this.message = 'Đặt hàng k thành công : Kho đã hết hàng'
+                  } else {
+                    this.message = 'Order not successful: Warehouse is out of stock'
+                  }
+                  this.$emit('hide-modal__buy', false, this.visibleToastFail, this.message, this.statusToast)
+                } else {
+                  if (!this.isEnglish) {
+                    this.message = 'Đặt hàng k thành công : Không tìm thấy sản phẩm'
+                  } else {
+                    this.message = 'Order not successful: Product not found'
+                  }
+                  this.$emit('hide-modal__buy', false, this.visibleToastFail, this.message, this.statusToast)
+                }
+              })
+          }
+        });
       }
-      const token = localStorage.getItem('token')
-      setBearerToken(token)
-      axiosInstance.post('/api/create-order', data)
-        .then((response) => {
-          this.visibleToastSuccess = true
-          if (!this.isEnglish) {
-            this.message = 'Bạn đã đặt hàng thành công'
-          } else {
-            this.message = 'You have placed your order successfully'
-          }
-          this.statusToast = true
-          this.$emit('hide-modal__buy',false,this.visibleToastSuccess,this.message, this.statusToast)
-        })
-        .catch((error) => {
-          this.visibleToastFail = true
-          this.statusToast = false
-          if (error.response.status === 500 && error.response.data.message === 'Inventory costume not found.') {
-            if (!this.isEnglish) {
-              this.message = 'Đặt hàng k thành công : Kho đã hết hàng'
-            } else {
-              this.message = 'Order not successful: Warehouse is out of stock'
-            }
-            this.$emit('hide-modal__buy',false,this.visibleToastFail,this.message, this.statusToast)
-          } else {
-            if (!this.isEnglish) {
-              this.message = 'Đặt hàng k thành công : Không tìm thấy sản phẩm'
-            } else {
-              this.message = 'Order not successful: Product not found'
-            }
-            this.$emit('hide-modal__buy',false,this.visibleToastFail,this.message, this.statusToast)
-          }
-        })
     },
 
     subtraction() {
@@ -348,24 +383,29 @@ export default {
     },
 
     addInvetery() {
-      const data = {
-        costumeId: this.productId,
-        size: this.selectedSize,
-        quantity: this.amount,
+      if (this.$refs.observerAdd) {
+        this.$refs.observerAdd.validate().then(success => {
+          if (success) {
+            const data = {
+              costumeId: this.productId,
+              size: this.selectedSize,
+              quantity: this.amount,
+            }
+            const token = localStorage.getItem('token')
+            setBearerToken(token)
+            axiosInstance.post('/api/add-inventory', data)
+              .then((response) => {
+                window.location.reload()
+              })
+              .catch((error) => {
+                console.error(error)
+              })
+          }
+        })
       }
-      const token = localStorage.getItem('token')
-      setBearerToken(token)
-      axiosInstance.post('/api/add-inventory', data)
-        .then((response) => {
-          window.location.reload()
-        })
-        .catch((error) => {
-          console.error(error)
-        })
     },
 
     closeModalDetail() {
-      console.log(this.costumeIdDetail)
       window.location.reload()
     },
 
@@ -389,7 +429,7 @@ export default {
 }
 </script>
 
-<style>
+<style scoped>
 .modal {
   position: fixed;
   z-index: 1;
@@ -432,6 +472,7 @@ export default {
 .flex {
   display: flex;
   align-items: center;
+  position: relative;
 }
 
 .modal p {
@@ -450,5 +491,13 @@ export default {
 .active {
   color: red;
   border: 1px solid red;
+}
+
+.validateInput {
+  color: red;
+  position: absolute;
+  top: 50px;
+  font-size: 12px;
+  left: 250px;
 }
 </style>

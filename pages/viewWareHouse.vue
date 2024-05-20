@@ -9,11 +9,8 @@
     <Table :type="adminCheckProduct" class="tbl" @hidemodaledit="openModalEdit">
     </Table>
     <Modal v-if="hideModalAdd" type="modal-add"></Modal>
-    <Modal
-      v-if="hideModalEdit"
-      :quantityEdit="quantityEdit" :costumeIdEdit="costumeIdEdit" :sizeEdit="sizeEdit"
-      type="modal-edit"
-    ></Modal>
+    <Modal v-if="hideModalEdit" :quantityEdit="quantityEdit" :costumeIdEdit="costumeIdEdit" :sizeEdit="sizeEdit"
+      type="modal-edit"></Modal>
   </div>
 </template>
 <script>
@@ -24,6 +21,12 @@ export default {
   components: {
     Table,
     Button,
+  },
+
+  computed: {
+    isEnglish() {
+      return this.$store.state.isEnglish;
+    },
   },
 
   mounted() {
@@ -47,7 +50,6 @@ export default {
       hideModalAdd: false,
       adminCheckProduct: 'adminCheckProduct',
       hideModalEdit: false,
-      isEnglish: false,
       quantityEdit: 1,
       costumeIdEdit: 1,
       sizeEdit: '',
@@ -58,12 +60,12 @@ export default {
     addInvetery() {
       this.hideModalAdd = true
     },
-    openModalEdit(costumeId, quantity,size) {
+    openModalEdit(costumeId, quantity, size) {
       this.hideModalEdit = true
       this.quantityEdit = quantity
       this.costumeIdEdit = costumeId
       this.sizeEdit = size
-      
+
     },
   },
 }

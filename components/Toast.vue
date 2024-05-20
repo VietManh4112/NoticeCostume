@@ -51,15 +51,15 @@ export default {
 <style>
 .toast-creat-order {
   display: flex;
+  position: fixed;
   text-align: center;
   justify-items: center;
   width: 500px;
   height: 40px;
   border-radius: 1px;
   line-height: 40px;
-  position: absolute;
   right: -300px;
-  top: 580px;
+  bottom: 40px;
   animation: toast-slide-in 1s forwards;
   z-index: 999;
 }

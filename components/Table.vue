@@ -3,18 +3,29 @@
     <table cellspacing="0" v-show="type === 'userCheckCart'" id="userCheckCart">
       <thead>
         <th style="width: 5%">STT</th>
-        <th style="width: 15%">Mã sản phẩm</th>
-        <th style="width: 15%">Mã khách hàng</th>
-        <th style="width: 10%">Giá tiền</th>
-        <th style="width: 20%">Thời gian đặt</th>
-        <th style="width: 10%">Trạng thái</th>
+        <th style="width: 15%">
+          <p v-if="!isEnglish">Mã sản phẩm</p>
+          <p v-else>Product code</p>
+        </th>
+        <th style="width: 15%">
+          <p v-if="!isEnglish">Mã khách hàng</p>
+          <p v-else>Customer's code</p>
+        </th>
+        <th style="width: 10%">
+          <p v-if="!isEnglish">Giá tiền</p>
+          <p v-else>Price</p>
+        </th>
+        <th style="width: 20%">
+          <p v-if="!isEnglish">Thời gian đặt</p>
+          <p v-else>Set time</p>
+        </th>
+        <th style="width: 10%">
+          <p v-if="!isEnglish">Trạng thái</p>
+          <p v-else>Status</p>
+        </th>
       </thead>
       <tbody>
-        <tr
-          v-for="(item, index) in cartItemsUserOrder"
-          :key="index"
-          @click="openModalDetail(item.id)"
-        >
+        <tr v-for="(item, index) in cartItemsUserOrder" :key="index" @click="openModalDetail(item.id)">
           <td>{{ index + 1 }}</td>
           <td>{{ item.id }}</td>
           <td>{{ item.userId }}</td>
@@ -24,57 +35,70 @@
         </tr>
       </tbody>
     </table>
-    <Modal
-      v-if="hideModalDetail"
-      type="modal-detail"
-      :costumeIdDetail="costumeIdDetail"
-      :quantityDetail="quantityDetail"
-      :priceDetail="priceDetail"
-      :sizeDetail="sizeDetail"
-      :nameDetail="nameDetail"
-      :phoneNumberDetail="phoneNumberDetail"
-      :addressDetail="addressDetail"
-    ></Modal>
+    <Modal v-if="hideModalDetail" type="modal-detail" :costumeIdDetail="costumeIdDetail"
+      :quantityDetail="quantityDetail" :priceDetail="priceDetail" :sizeDetail="sizeDetail" :nameDetail="nameDetail"
+      :phoneNumberDetail="phoneNumberDetail" :addressDetail="addressDetail"></Modal>
     <table cellspacing="0" v-show="type === 'adminCheckOrder'">
       <thead>
         <th style="width: 5%">STT</th>
-        <th style="width: 15%">Mã sản phẩm</th>
-        <th style="width: 15%">Mã khách hàng</th>
-        <th style="width: 10%">Giá tiền</th>
-        <th style="width: 20%">Thời gian đặt</th>
-        <th style="width: 10%">Trạng thái</th>
-        <th style="width: 10%">Hủy</th>
+        <th style="width: 15%">
+          <p v-if="!isEnglish">Mã sản phẩm</p>
+          <p v-else>Product code</p>
+        </th>
+        <th style="width: 15%">
+          <p v-if="!isEnglish">Mã khách hàng</p>
+          <p v-else>Customer's code</p>
+        </th>
+        <th style="width: 10%">
+          <p v-if="!isEnglish">Giá tiền</p>
+          <p v-else>Price</p>
+        </th>
+        <th style="width: 20%">
+          <p v-if="!isEnglish">Thời gian đặt</p>
+          <p v-else>Set time</p>
+        </th>
+        <th style="width: 10%">
+          <p v-if="!isEnglish">Trạng thái</p>
+          <p v-else>Status</p>
+        </th>
+        <th style="width: 10%">
+          <p v-if="!isEnglish">Hủy</p>
+          <p v-else>Cancel</p>
+        </th>
       </thead>
       <tbody>
-        <tr v-for="(item, index) in cartItemsOrder" :key="index" @click="openModalDetail(item.id)">
-          <td>{{ index + 1 }}</td>
-          <td>{{ item.id }}</td>
-          <td>{{ item.userId }}</td>
-          <td>{{ item.totalAmount }}</td>
-          <td>{{ item.orderDate }}</td>
-          <td>{{ item.status }}</td>
+        <tr v-for="(item, index) in cartItemsOrder" :key="index">
+          <td @click="openModalDetail(item.id)">{{ index + 1 }}</td>
+          <td @click="openModalDetail(item.id)">{{ item.id }}</td>
+          <td @click="openModalDetail(item.id)">{{ item.userId }}</td>
+          <td @click="openModalDetail(item.id)">{{ item.totalAmount }}</td>
+          <td @click="openModalDetail(item.id)">{{ item.orderDate }}</td>
+          <td @click="openModalDetail(item.id)">{{ item.status }}</td>
           <td>
-            <span
-              @click="cancelOrder(item.id)"
-              style="cursor: pointer; text-decoration: underline; color: red"
-            >
-              Hủy</span
-            >
+            <span @click="cancelOrder(item.id)" style="cursor: pointer; text-decoration: underline; color: red">
+              <p v-if="!isEnglish">Hủy</p>
+              <p v-else>Cancel</p>
+            </span>
           </td>
         </tr>
       </tbody>
     </table>
-    <table
-      cellspacing="0"
-      v-show="type === 'adminCheckProduct'"
-      style="margin-top: 150px"
-    >
+    <table cellspacing="0" v-show="type === 'adminCheckProduct'" style="margin-top: 150px">
       <thead>
         <th style="width: 5%">STT</th>
-        <th style="width: 20%">Mã sản phẩm</th>
+        <th style="width: 20%">
+          <p v-if="!isEnglish">Mã sản phẩm</p>
+          <p v-else>Product code</p>
+        </th>
         <!-- <th style="width: 20%">Giá</th> -->
-        <th style="width: 15%">Số lượng</th>
-        <th style="width: 15%">Kích thước</th>
+        <th style="width: 15%">
+          <p v-if="!isEnglish">Số lượng</p>
+          <p v-else>Quantity</p>
+        </th>
+        <th style="width: 15%">
+          <p v-if="!isEnglish">Kích thước</p>
+          <p v-else>Size</p>
+        </th>
         <th style="width: 10%"></th>
       </thead>
       <tbody>
@@ -85,47 +109,22 @@
           <td>{{ item.quantity }}</td>
           <td>{{ item.size }}</td>
           <td>
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              width="20"
-              height="20"
-              viewBox="0 0 24 24"
-              aria-hidden="true"
-              fill="none"
-              class="icon-edit"
-              @click="openModalEdit(item.costumeId, item.quantity, item.size)"
-            >
-              <path
-                fill="currentColor"
+            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" aria-hidden="true"
+              fill="none" class="icon-edit" @click="openModalEdit(item.costumeId, item.quantity, item.size)">
+              <path fill="currentColor"
                 d="m13.96 5.46 4.58 4.58a1 1 0 0 0 1.42 0l1.38-1.38a2 2 0 0 0 0-2.82l-3.18-3.18a2 2 0 0 0-2.82 0l-1.38 1.38a1 1 0 0 0 0 1.42ZM2.11 20.16l.73-4.22a3 3 0 0 1 .83-1.61l7.87-7.87a1 1 0 0 1 1.42 0l4.58 4.58a1 1 0 0 1 0 1.42l-7.87 7.87a3 3 0 0 1-1.6.83l-4.23.73a1.5 1.5 0 0 1-1.73-1.73Z"
-                class
-              ></path>
+                class></path>
             </svg>
-            <span
-              @click="deleteItem(index)"
-              style="cursor: pointer; text-decoration: underline; color: red"
-            >
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                width="20"
-                height="20"
-                viewBox="0 0 24 24"
-                aria-hidden="true"
-                fill="none"
-              >
-                <path
-                  fill="currentColor"
+            <span @click="deleteItem(index)" style="cursor: pointer; text-decoration: underline; color: red">
+              <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" aria-hidden="true"
+                fill="none">
+                <path fill="currentColor"
                   d="M14.25 1c.41 0 .75.34.75.75V3h5.25c.41 0 .75.34.75.75v.5c0 .41-.34.75-.75.75H3.75A.75.75 0 0 1 3 4.25v-.5c0-.41.34-.75.75-.75H9V1.75c0-.41.34-.75.75-.75h4.5Z"
-                  class
-                ></path>
-                <path
-                  fill="currentColor"
-                  fill-rule="evenodd"
+                  class></path>
+                <path fill="currentColor" fill-rule="evenodd"
                   d="M5.06 7a1 1 0 0 0-1 1.06l.76 12.13a3 3 0 0 0 3 2.81h8.36a3 3 0 0 0 3-2.81l.75-12.13a1 1 0 0 0-1-1.06H5.07ZM11 12a1 1 0 1 0-2 0v6a1 1 0 1 0 2 0v-6Zm3-1a1 1 0 0 1 1 1v6a1 1 0 1 1-2 0v-6a1 1 0 0 1 1-1Z"
-                  clip-rule="evenodd"
-                  class
-                ></path></svg
-            ></span>
+                  clip-rule="evenodd" class></path>
+              </svg></span>
           </td>
         </tr>
       </tbody>
@@ -143,6 +142,13 @@ export default {
   props: {
     type: String,
   },
+
+  computed: {
+    isEnglish() {
+      return this.$store.state.isEnglish;
+    },
+  },
+
   data() {
     return {
       cartItems: [],
@@ -174,8 +180,6 @@ export default {
           if (response.data) {
             this.cartItems = response.data
             this.populateCartTable()
-            console.log('Data')
-            console.log(response.data)
           } else {
             console.error('Lỗi khi gọi API: Không nhận được dữ liệu JSON')
           }
@@ -224,8 +228,6 @@ export default {
           if (response.data) {
             this.cartItemsOrder = response.data
             this.populateCartTable()
-            console.log('Data')
-            console.log(response.data)
           } else {
             console.error('Lỗi khi gọi API: Không nhận được dữ liệu JSON')
           }
@@ -243,8 +245,6 @@ export default {
           if (response.data) {
             this.cartItemsUserOrder = response.data
             this.populateCartTable()
-            console.log('Data')
-            console.log(response.data)
           } else {
             console.error('Lỗi khi gọi API: Không nhận được dữ liệu JSON')
           }
@@ -254,9 +254,6 @@ export default {
         })
     },
     deleteItem(index) {
-      console.log(this.cartItems)
-      console.log(this.cartItems[index].id)
-
       const deleteItem = {
         id: this.cartItems[index].id,
       }
@@ -290,7 +287,6 @@ export default {
             this.nameDetail = response.data[0].name
             this.phoneNumberDetail = response.data[0].phoneNumber
             this.addressDetail = response.data[0].address
-            console.log(response.data)
           } else {
             console.error('Lỗi khi gọi API: Không nhận được dữ liệu JSON')
           }
@@ -301,7 +297,6 @@ export default {
     },
     cancelOrder(index) {
       const id = index
-      console.log(id)
       const token = localStorage.getItem('token')
       setBearerToken(token)
       axiosInstance
@@ -320,6 +315,7 @@ export default {
 .table {
   width: 100%;
 }
+
 table {
   width: 80%;
   padding: 0;
@@ -327,9 +323,11 @@ table {
   margin: 50px auto;
   transform: translateX(150px);
 }
+
 thead {
   background: rgba(249, 220, 200, 100%);
 }
+
 th,
 td {
   border: 0.5px solid rgb(234, 168, 138);
@@ -337,9 +335,11 @@ td {
   text-align: center;
   padding: 1px 10px;
 }
+
 tr:hover {
   background: #f4efef;
 }
+
 .icon-edit {
   margin-top: 10px;
   cursor: pointer;

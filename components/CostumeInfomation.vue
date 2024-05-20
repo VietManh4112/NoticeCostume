@@ -21,7 +21,7 @@
           </button>
         </div>
         <Modal v-if="hideModalBuy" type="modal-buy" @hide-modal__buy="handleHideModalBuy" :hideModalBuy="hideModalBuy"
-          :costumeId="count"></Modal>
+          :costumeId="count" :priceCostume="info[0].price" :currencyCostume="info[0].currency"></Modal>
         <Modal v-if="hideModalContinue" type="modal-continue" @hide-modal__continue="handleHideModalContinue"
           :hideModalContinue="hideModalContinue"></Modal>
         <div v-for="(item, index) in items" :key="index" class="content-text">
@@ -301,6 +301,8 @@ export default {
           newItem.pattern = response.data.pattern
           newItem.other = response.data.other
           newItem.characteristic = response.data.characteristic
+          newItem.price = response.data.price
+          newItem.currency = response.data.currency
           newItem.male = response.data.listCostumesDetail[0].description
           newItem.female = response.data.listCostumesDetail[1].description
           newItem.idMale = response.data.listCostumesDetail[0].id
@@ -494,6 +496,8 @@ export default {
   data() {
     return {
       textData: '',
+      priceCostume: 1,
+      currencyCostume: '',
       hideModalBuy: false,
       hideModalContinue: false,
       messageSuccess: '',
@@ -509,6 +513,8 @@ export default {
         pattern: '',
         other: '',
         characteristic: '',
+        price: '',
+        currency: '',
         male: '',
         female: '',
         idMale: '',
@@ -1220,7 +1226,7 @@ export default {
 }
 
 .comment-list {
-  height: 15vh;
+  height: 18vh;
   padding: 20px;
 }
 
