@@ -1,6 +1,6 @@
 <template>
-  <Toast type="toastFail" :messageFail="messageFail" v-if="visibleToastFail"></Toast>
   <div class="table">
+    <Toast type="toastFail" :messageFail="messageFail" v-if="visibleToastFail"></Toast>
     <table cellspacing="0" v-show="type === 'userCheckCart'" id="userCheckCart">
       <thead>
         <th style="width: 5%">STT</th>
