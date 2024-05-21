@@ -89,7 +89,7 @@
         </Button>
       </div>
       <hr style="border: none; height: 2px; background-color: #f5f5f5" />
-      <div v-for="(comment, indexCmt) in comment" :key="indexCmt">
+      <div v-for="(comment, indexCmt) in displayedComments" :key="indexCmt">
         <div v-if="comment.status.includes('0')" class="comment-list">
           <div class="box-infor">
             <img :src="comment.url" width="20px" height="20px" class="box-infor__avatar" />
@@ -99,15 +99,19 @@
             <div class="box-comment__question">
               <p v-if="!editStatus[indexCmt]">{{ comment.content }}</p>
               <span v-else>
-                <textarea v-model="editText[indexCmt]" style="width: 60vw; height: 30px"></textarea>
-                <div style="color: red; font-size: 10px">
-                  nhấn để
+                <input v-model="editText[indexCmt]" style="width: 60vw; height: 30px">
+                <div style="color: red; font-size: 10px;display: flex;">
+                  <p v-if="!isEnglish">nhấn để&nbsp;</p>
+                  <p v-else>press to&nbsp;</p>
                   <button style="color: #06f" @click="cancelEdit(indexCmt)">
-                    hủy
+                    <p v-if="!isEnglish">hủy</p>
+                    <p v-else>cancel</p>
                   </button>
-                  • nhấn để
+                  &nbsp;•&nbsp;<p v-if="!isEnglish">nhấn để&nbsp;</p>
+                  <p v-else>press to&nbsp;</p>
                   <button style="color: #06f" @click="saveEdit(indexCmt, comment.id)">
-                    lưu
+                    <p v-if="!isEnglish">lưu</p>
+                    <p v-else>save</p>
                   </button>
                 </div>
               </span>
@@ -141,6 +145,22 @@
             </div>
           </div>
         </div>
+      </div>
+      <div style="display: flex;justify-content: center;margin-top: 20px;">
+        <Button type="normal" v-if="displayedComments.length < filteredComments.length" @click="loadMoreComments"
+          style="display: flex; justify-content: center;align-items: center;">
+          <p v-if="!isEnglish">Xem thêm&nbsp;</p>
+          <p v-else>See more&nbsp;</p>
+          {{ filteredComments.length - displayedComments.length }}
+          <p v-if="!isEnglish">&nbsp;bình luận</p>
+          <p v-else>&nbsp;comment</p>
+          &emsp;
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512" width="10" height="10">
+            <path
+              d="M224 416c-8.188 0-16.38-3.125-22.62-9.375l-192-192c-12.5-12.5-12.5-32.75 0-45.25s32.75-12.5 45.25 0L224 338.8l169.4-169.4c12.5-12.5 32.75-12.5 45.25 0s12.5 32.75 0 45.25l-192 192C240.4 412.9 232.2 416 224 416z">
+            </path>
+          </svg>
+        </Button>
       </div>
     </div>
   </div>
@@ -335,6 +355,10 @@ export default {
         })
     },
 
+    loadMoreComments() {
+      this.commentsToShow += 5;
+    },
+
     itemsToShow() {
       return this.items
     },
@@ -344,7 +368,7 @@ export default {
         this.$set(this.editStatus, i, false)
       })
       this.$set(this.editStatus, index, true)
-      this.$set(this.editText, index, this.comment[index].content)
+      this.$set(this.editText, index, this.displayedComments[index].content)
     },
 
     deleteComment(index, indexCmt) {
@@ -358,7 +382,7 @@ export default {
       axiosInstance
         .post('/api/delete-comments', deleteComment)
         .then((response) => {
-          this.comment[indexCmt].status = '1';
+          this.displayedComments[indexCmt].status = '1';
           this.visibleToastSuccess = true
           if (!this.isEnglish) {
             this.messageSuccess = 'Thành công'
@@ -397,7 +421,7 @@ export default {
       axiosInstance
         .post('/api/update-comments', updateComment)
         .then((response) => {
-          this.comment[indexCmt].content = this.editText[indexCmt]
+          this.displayedComments[indexCmt].content = this.editText[indexCmt]
           delete this.editText[indexCmt]
           this.visibleToastSuccess = true
           if (!this.isEnglish) {
@@ -437,14 +461,16 @@ export default {
           axiosInstance
             .post('/api/post-comments', addComment)
             .then((response) => {
-              const indexComment = this.comment.length
-              this.comment[indexComment] = {
+              const newComment = {
                 status: '0',
                 content: this.commentText,
                 name: this.sub,
                 url: this.url
               };
-              this.commentText = ''
+              // Add new comment to the array
+              this.comment = [...this.comment, newComment];
+              // Reset the input field
+              this.commentText = '';
               this.visibleToastSuccess = true
               if (!this.isEnglish) {
                 this.messageSuccess = 'Thành công'
@@ -510,6 +536,14 @@ export default {
       return this.$store.state.isEnglish
     },
 
+    filteredComments() {
+      return this.comment.filter(cmt => cmt.status === '0');
+    },
+
+    displayedComments() {
+      return this.filteredComments.slice().reverse().slice(0, this.commentsToShow);
+    },
+
     dynamicTexts() {
       return {
         text1: this.isEnglish ? Resource.text1.en : Resource.text1.vi,
@@ -529,6 +563,7 @@ export default {
       textData: '',
       priceCostume: 1,
       currencyCostume: '',
+      commentsToShow: 5,
       hideModalBuy: false,
       hideModalContinue: false,
       messageSuccess: '',
@@ -1264,7 +1299,7 @@ export default {
 }
 
 .comment-list {
-  height: 18vh;
+  height: 16vh;
   padding: 20px;
 }
 
