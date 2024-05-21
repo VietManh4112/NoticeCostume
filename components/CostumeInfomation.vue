@@ -125,7 +125,7 @@
                   </svg>
                 </button>
 
-                <button v-if="userIdToken === comment.userId || sub.includes('admin')" title="Xóa"
+                <button v-if="userIdToken === comment.userId || authority === 'admin'" title="Xóa"
                   style="color: red; width: 30px; height: 30px" @click="deleteComment(comment.id, indexCmt)">
                   <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" aria-hidden="true"
                     fill="none">
@@ -178,6 +178,7 @@ export default {
     const decoded = jwt.decode(token)
     if (decoded) {
       this.sub = decoded.sub
+      this.url = decoded.url
       this.userIdToken = decoded.id
     }
 
@@ -436,7 +437,23 @@ export default {
           axiosInstance
             .post('/api/post-comments', addComment)
             .then((response) => {
-              window.location.reload()
+              const indexComment = this.comment.length
+              this.comment[indexComment] = {
+                status: '0',
+                content: this.commentText,
+                name: this.sub,
+                url: this.url
+              };
+              this.commentText = ''
+              this.visibleToastSuccess = true
+              if (!this.isEnglish) {
+                this.messageSuccess = 'Thành công'
+              } else {
+                this.messageSuccess = 'Successfully'
+              }
+              setTimeout(() => {
+                this.visibleToastSuccess = false
+              }, 3000)
             })
             .catch((error) => {
               this.visibleToastFail = true
@@ -552,6 +569,7 @@ export default {
       editText: [],
       userIdToken: '',
       sub: '',
+      url: '',
       placeholderComment: '',
       isEdit: false,
       authority: null,
@@ -877,7 +895,7 @@ export default {
           characteristic: '',
           male: 'Brown blouse, chest slit, round neck, slits, two bottom pockets. Wide-leg pants with waistband or drawstring. In the past, people used to have long hair, buns or head scarves, and wore loincloths.',
           female:
-            'Women in the North and Central regions wear short brown blouses with a camisole and a tight skirt inside, some places wear them short to the shins. The belt is a colored fabric sheath (in some places called statue intestine) that wraps around the waistband of the skirt. Southern women wear Ba Ba shirts combined with bandanas and conical hats.',
+            "Women in the North and Central regions wear short brown blouses with a camisole and a tight skirt inside, some places wear them as short as the shins. The belt is a colored fabric sheath (in some places called statue intestine) that wraps around the waistband of the skirt. wear a square scarf wearing a 'crow's beak' or hats: basket, ba tam...; Southern women wear Ba Ba shirts combined with bandanas and conical hats.",
         },
         {
           material:
@@ -1178,7 +1196,11 @@ export default {
   }
 
   .content-text {
-    font-size: 12px !important;
+    font-size: 12.5px !important;
+  }
+
+  .content-logo {
+    width: 50vw !important;
   }
 }
 
@@ -1302,7 +1324,7 @@ export default {
   display: flex;
   width: 40vw;
   position: absolute;
-  bottom: 3vh;
+  bottom: 1vh;
 }
 
 .content-logo__btn,
