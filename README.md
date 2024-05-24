@@ -1,5 +1,12 @@
 # NoticeCustome
-
+```
+Admin: username:admin
+       pass: admin@123
+User: username: lam
+      pass: 12345678
+      username: manhkk  
+      pass: 123456
+```
 ## Build Setup
 
 ```bash
