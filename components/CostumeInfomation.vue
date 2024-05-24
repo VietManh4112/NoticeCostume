@@ -464,6 +464,8 @@ export default {
               const newComment = {
                 status: '0',
                 content: this.commentText,
+                userId: this.userIdToken,
+                id: response.data.id,
                 name: this.sub,
                 url: this.url
               };
