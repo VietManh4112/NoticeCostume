@@ -147,7 +147,7 @@
         </div>
       </div>
       <div style="display: flex;justify-content: center;margin-top: 20px;">
-        <Button type="normal" v-if="displayedComments.length < filteredComments.length" @click="loadMoreComments"
+        <Button type="comment" v-if="displayedComments.length < filteredComments.length" @click="loadMoreComments"
           style="display: flex; justify-content: center;align-items: center;">
           <p v-if="!isEnglish">Xem thêm&nbsp;</p>
           <p v-else>See more&nbsp;</p>

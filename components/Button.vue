@@ -101,6 +101,12 @@ export default {
 .btn-normal {
     padding: 6px 16px;
     border: 1px solid rgba(0,0,0,9%);
+    border-radius: 0px;
+}
+
+.btn-comment {
+    padding: 6px 16px;
+    border: 1px solid rgba(0,0,0,9%);
     border-radius: 10px;
     background-color: #fff;
     color: #212;
@@ -110,7 +116,7 @@ export default {
     0 2px 6px 2px rgba(60, 64, 67, 15%);
 }
 
-.btn-normal:hover {
+.btn-comment:hover {
     background-color: #fdddc9;
 }
 
