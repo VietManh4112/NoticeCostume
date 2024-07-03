@@ -32,6 +32,7 @@ export default {
 </script>
 
 <style>
+@import url('https://fonts.googleapis.com/css2?family=Maitree:wght@200;300;400;500;600;700&display=swap');
 .btn {
   border-radius: 16px;
 }
@@ -106,4 +107,25 @@ export default {
   border: 1px solid rgba(0, 0, 0, 9%);
   border-radius: 0px;
 }
+<<<<<<< HEAD
 </style>
+=======
+
+.btn-comment {
+    padding: 6px 16px;
+    border: 1px solid rgba(0,0,0,9%);
+    border-radius: 10px;
+    background-color: #fff;
+    color: #212;
+    max-width: 335px;
+    width: 100%;
+    box-shadow: 0 1px 2px 0 rgba(60, 64, 67, 10%),
+    0 2px 6px 2px rgba(60, 64, 67, 15%);
+}
+
+.btn-comment:hover {
+    background-color: #fdddc9;
+}
+
+</style>
+>>>>>>> 01d494871b30dc3a3d89be5c0a8277d5add2aaf5

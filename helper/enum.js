@@ -5,6 +5,7 @@ const Enum = {
         login: 'btn-login',
         register: 'btn-register',
         normal: 'btn-normal',
+        comment: 'btn-comment'
     }
 }
 

@@ -6,75 +6,63 @@
         <div class="form-form">
             <h1 v-show="type === 'login'">{{ loginBtn }}</h1>
             <h1 v-show="type === 'register'">{{ registerBtn }}</h1>
-            <form>
-                <div>
-                    <ul>
-                        <li class="google">
-                            <img src="https://cfcdn.apowersoft.info/astro/picwish/_astro/google.61020c54.svg" width="20"
-                                height="20" style="margin-right: 5px;">
-                            {{ google }}
-                        </li>
-                        <li class="facebook">
-                            <img src="https://cfcdn.apowersoft.info/astro/picwish/_astro/facebook.d531e827.svg">
-                        </li>
-                        <li class="apple">
-                            <img src="https://cfcdn.apowersoft.info/astro/picwish/_astro/apple.650e301d.svg">
-                        </li>
-                    </ul>
-                </div>
-                <div class="display: absolute;">
-                    <div class="border-line"></div>
-                    <span class="text-line">Hoặc</span>
-                </div>
-                <div style="position: relative;">
-                    <TextField type="form-text" :placeholder="Name" v-model="name"></TextField>
-                    <p v-if="validateName && !isEnglish" class="validateInput">Tên đăng nhập không được bỏ trống!</p>
-                    <p v-if="validateName && isEnglish" class="validateInput">Username cannot be empty!</p>
-                    <p v-if="errorLogin && !isEnglish" class="validateInput">Tài khoản hoặc mật khẩu không chính xác</p>
-                    <p v-if="errorLogin && isEnglish" class="validateInput">Account or password is incorrect</p>
-                </div>
-                <div style="position: relative;">
-                    <TextField v-show="type === 'register'" type="form-text" :placeholder="Email" v-model="email"></TextField>
-                    <p v-show="type === 'register' && !isEnglish" class="validateInput">{{ validationEmailVn1 }}
-                        {{ validationEmailVn2 }}</p>
-                    <p v-show="type === 'register' && isEnglish" class="validateInput">{{ validationEmailEn1 }}
-                        {{ validationEmailEn2 }}</p>
-                </div>
-                <div style="position: relative;">
-                    <TextField type="form-pass" :placeholder="Pass" v-model="pass"></TextField>
-                    <p v-if="validatePass && !isEnglish" class="validateInput">Mật khẩu không được bỏ trống!</p>
-                    <p v-if="validatePass && isEnglish" class="validateInput">Password cannot be left blank!</p>
-                </div>
-                <div style="position: relative;">
-                    <TextField v-show="type === 'register'" type="form-pass" :placeholder="ConfirmPass"
-                        v-model="confirmpass"></TextField>
-                    <p v-show="type === 'register' && !isEnglish" class="validateInput">{{ validationMessageVn1 }}
-                        {{ validationMessageVn2 }}</p>
-                    <p v-show="type === 'register' && isEnglish" class="validateInput">{{ validationMessageEn1 }}
-                        {{ validationMessageEn2 }}</p>
-                </div>
-                <div v-if="type === 'login'" style="display: flex;justify-content: flex-end;margin-bottom: 10px;">{{
-                fogotpass }}</div>
-                <Button v-show="type === 'login'" type="icon" @click="login">
-                    <p>{{ loginBtn }}</p>
-                </Button>
+            <ValidationObserver ref="observer">
+                <form>
+                    <ValidationProvider v-slot="{ errors }" name="Name" rules="required">
+                        <div style="position: relative;">
+                            <TextField type="form-text" :placeholder="Name" v-model="name"></TextField>
+                            <span v-if="errors.length" class="validateInput">{{ errors[0] }}</span>
+                            <p v-if="errorLogin" class="validateInput">Account or password is incorrect</p>
+                            <p v-show="type === 'register'" class="validateInput">{{ errorRegister }}</p>
+                        </div>
+                    </ValidationProvider>
 
-                <Button v-show="type === 'register'" type="icon" @click="register">
-                    <p>{{ registerBtn }}</p>
-                </Button>
+                    <ValidationProvider v-if="type === 'register'" v-slot="{ errors }" name="Email"
+                        rules="required|email">
+                        <div style="position: relative;">
+                            <TextField type="form-text" :placeholder="Email" v-model="email"></TextField>
+                            <span v-if="errors.length" class="validateInput">{{ errors[0] }}</span>
+                        </div>
+                    </ValidationProvider>
 
-            </form>
+                    <ValidationProvider v-slot="{ errors }" name="Password" rules="required|min:6">
+                        <div style="position: relative;">
+                            <TextField type="form-pass" :placeholder="Pass" v-model="pass"></TextField>
+                            <span v-if="errors.length" class="validateInput">{{ errors[0] }}</span>
+                        </div>
+                    </ValidationProvider>
+
+                    <ValidationProvider v-if="type === 'register'" v-slot="{ errors }" name="Confirm Password" rules="required|min:6">
+                        <div style="position: relative;">
+                            <TextField type="form-pass" :placeholder="ConfirmPass" v-model="confirmpass"></TextField>
+                            <span v-if="errors.length" class="validateInput">{{ errors[0] }}</span>
+                            <p v-show="type === 'register'" class="validateInput">{{ validationMessage }}</p>
+                        </div>
+                    </ValidationProvider>
+
+                    <Button v-show="type === 'login'" type="icon" @click="submitForm('login')">
+                        <p>{{ loginBtn }}</p>
+                    </Button>
+
+                    <Button v-show="type === 'register'" type="icon" @click="submitForm('register')">
+                        <p>{{ registerBtn }}</p>
+                    </Button>
+                </form>
+            </ValidationObserver>
         </div>
     </div>
 </template>
+
 <script>
+import { ValidationObserver, ValidationProvider } from 'vee-validate';
 import Resource from '@/helper/resource.js'
 import TextField from '@/components/TextField.vue';
 import Button from '@/components/Button.vue'
-export default {
-    name: "Form",
 
+export default {
     components: {
+        ValidationObserver,
+        ValidationProvider,
         TextField,
         Button,
     },
@@ -100,22 +88,6 @@ export default {
             }
         },
 
-        google() {
-            if (this.isEnglish) {
-                return Resource.google.en;
-            } else {
-                return Resource.google.vi;
-            }
-        },
-
-        fogotpass() {
-            if (this.isEnglish) {
-                return Resource.fogotpass.en;
-            } else {
-                return Resource.fogotpass.vi;
-            }
-        },
-
         isEnglish() {
             return this.$store.state.isEnglish;
         },
@@ -128,118 +100,81 @@ export default {
             Pass: 'Password',
             ConfirmPass: 'Confirm Password',
             name: '',
-            pass: '',
             email: '',
+            pass: '',
             confirmpass: '',
+            validationEmailVn1: 'Email không hợp lệ',
+            validationEmailVn2: '',
+            validationEmailEn1: 'Invalid email',
+            validationEmailEn2: '',
+            validationMessage:'',
             validateName: false,
             validatePass: false,
-            validationEmailVn1: '',
-            validationEmailVn2: '',
-            validationEmailEn1: '',
-            validationEmailEn2: '',
-            validationMessageVn1: '',
-            validationMessageVn2: '',
-            validationMessageEn1: '',
-            validationMessageEn2: '',
             errorLogin: false,
+            errorRegister: ''
         };
     },
 
     methods: {
-        login() {
-            var error = [];
-            if (this.name.trim() === '') {
-                this.validateName = true;
-                error.push('lỗi');
-            } else {
-                this.validateName = false;
-            }
-
-            if (this.pass.trim() === '') {
-                this.validatePass = true;
-                error.push('lỗi');
-            } else {
-                this.validatePass = false;
-            }
-            const userData = { username: this.name, password: this.pass };
-            if (error.length == 0) {
-                this.$store.dispatch('login', userData)
-                    .then(() => {
-                        this.$router.push('/');
-                        setTimeout(() => {
-                            location.reload();
-                        }, 10);
-                    })
-                    .catch((error) => {
-                        this.errorLogin = true;
-                    });
+        submitForm(action) {
+            if (this.$refs.observer) {
+                this.$refs.observer.validate().then(success => {
+                    if (success) {
+                        if (action === 'login') {
+                            this.login();
+                        } else if (action === 'register') {
+                            this.register();
+                        }
+                    }
+                });
             }
         },
 
+        login() {
+            const userData = { username: this.name, password: this.pass };
+            this.$store.dispatch('login', userData)
+                .then(() => {
+                    this.$router.push('/');
+                    setTimeout(() => {
+                        location.reload();
+                    }, 10);
+                })
+                .catch((error) => {
+                    this.errorLogin = true;
+                });
+        },
+
         register() {
-            var error = [];
-            if (this.name.trim() === '') {
-                this.validateName = true;
-                error.push('lỗi');
-            } else {
-                this.validateName = false;
+            var errors = [];
+            if (this.confirmpass !== this.pass) {
+                this.validationMessage = 'Confirm Password is different!';
+                errors.push('lỗi');
             }
-
-            if (this.pass.trim() === '') {
-                this.validatePass = true;
-                error.push('lỗi');
-            } else {
-                this.validatePass = false;
-            }
-
-            const regex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-            if (this.email.trim() === '') {
-                this.validationEmailVn1 = 'Email không được bỏ trống!';
-                this.validationEmailVn2 = '';
-                this.validationEmailEn1 = 'Email cannot be left blank!';
-                this.validationEmailEn2 = '';
-                error.push('lỗi');
-            } else if (regex.test(this.email) == false) {
-                this.validationEmailVn1 = '';
-                this.validationEmailVn2 = 'Email không đúng định dạng!';
-                this.validationEmailEn1 = '';
-                this.validationEmailEn2 = 'Invalid email!';
-                error.push('lỗi');
-            } else {
-                this.validateEmail = '';
-            }
-
-            if (this.confirmpass.trim() === '') {
-                this.validationMessageVn1 = 'Xác nhận mật khẩu không được bỏ trống!';
-                this.validationMessageVn2 = '';
-                this.validationMessageEn1 = 'Confirm password cannot be left blank!';
-                this.validationMessageEn2 = '';
-                error.push('lỗi');
-            } else if (this.confirmpass !== this.pass) {
-                this.validationMessageVn1 = '';
-                this.validationMessageVn2 = 'Xác nhận mật khẩu không giống!';
-                this.validationMessageEn1 = '';
-                this.validationMessageEn2 = 'Confirm Password is different!';
-                error.push('lỗi');
-            } else {
-                this.validationMessage = '';
-            }
-            const userData = { username: this.name,email: this.email,password: this.pass };
-            if (error.length == 0) {
+            const userData = { username: this.name, email: this.email, password: this.pass };
+            if (errors.length == 0) {
                 this.$store.dispatch('register', userData)
                     .then(() => {
                         this.$router.push('/login');
                     })
                     .catch((error) => {
-                        console.log(error)
+                        this.errorRegister = error.response.data.message;
                     });
             }
-        },
-    },
-}
+        }
+    }
+};
 </script>
 
+
 <style>
+@import url('https://fonts.googleapis.com/css2?family=Maitree:wght@200;300;400;500;600;700&display=swap');
+
+@media (max-width: 1400px) {
+    .form-form {
+        margin-left: 100px !important;
+    }
+}
+
 .form {
     width: 100vw;
     height: 91vh;

@@ -4,7 +4,7 @@
             <span v-if="!isEditing">{{ displayValue }}</span>
             <span v-else>
                 <textarea v-model="editText" ref="textInput"></textarea>
-                <div style="color: red; font-size: 10px;">
+                <div style="color: red; font-size: 10px; z-index: 9999;">
                     nhấn esc để
                     <button style="color: #06F;" @click="cancel">hủy</button>
                     • nhấn enter để
@@ -13,7 +13,7 @@
             </span>
         </p>
 
-        <div v-show="isAdmin" class="button-edit">
+        <div v-show="isAdmin && !isEdit" class="button-edit">
             <button title="Chỉnh sửa" @click="editInfo">
                 <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" aria-hidden="true"
                     fill="none">
@@ -27,7 +27,7 @@
 </template>
 
 <script>
-import axiosInstance from '@/helper/api.js'
+import axiosInstance, { setBearerToken } from '@/helper/api.js'
 export default {
     name: "TextEdit",
 
@@ -43,6 +43,7 @@ export default {
         apiUrl: String,
         id: Number,
         sexId: Number,
+        isEdit: Boolean,
     },
 
     computed: {
@@ -66,6 +67,10 @@ export default {
 
         isAdmin() {
             return this.authority === 'admin';
+        },
+
+        isEnglish() {
+            return this.$store.state.isEnglish
         },
     },
 
@@ -105,6 +110,7 @@ export default {
         editInfo() {
             if (!this.isEditing) {
                 this.isEditing = true;
+                this.$emit('is-edit', true)
                 this.$nextTick(() => {
                     this.$refs.textInput.focus();
                 });
@@ -116,13 +122,22 @@ export default {
         },
 
         cancel() {
+            this.$emit('is-edit', false)
             this.isEditing = false;
         },
 
-        updateInfo(propName) {
+        updateInfo(propName, textData) {
             if (this[propName] !== undefined) {
                 this.updateCostume.forEach(info => {
                     info[propName] = this.editText;
+                    this.visibleToastSuccess = true
+                    if (!this.isEnglish) {
+                        this.message = 'Thành công'
+                    } else {
+                        this.message = 'Successfully'
+                    }
+                    this.statusToast = true
+                    this.$emit('updateData', this.editText, textData)
                 });
             }
         },
@@ -131,24 +146,48 @@ export default {
             if (!this.editingItem) return;
             this.isEditing = false;
             try {
+                const token = localStorage.getItem('token')
+                setBearerToken(token)
                 if (this.material !== undefined || this.pattern !== undefined || this.characteristic !== undefined || this.other !== undefined) {
-                    this.updateInfo("material");
-                    this.updateInfo("pattern");
-                    this.updateInfo("characteristic");
-                    this.updateInfo("other");
+                    this.updateInfo("material", "material");
+                    this.updateInfo("pattern", "pattern");
+                    this.updateInfo("characteristic", "characteristic");
+                    this.updateInfo("other", "other");
                     await axiosInstance.post(this.apiUrl, this.updateCostume[0])
+                        .then(response => {
+                            this.$emit('is-edit', false)
+                            this.$emit('updateData', '', '', this.visibleToastSuccess, this.message, this.statusToast)
+                        }
+                        ).catch(error => {
+                            this.visibleToastFail = true
+                            if (!this.isEnglish) {
+                                this.message = 'Thất bại'
+                            } else {
+                                this.message = 'Failure'
+                            }
+                            this.statusToast = false
+                            this.$emit('updateData', '', '', this.visibleToastFail, this.message, this.statusToast)
+                        });
                 } else {
                     if (this.male !== undefined) {
                         this.updateDescription.forEach(info => {
                             info.description = this.editText;
+                            this.$emit('updateData', this.editText, "male")
                         });
                     }
                     if (this.female !== undefined) {
                         this.updateDescription.forEach(info => {
                             info.description = this.editText;
+                            this.$emit('updateData', this.editText, "female")
                         });
                     }
                     axiosInstance.post(this.apiUrl, this.updateDescription[0])
+                        .then(response => {
+                            this.$emit('is-edit', false)
+                        }
+                        ).catch(error => {
+                            console.error(error);
+                        });
                 }
             } catch (error) {
                 console.error('Error saving data:', error);
@@ -175,6 +214,11 @@ export default {
     data() {
         return {
             isEditing: false,
+            textData: '',
+            message: '',
+            visibleToastSuccess: true,
+            visibleToastFail: false,
+            statusToast: false,
             editText: this.text,
             editingItem: null,
             infocostume: {
@@ -197,6 +241,7 @@ export default {
 </script>
 
 <style>
+@import url('https://fonts.googleapis.com/css2?family=Maitree:wght@200;300;400;500;600;700&display=swap');
 .edit {
     display: flex;
 }

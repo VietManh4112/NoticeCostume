@@ -47,6 +47,8 @@ export default {
             this.count = 7;
           } else if(this.$route.params.id.toLowerCase() === "ma") {
             this.count = 43;
+          } else if(this.$route.params.id.toLowerCase() === "co") {
+            this.count = 36;
           }
         })
       }
@@ -56,3 +58,7 @@ export default {
   }
 }
 </script>
+
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Maitree:wght@200;300;400;500;600;700&display=swap');
+</style>
